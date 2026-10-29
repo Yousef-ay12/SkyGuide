@@ -302,6 +302,65 @@ h2 { font-family: var(--f-display); font-weight: 400; font-size: clamp(28px, 4vw
 .szs { width: 100%; max-width: 280px; height: auto; display: block; background: var(--sky); border-radius: 5px; border: 1px solid var(--line); }
 .szs text { fill: var(--sky-label); font: 11px var(--f-mono), sans-serif; }
 .szf figcaption { font-family: var(--f-mono); font-size: 11px; color: var(--muted); margin-top: 3px; }
+.agsave { font: inherit; font-size: 14px; padding: 3px 11px; border-radius: 999px; border: 1px solid var(--line); background: var(--panel); color: var(--ink); cursor: pointer; white-space: nowrap; line-height: 1.3; }
+.agsave[aria-pressed="true"] { background: #e9a23b; border-color: #e9a23b; color: #1d1405; }
+.agsave.sm { padding: 0 7px; font-size: 14px; margin-inline-start: 6px; vertical-align: middle; }
+.agsave:focus-visible, .agnav button:focus-visible, .agw button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.card-head .agsave { margin-top: 8px; }
+#agmenu { position: absolute; z-index: 50; background: var(--panel); border: 1px solid var(--line); border-radius: 8px; box-shadow: 0 8px 24px rgba(0,0,0,.18); padding: 6px; min-width: 210px; font-size: 15px; }
+#agmenu .agm-h { font-family: var(--f-mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); padding: 4px 8px; }
+#agmenu button { display: flex; align-items: center; gap: 8px; width: 100%; text-align: start; font: inherit; background: none; border: 0; border-radius: 5px; padding: 7px 8px; color: var(--ink); cursor: pointer; }
+#agmenu button:hover, #agmenu button:focus-visible { background: var(--sel); outline: none; }
+#agmenu .ck { width: 1em; color: var(--accent); font-weight: 700; }
+#agmenu .n, .aglist .n { margin-inline-start: auto; font-family: var(--f-mono); font-size: 12px; color: var(--muted); }
+#agtoast { position: fixed; bottom: 18px; left: 50%; transform: translate(-50%, 20px); background: var(--ink); color: var(--panel); padding: 8px 16px; border-radius: 999px; font-size: 15px; opacity: 0; transition: opacity .2s, transform .2s; pointer-events: none; z-index: 60; }
+#agtoast.on { opacity: 1; transform: translate(-50%, 0); }
+.agnav { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; background: color-mix(in srgb, #e9a23b 14%, var(--panel)); border: 1px solid #e9a23b; border-radius: 8px; padding: 8px 10px; margin: 0 0 16px; font-size: 15px; }
+.agnav button { font: inherit; font-size: 14.5px; padding: 4px 11px; border-radius: 999px; border: 1px solid var(--line); background: var(--panel); color: var(--ink); cursor: pointer; }
+.agnav button[aria-disabled="true"] { opacity: .45; cursor: default; }
+.agnav .agpos { flex: 1 1 12em; text-align: center; }
+.agnav .agnote-show { flex-basis: 100%; margin: 2px 4px 0; font-style: italic; color: var(--muted); }
+.agflash { animation: agf 1.6s ease-out; }
+@keyframes agf { 0%, 40% { box-shadow: 0 0 0 4px #e9a23b; } 100% { box-shadow: 0 0 0 0 transparent; } }
+.aglists { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 10px; }
+.aglist { display: inline-flex; gap: 8px; align-items: center; font: inherit; font-size: 15px; padding: 5px 13px; border-radius: 999px; border: 1px solid var(--line); background: var(--panel); color: var(--ink); cursor: pointer; }
+.aglist[aria-selected="true"] { border-color: #e9a23b; box-shadow: inset 0 0 0 1px #e9a23b; background: color-mix(in srgb, #e9a23b 14%, var(--panel)); }
+.aglist.add { color: var(--muted); border-style: dashed; }
+.agbar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 4px 0 12px; }
+.agbar button, .agctl button { font: inherit; font-size: 14.5px; padding: 4px 11px; border-radius: 6px; border: 1px solid var(--line); background: var(--panel); color: var(--ink); cursor: pointer; }
+.agbar button.danger { border-color: #c0392b; color: #c0392b; }
+.agbar .agstart { background: var(--c-cal); border-color: var(--c-cal); color: var(--panel); }
+.agbar input { font: inherit; font-size: 15px; padding: 4px 8px; border: 1px solid var(--line); border-radius: 6px; background: var(--bg); color: var(--ink); }
+.agitems { list-style: none; padding: 0; margin: 0 0 6px; display: grid; gap: 8px; }
+.agi { border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; background: var(--bg); }
+.agrow { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.agn { font-family: var(--f-mono); font-size: 13px; color: var(--muted); width: 1.6em; text-align: center; }
+.agdot { width: 12px; height: 12px; border-radius: 50%; box-shadow: 0 0 0 1px var(--line); flex: none; }
+.agtitle { flex: 1 1 14em; min-width: 0; text-align: start; font: inherit; background: none; border: 0; padding: 2px 0; color: var(--ink); cursor: pointer; display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; }
+.agtitle b { font-weight: 600; font-size: 17px; }
+.agtitle:hover b { text-decoration: underline; }
+.agsub { font-family: var(--f-ar); color: var(--accent); }
+.agtype { font-family: var(--f-mono); font-size: 11.5px; color: var(--muted); flex-basis: 100%; }
+.agctl { display: flex; gap: 5px; align-items: center; }
+.agctl button { padding: 2px 9px; }
+.agctl button[aria-disabled="true"] { opacity: .4; }
+.agck { font-size: 14px; color: var(--muted); display: inline-flex; gap: 4px; align-items: center; margin-inline-end: 4px; cursor: pointer; }
+.agnote { width: 100%; margin-top: 6px; font: inherit; font-size: 15.5px; padding: 5px 8px; border: 1px dashed var(--line); border-radius: 6px; background: var(--panel); color: var(--ink); resize: vertical; min-height: 2.1em; }
+.rtl .agnote { font-family: var(--f-ar); }
+.agempty { border: 1px dashed var(--line); border-radius: 8px; padding: 14px 16px; }
+.agempty p { margin: 0 0 4px; }
+.agcmp { border-top: 1px solid var(--line); padding-top: 14px; margin-top: 10px; }
+.agcmp h3 { font-family: var(--f-display); font-weight: 400; font-size: 24px; margin: 0 0 8px; }
+.rtl .agcmp h3 { font-family: var(--f-ar); font-weight: 700; }
+.agtw { overflow-x: auto; }
+.agt { border-collapse: collapse; width: 100%; font-size: 15.5px; min-width: 420px; }
+.agt th, .agt td { border-bottom: 1px solid var(--line); padding: 6px 8px; text-align: start; vertical-align: top; }
+.agt thead th { font-family: var(--f-body); font-size: 17px; }
+.agt tbody th { font-family: var(--f-mono); font-size: 11.5px; font-weight: 400; letter-spacing: .05em; text-transform: uppercase; color: var(--muted); white-space: nowrap; }
+.rtl .agt tbody th { font-family: var(--f-ar); font-size: 14px; letter-spacing: 0; text-transform: none; }
+.agt .sw { display: inline-block; width: 12px; height: 12px; border-radius: 50%; background: var(--sc); box-shadow: 0 0 0 1px var(--line); }
+.agbadge { font-family: var(--f-mono); font-size: 11px; background: #e9a23b; color: #1d1405; border-radius: 999px; padding: 0 6px; margin-inline-start: 4px; }
+.agbadge:empty { display: none; }
 .full { border-top: 1px solid var(--line); padding-top: 18px; margin-top: 8px; }
 .full ol { list-style: none; padding: 0; margin: 10px 0 0; display: grid; gap: 14px; counter-reset: b; }
 .full li { counter-increment: b; display: grid; grid-template-columns: 2.2em minmax(0, 1fr); gap: 0 10px; }
@@ -394,18 +453,19 @@ const CULTURES = [
 const REGIONS = {quran:'Arab sources', solar:'Our neighbourhood', north:'Northern sky', zodiac:'Zodiac', south:'Southern sky', beyond:'Beyond the constellations'};
 const REGIONS_AR = {solar:'جوارنا', north:'السماء الشمالية', zodiac:'دائرة البروج', south:'السماء الجنوبية', beyond:'ما وراء الكوكبات'};
 const byKey = Object.fromEntries(DATA.constellations.map(c => [c.key, c]));
-const cname = id => id === 'calendar' ? 'Sky calendar' : id === 'science' ? 'Science' : CULTURES.find(c => c.id === id).name;
+const cname = id => id === 'guide' ? 'AstroGuide' : id === 'calendar' ? 'Sky calendar' : id === 'science' ? 'Science' : CULTURES.find(c => c.id === id).name;
 let state = { con: 'Ori', cul: 'arab', lang: 'en' };
 try { const l = localStorage.getItem('osms-lang'); if (l === 'af' || l === 'en' || l === 'ar') state.lang = l; } catch (e) {}
 
 function readHash() {
   const h = decodeURIComponent(location.hash.slice(1));
   if (h === 'calendar') { state.cul = 'calendar'; return true; }
+  if (h === 'guide') { state.cul = 'guide'; return true; }
   const m = h.match(/^([A-Za-z]+)-([a-z]+)$/);
   if (m && byKey[m[1]] && (m[2] === 'science' || CULTURES.some(c => c.id === m[2]))) { state.con = m[1]; state.cul = m[2]; return true; }
   return false;
 }
-function writeHash() { const h = state.cul === 'calendar' ? '#calendar' : '#' + state.con + '-' + state.cul; try { if (location.hash !== h) history.replaceState(null, '', h); } catch (e) { /* some previews block address changes */ } }
+function writeHash() { const h = state.cul === 'guide' ? '#guide' : state.cul === 'calendar' ? '#calendar' : '#' + state.con + '-' + state.cul; try { if (location.hash !== h) history.replaceState(null, '', h); } catch (e) { /* some previews block address changes */ } }
 function esc(s) { return s.replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
 
 function buildCultures() {
@@ -425,10 +485,14 @@ function buildCultures() {
   d2.innerHTML = `<input type="radio" name="cul" id="cul-calendar" value="calendar"><label for="cul-calendar"><span class="dot"></span>Sky calendar <span class="nat" lang="ar">تقويم السماء</span></label>`;
   d2.querySelector('input').addEventListener('change', () => setCulture('calendar'));
   fs.appendChild(d2);
+  const d3 = document.createElement('div'); d3.className = 'chip sci'; d3.style.setProperty('--cc', '#e9a23b');
+  d3.innerHTML = `<input type="radio" name="cul" id="cul-guide" value="guide"><label for="cul-guide"><span class="dot"></span>★ AstroGuide <span class="agbadge" id="agcount"></span></label>`;
+  d3.querySelector('input').addEventListener('change', () => setCulture('guide'));
+  fs.appendChild(d3);
 }
 
 function buildList(filter = '') {
-  if (state.cul === 'calendar') return;
+  if (state.cul === 'calendar' || state.cul === 'guide') return;
   const list = document.getElementById('list'); list.innerHTML = '';
   const f = filter.trim().toLowerCase();
   let shown = 0;
@@ -458,12 +522,12 @@ function searchLore(key, f) {
   if (state.cul === 'science') return false;
   return Object.values(lo).some(e => (e.seen + ' ' + e.stories.map(s => s.title + ' ' + s.text).join(' ')).toLowerCase().includes(f));
 }
-function hasLore(con, cul) { if (cul === 'calendar') return true; return cul === 'science' ? !!DATA.sci[con] : !!(DATA.lore[con] || {})[cul]; }
+function hasLore(con, cul) { if (cul === 'calendar' || cul === 'guide') return true; return cul === 'science' ? !!DATA.sci[con] : !!(DATA.lore[con] || {})[cul]; }
 function firstFor(cul) { const c = DATA.constellations.find(x => x.key !== 'QUR' && hasLore(x.key, cul)); return c ? c.key : 'Ori'; }
 function setCulture(id) {
-  const wasCal = state.cul === 'calendar';
+  const wasCal = state.cul === 'calendar' || state.cul === 'guide';
   state.cul = id;
-  if (id === 'calendar') { render(); return; }
+  if (id === 'calendar' || id === 'guide') { render(); return; }
   if (wasCal && !byKey[state.con]) state.con = 'Ori';
   if (!hasLore(state.con, id)) state.con = firstFor(id);
   buildList(document.getElementById('q').value);
@@ -876,7 +940,7 @@ function calHTML(lang) {
       w += ar ? `: نحو ${Math.round(I.when.alt)}° فوق أفق ${dirOf(I.when.az, 'ar')} الساعة ${hh}` : `: about ${Math.round(I.when.alt)}° up in the ${dirOf(I.when.az, 'en')} at ${hh}`;
     }
     const sc = scopeFor(I.q.mag);
-    h += `<article class="plc" style="--pc:${b.color}"><h4><span class="pd" aria-hidden="true"></span>${esc(ar ? b.ar : b.en)}</h4><p>${esc(w)}</p>`;
+    h += `<article class="plc" style="--pc:${b.color}"><h4><span class="pd" aria-hidden="true"></span>${esc(ar ? b.ar : b.en)}${AG.btn({t: 'planet', key: 'SOL', ref: p}, lang, true)}</h4><p>${esc(w)}</p>`;
     h += `<p class="muted">${I.c ? `${T.inCon} ${esc(ar ? I.c.ar : I.c.name)} · ` : ''}${T.bright} <bdi dir="ltr">${I.q.mag.toFixed(1)}</bdi> · ${T.toSee}: ${esc(sc[lang])}</p></article>`;
   });
   h += `</div>`;
@@ -964,7 +1028,7 @@ function tourHTML(lang, Y, M, D, pl) {
   const REASON = {twilight: ['the sky is not dark enough during the tour', 'السماء غير مظلمة بما يكفي خلال الجولة'], low: ['too low: not all core stars get above ' + st.minCoreAlt + '°', 'منخفض: لا ترتفع كل النجوم الأساسية فوق ' + st.minCoreAlt + '°'], faint: ['too faint tonight', 'أخفت من أن يُرى الليلة']};
   const row = r => {
     const p = byId[r.id], c = CULT_LBL[p.culture], key = CAL.iau[p.refCon] ? CAL.iau[p.refCon].key : null;
-    let x = `<article class="tpr${r.pass ? ' ok' : ''}"><div class="tph"><span class="tps">${r.pass ? (ar ? '✓ ينجح' : '✓ Pass') : (ar ? '✗ لا' : '✗ Fail')}</span><b>${esc(ar ? p.nameAr : p.name)}</b> <span class="vref">${c[ar ? 1 : 0]}</span></div><p>`;
+    let x = `<article class="tpr${r.pass ? ' ok' : ''}"><div class="tph"><span class="tps">${r.pass ? (ar ? '✓ ينجح' : '✓ Pass') : (ar ? '✗ لا' : '✗ Fail')}</span><b>${esc(ar ? p.nameAr : p.name)}</b> <span class="vref">${c[ar ? 1 : 0]}</span>${key ? AG.btn({t: 'pat', key, ref: p.id}, lang, true) : ''}</div><p>`;
     if (r.pass && r.window.start === r.window.end) x += ar ? `نحو ${hhmm(r.window.peak, pl.tz)} فقط. ` : `Only around ${hhmm(r.window.peak, pl.tz)}. `;
     else if (r.pass) x += ar ? `أفضل وقت: ${hhmm(r.window.start, pl.tz)}–${hhmm(r.window.end, pl.tz)} (الأفضل ${hhmm(r.window.peak, pl.tz)}). ` : `Best window: ${hhmm(r.window.start, pl.tz)}–${hhmm(r.window.end, pl.tz)} (best at ${hhmm(r.window.peak, pl.tz)}). `;
     else x += (REASON[r.reason] ? REASON[r.reason][ar ? 1 : 0] : '') + '. ';
@@ -1192,7 +1256,7 @@ function starCard(s, lang) {
   let alt = [];
   if (s.bayer) alt.push(`<span dir="ltr">${esc(s.bayer)}</span>`);
   if (arName) alt.push(`<span class="arn2" lang="ar">${esc(arName)}</span>`);
-  let h = `<article class="starc" style="--sc:${bvColour(s.ci, s.cls)}"><h4><span class="sw" aria-hidden="true"></span><bdi>${esc(s.name)}</bdi></h4><div class="alt">${alt.join(' · ') || '&nbsp;'}</div>`;
+  let h = `<article class="starc" data-star="${esc(s.name)}" style="--sc:${bvColour(s.ci, s.cls)}"><h4><span class="sw" aria-hidden="true"></span><bdi>${esc(s.name)}</bdi>${AG.btn({t: 'star', key: state.con, ref: s.name}, lang, true)}</h4><div class="alt">${alt.join(' · ') || '&nbsp;'}</div>`;
   if (KIDS) { const k = kidStar(s, lang); if (k.length) h += `<div class="kidbox"><span class="sect-lbl">${ar ? '🧒 للأطفال' : '🧒 For kids'}</span><ul>${k.map(x => `<li>${esc(x)}</li>`).join('')}</ul></div>`; }
   h += `<dl>`;
   h += `<dt>${t.colour}</dt><dd>${esc(typeTxt(s, lang))} <span class="vref" dir="ltr">${esc(s.spect)}</span></dd>`;
@@ -1236,7 +1300,7 @@ function dsoHTML(list, lang) {
     const bits = [DTYPE[lang][d.type] || d.type];
     if (d.dist) bits.push(`${ar ? 'على بعد' : ''} ${distTxt(d.dist, lang)}`.trim());
     if (see) bits.push(see);
-    return `<li><span class="cat">${esc(d.cat || '')}</span><div><div class="dn" dir="auto">${esc(d.name || d.cat)}</div><div class="dm">${esc(bits.join(' · '))}</div></div></li>`;
+    return `<li data-dso="${esc(d.id)}"><span class="cat">${esc(d.cat || '')}</span><div><div class="dn" dir="auto">${esc(d.name || d.cat)}${AG.btn({t: 'dso', key: state.con, ref: d.id}, lang, true)}</div><div class="dm">${esc(bits.join(' · '))}</div></div></li>`;
   }).join('')}</ul>`;
 }
 function partHTML(p, lang, many) {
@@ -1308,7 +1372,7 @@ function solarHTML(bodies, lang) {
     rows.push([ar ? 'الجاذبية' : 'Gravity', b.id === 'earth' ? (ar ? 'المرجع (1)' : '1 (for comparison)') : b.id === 'sun' ? (ar ? `${nf(b.g, 1)} ضعف جاذبية الأرض عند السطح` : `${nf(b.g, 1)} × Earth at the surface`) : (ar ? `${nf(b.g, 2)} من جاذبية الأرض: من وزنه 50 كغ على الأرض يزن هنا ${nf(50 * b.g, 0)} كغ` : `${nf(b.g, 2)} × Earth: someone who weighs 50 kg here would weigh ${nf(50 * b.g, 0)} kg`)]);
     rows.push([ar ? 'لرؤيته' : 'To see it', ar ? b.see_ar : b.see_en]);
     if (b.au) rows.push([ar ? 'رحلة من الشمس' : 'Trip from the Sun', ar ? `الضوء: ${b.au * 8.317 < 60 ? nf(b.au * 8.317, 1) + ' دقيقة' : nf(b.au * 8.317 / 60, 1) + ' ساعة'} · سيارة بسرعة 100 كم/س: ${bigYears(b.au * 149.6e6 / 100 / 8766, 'ar')}` : `light: ${b.au * 8.317 < 60 ? nf(b.au * 8.317, 1) + ' minutes' : nf(b.au * 8.317 / 60, 1) + ' hours'} · a car at 100 km/h: ${bigYears(b.au * 149.6e6 / 100 / 8766, 'en')}`]);
-    h += `<section class="planet" style="--pc:${b.color}"><h3><span class="pd" aria-hidden="true"></span>${esc(ar ? b.ar : b.en)}${ar ? '' : ` <span class="arn2" lang="ar">${esc(b.ar)}</span>`}</h3>`;
+    h += `<section class="planet" data-planet="${b.id}" style="--pc:${b.color}"><h3><span class="pd" aria-hidden="true"></span>${esc(ar ? b.ar : b.en)}${ar ? '' : ` <span class="arn2" lang="ar">${esc(b.ar)}</span>`}${AG.btn({t: 'planet', key: 'SOL', ref: b.id}, lang, true)}</h3>`;
     h += `<dl class="ftable">${rows.map(r => `<dt>${esc(r[0])}</dt><dd>${esc(r[1])}</dd>`).join('')}</dl>`;
     if (KIDS) h += `<div class="kidbox"><span class="sect-lbl">${ar ? '🧒 للأطفال' : '🧒 For kids'}</span><p style="margin:0">${esc(kidPlanet(b, lang))}</p></div>`;
     h += `<ul class="facts">${(ar ? b.facts_ar : b.facts_en).map(f => `<li>${esc(f)}</li>`).join('')}</ul></section>`;
@@ -1329,9 +1393,262 @@ function sciHTML(key, lang) {
   return h + `</div>`;
 }
 
+/* ---------- AstroGuide: saved lists of constellations, stars, objects and planets ---------- */
+const AG = (() => {
+  let S = {lists: [], active: null};
+  const uid = () => Math.random().toString(36).slice(2, 9);
+  function load() {
+    try { const v = JSON.parse(localStorage.getItem('osms-ag') || 'null'); if (v && Array.isArray(v.lists)) S = v; } catch (e) {}
+    if (!S.lists.length) S.lists = [{id: uid(), name: '', items: []}];
+    if (!S.lists.find(l => l.id === S.active)) S.active = S.lists[0].id;
+  }
+  function save() { try { localStorage.setItem('osms-ag', JSON.stringify(S)); } catch (e) {} updateCount(); }
+  const idOf = it => [it.t, it.key, it.ref || '', it.t === 'con' ? it.cul : ''].join('|');
+  const listName = (l, ar) => l.name || (ar ? 'قائمتي' : 'My list');
+  const active = () => S.lists.find(l => l.id === S.active) || S.lists[0];
+  const inList = (l, it) => l.items.some(x => idOf(x) === idOf(it));
+  const savedAnywhere = it => S.lists.some(l => inList(l, it));
+  function toggle(l, it) {
+    const i = l.items.findIndex(x => idOf(x) === idOf(it));
+    if (i >= 0) { l.items.splice(i, 1); save(); return false; }
+    l.items.push({...it, note: ''}); save(); return true;
+  }
+  function total() { return S.lists.reduce((n, l) => n + l.items.length, 0); }
+  function updateCount() { const el = document.getElementById('agcount'); if (el) el.textContent = total() ? String(total()) : ''; }
+
+  // ---- what an item is ----
+  function findStar(key, name) {
+    const sc = DATA.sci[key]; if (!sc || !sc.parts) return null;
+    for (const p of sc.parts) for (const s of p.stars.concat(p.extraHosts, [p.nearest])) if (s && s.name === name) return s;
+    return null;
+  }
+  function findDso(key, id) {
+    const sc = DATA.sci[key]; if (!sc) return null;
+    const lists = sc.parts ? sc.parts.map(p => p.dsos) : [sc.dsos || []];
+    for (const l of lists) for (const d of l) if (d.id === id) return d;
+    return null;
+  }
+  const TYPES = {con: ['Constellation', 'كوكبة'], star: ['Star', 'نجم'], dso: ['Deep sky', 'جرم سماوي عميق'], planet: ['Planet', 'كوكب'], pat: ['Pattern', 'شكل نجمي']};
+  function info(it, lang) {
+    const ar = lang === 'ar';
+    if (it.t === 'con') {
+      const c = byKey[it.key]; if (!c) return null;
+      const where = it.cul === 'science' ? (ar ? 'العلم' : 'Science') : CULTURES.find(x => x.id === it.cul) ? (ar ? '' : cname(it.cul) + ' sky') : '';
+      return {title: c.latin, sub: c.ar, color: `var(--c-${it.cul === 'science' ? 'science' : it.cul})`, type: TYPES.con[ar ? 1 : 0] + (where ? ' · ' + where : (ar && it.cul !== 'science' ? ' · ' + (CULTURES.find(x => x.id === it.cul) || {nat: ''}).nat : ''))};
+    }
+    if (it.t === 'star') {
+      const s = findStar(it.key, it.ref); if (!s) return null;
+      return {title: s.name, sub: DATA.starAr[s.name] || '', color: bvColour(s.ci, s.cls), type: TYPES.star[ar ? 1 : 0] + ' · ' + (ar ? (byKey[it.key] || {}).ar : (byKey[it.key] || {}).latin), star: s};
+    }
+    if (it.t === 'dso') {
+      const d = findDso(it.key, it.ref); if (!d) return null;
+      return {title: d.name || d.cat, sub: d.cat && d.name ? d.cat : '', color: '#85B7EB', type: (DTYPE[lang][d.type] || TYPES.dso[ar ? 1 : 0]) + ' · ' + (ar ? (byKey[it.key] || {}).ar : (byKey[it.key] || {}).latin)};
+    }
+    if (it.t === 'planet') {
+      const b = DATA.sci.SOL.bodies.find(x => x.id === it.ref); if (!b) return null;
+      return {title: ar ? b.ar : b.en, sub: ar ? '' : b.ar, color: b.color, type: b.id === 'sun' ? (ar ? 'نجم' : 'Star') : TYPES.planet[ar ? 1 : 0]};
+    }
+    if (it.t === 'pat') {
+      const p = CALP.patterns.find(x => x.id === it.ref); if (!p) return null;
+      return {title: ar ? p.nameAr : p.name, sub: ar ? '' : p.nameAr, color: 'var(--c-cal)', type: TYPES.pat[ar ? 1 : 0] + ' · ' + CULT_LBL[p.culture][ar ? 1 : 0]};
+    }
+    return null;
+  }
+
+  // ---- save buttons and the list chooser ----
+  function btn(it, lang, small) {
+    const on = savedAnywhere(it), ar = lang === 'ar';
+    return `<button type="button" class="agsave${small ? ' sm' : ''}" data-ag="${esc(JSON.stringify(it))}" aria-pressed="${on}" title="${ar ? 'احفظ في AstroGuide' : 'Save to AstroGuide'}">${on ? '★' : '☆'}${small ? '' : ` <span>${on ? (ar ? 'محفوظ' : 'Saved') : (ar ? 'احفظ' : 'Save')}</span>`}</button>`;
+  }
+  function refreshButtons() {
+    document.querySelectorAll('.agsave').forEach(b => {
+      const it = JSON.parse(b.dataset.ag), on = savedAnywhere(it), ar = state.lang === 'ar';
+      b.setAttribute('aria-pressed', on); b.firstChild.textContent = on ? '★' : '☆';
+      const sp = b.querySelector('span'); if (sp) sp.textContent = on ? (ar ? 'محفوظ' : 'Saved') : (ar ? 'احفظ' : 'Save');
+    });
+  }
+  function toast(msg) {
+    let t = document.getElementById('agtoast');
+    if (!t) { t = document.createElement('div'); t.id = 'agtoast'; t.setAttribute('role', 'status'); document.body.appendChild(t); }
+    t.textContent = msg; t.classList.add('on'); clearTimeout(t._h); t._h = setTimeout(() => t.classList.remove('on'), 1800);
+  }
+  function closeMenu() { const m = document.getElementById('agmenu'); if (m) m.remove(); }
+  function menu(b) {
+    const it = JSON.parse(b.dataset.ag), ar = state.lang === 'ar';
+    closeMenu();
+    if (S.lists.length === 1) {
+      const l = S.lists[0], on = toggle(l, it); refreshButtons();
+      toast(on ? (ar ? `حُفظ في «${listName(l, true)}»` : `Saved to ${listName(l, false)}`) : (ar ? 'أُزيل من القائمة' : 'Removed from your list'));
+      return;
+    }
+    const m = document.createElement('div'); m.id = 'agmenu'; m.setAttribute('role', 'menu'); if (ar) { m.dir = 'rtl'; m.lang = 'ar'; }
+    m.innerHTML = `<div class="agm-h">${ar ? 'احفظ في' : 'Save to'}</div>` + S.lists.map(l => `<button type="button" role="menuitemcheckbox" aria-checked="${inList(l, it)}" data-l="${l.id}"><span class="ck">${inList(l, it) ? '✓' : ''}</span>${esc(listName(l, ar))} <span class="n">${l.items.length}</span></button>`).join('')
+      + `<button type="button" data-new="1"><span class="ck">+</span>${ar ? 'قائمة جديدة' : 'New list'}</button>`;
+    document.body.appendChild(m);
+    const r = b.getBoundingClientRect();
+    m.style.top = (r.bottom + scrollY + 6) + 'px';
+    m.style.left = Math.max(8, Math.min(innerWidth - m.offsetWidth - 8, r.left + scrollX)) + 'px';
+    m.querySelectorAll('[data-l]').forEach(x => x.addEventListener('click', ev => {
+      ev.stopPropagation(); const l = S.lists.find(y => y.id === x.dataset.l), on = toggle(l, it);
+      x.setAttribute('aria-checked', on); x.querySelector('.ck').textContent = on ? '✓' : ''; x.querySelector('.n').textContent = l.items.length; refreshButtons();
+    }));
+    m.querySelector('[data-new]').addEventListener('click', ev => {
+      ev.stopPropagation(); const name = prompt(ar ? 'اسم القائمة الجديدة' : 'Name for the new list', ar ? 'جولة الليلة' : "Tonight's tour");
+      if (name === null) return; const l = {id: uid(), name: name.trim().slice(0, 40), items: []}; S.lists.push(l); toggle(l, it); refreshButtons(); closeMenu();
+      toast(ar ? `حُفظ في «${listName(l, true)}»` : `Saved to ${listName(l, false)}`);
+    });
+    m.querySelector('button').focus();
+  }
+  document.addEventListener('click', ev => {
+    const b = ev.target.closest('.agsave'); if (b) { ev.preventDefault(); ev.stopPropagation(); menu(b); return; }
+    if (!ev.target.closest('#agmenu')) closeMenu();
+  });
+  document.addEventListener('keydown', ev => { if (ev.key === 'Escape') closeMenu(); });
+
+  // ---- opening an item, and the presenting bar ----
+  function open(it, listId, i) {
+    state.agNav = listId ? {list: listId, i} : null;
+    if (it.t === 'con') { state.focus = null; state.con = it.key; setCulture(it.cul); }
+    else if (it.t === 'planet') { state.focus = `[data-planet="${it.ref}"]`; state.con = 'SOL'; setCulture('science'); }
+    else { state.focus = it.t === 'star' ? `[data-star="${CSS.escape(it.ref)}"]` : it.t === 'dso' ? `[data-dso="${CSS.escape(it.ref)}"]` : null; state.con = it.key; setCulture('science'); }
+    window.scrollTo({top: document.getElementById('card').getBoundingClientRect().top + scrollY - 10, behavior: 'smooth'});
+  }
+  function navBar(lang) {
+    const n = state.agNav; if (!n) return '';
+    const l = S.lists.find(x => x.id === n.list); if (!l || !l.items[n.i]) { state.agNav = null; return ''; }
+    const ar = lang === 'ar', inf = info(l.items[n.i], lang) || {title: '?'};
+    const note = l.items[n.i].note;
+    return `<div class="agnav"${ar ? ' dir="rtl" lang="ar"' : ''}><button type="button" data-agnav="prev"${n.i === 0 ? ' aria-disabled="true"' : ''}>${ar ? '→ السابق' : '← Previous'}</button><span class="agpos">${n.i + 1} ${ar ? 'من' : 'of'} ${l.items.length} · <b>${esc(inf.title)}</b> <span class="vref">${esc(listName(l, ar))}</span></span><button type="button" data-agnav="next"${n.i === l.items.length - 1 ? ' aria-disabled="true"' : ''}>${ar ? 'التالي ←' : 'Next →'}</button><button type="button" data-agnav="list">${ar ? 'القائمة' : 'Back to list'}</button><button type="button" data-agnav="close" aria-label="${ar ? 'إغلاق' : 'Close'}">✕</button>${note ? `<p class="agnote-show">${esc(note)}</p>` : ''}</div>`;
+  }
+  function bindNav(card) {
+    card.querySelectorAll('[data-agnav]').forEach(b => b.addEventListener('click', () => {
+      const n = state.agNav, l = n && S.lists.find(x => x.id === n.list); if (!l) return;
+      const a = b.dataset.agnav;
+      if (a === 'prev' && n.i > 0) open(l.items[n.i - 1], l.id, n.i - 1);
+      else if (a === 'next' && n.i < l.items.length - 1) open(l.items[n.i + 1], l.id, n.i + 1);
+      else if (a === 'list') { S.active = l.id; save(); state.agNav = null; setCulture('guide'); }
+      else if (a === 'close') { state.agNav = null; render(); }
+    }));
+    if (state.focus) {
+      const el = card.querySelector(state.focus); state.focus = null;
+      if (el) setTimeout(() => { el.scrollIntoView({behavior: 'smooth', block: 'center'}); el.classList.add('agflash'); setTimeout(() => el.classList.remove('agflash'), 1600); }, 60);
+    }
+  }
+
+  // ---- comparison ----
+  function compareHTML(items, lang) {
+    const ar = lang === 'ar', stars = items.map(it => ({it, s: findStar(it.key, it.ref)})).filter(x => x.s);
+    if (stars.length < 2) return '';
+    const R = stars.map(x => starRadius(x.s) || 1), max = Math.max(...R, 1);
+    const W = 640, H = 170, sc = 70 / max;
+    let x = 20, svg = `<svg class="sizes" viewBox="0 0 ${W} ${H}" role="img" aria-label="${ar ? 'مقارنة الأحجام بالمقياس نفسه' : 'Sizes compared to the same scale'}" dir="ltr">`;
+    stars.forEach((st, i) => { const r = Math.max(1.5, R[i] * sc), w = Math.max(2 * r + 24, 110); x += w / 2; svg += `<circle cx="${x.toFixed(1)}" cy="80" r="${r.toFixed(1)}" fill="${bvColour(st.s.ci, st.s.cls)}"/><text x="${x.toFixed(1)}" y="${Math.min(H - 6, 80 + r + 18).toFixed(1)}" text-anchor="middle">${esc(st.s.name)}</text>`; x += w / 2; });
+    const rs = Math.max(1.2, sc); x += 40; svg += `<circle cx="${Math.min(W - 30, x)}" cy="80" r="${rs.toFixed(1)}" fill="#f6c453"/><text x="${Math.min(W - 30, x)}" y="${(80 + rs + 18).toFixed(1)}" text-anchor="middle">${ar ? 'الشمس' : 'Sun'}</text></svg>`;
+    const rows = [
+      [ar ? 'الكوكبة' : 'Constellation', st => esc(ar ? byKey[st.it.key].ar : byKey[st.it.key].latin)],
+      [ar ? 'النوع' : 'Type', st => esc(typeTxt(st.s, lang))],
+      [ar ? 'المسافة' : 'Distance', st => distTxt(st.s.dist, lang)],
+      [ar ? 'الحرارة' : 'Temperature', st => st.s.temp ? (ar ? `نحو ${nf(st.s.temp)} كلفن` : `about ${nf(st.s.temp)} K`) : '—'],
+      [ar ? 'الحجم' : 'Size', st => { const r = starRadius(st.s); return r ? (ar ? `${nf(sig(r), 1)} ضعف الشمس` : `${nf(sig(r), 1)} × the Sun`) : '—'; }],
+      [ar ? 'الإضاءة' : 'Brightness', st => st.s.lum ? (ar ? `${nf(sig(st.s.lum), 1)} ضعف الشمس` : `${nf(sig(st.s.lum), 1)} × the Sun`) : '—'],
+      [ar ? 'القدر' : 'Magnitude', st => `<bdi dir="ltr">${st.s.mag.toFixed(1)}</bdi>`],
+      [ar ? 'مزدوج؟' : 'Double?', st => esc(dblTxt(st.s.dbl, lang).split(/[:،,]/)[0])],
+      [ar ? 'لرؤيته' : 'To see it', st => esc(scopeFor(st.s.mag)[lang])],
+      [ar ? 'غادره الضوء' : 'Light left it', st => st.s.dist ? leftAt(st.s.dist, lang) : '—']];
+    return `<section class="agcmp"><h3>${ar ? 'مقارنة النجوم' : 'Star comparison'}</h3>${svg}<div class="agtw"><table class="agt"><thead><tr><th></th>${stars.map(st => `<th><span class="sw" style="--sc:${bvColour(st.s.ci, st.s.cls)}"></span> ${esc(st.s.name)}</th>`).join('')}</tr></thead><tbody>${rows.map(([lab, f]) => `<tr><th>${lab}</th>${stars.map(st => `<td>${f(st)}</td>`).join('')}</tr>`).join('')}</tbody></table></div><p class="vref" style="white-space:normal">${ar ? 'الرسم بمقياس واحد للنجوم والشمس.' : 'The drawing shows the stars and the Sun at one scale.'}</p></section>`;
+  }
+
+  // ---- the AstroGuide page ----
+  let cmp = new Set(), renaming = false, confirmDel = false;
+  function guideHTML(lang) {
+    const ar = lang === 'ar', l = active();
+    let h = `<div class="agw${ar ? ' rtl' : ''}"${ar ? ' dir="rtl" lang="ar"' : ''}>`;
+    h += `<p class="muted" style="max-width:70ch">${ar ? 'احفظ الكوكبات والنجوم والأجرام والكواكب بزر ☆ احفظ في أي صفحة، ورتّبها في قوائم لجولاتك ومحاضراتك، وأضف ملاحظاتك، وتنقّل بينها بسهولة.' : 'Save constellations, stars, deep-sky objects and planets with the ☆ Save button on any page. Arrange them in lists for your tours and talks, add your notes, and move between them freely.'}</p>`;
+    h += `<div class="aglists" role="tablist">${S.lists.map(x => `<button type="button" role="tab" class="aglist" data-al="${x.id}" aria-selected="${x.id === l.id}">${esc(listName(x, ar))} <span class="n">${x.items.length}</span></button>`).join('')}<button type="button" class="aglist add" data-anew="1">+ ${ar ? 'قائمة جديدة' : 'New list'}</button></div>`;
+    h += `<div class="agbar">`;
+    if (renaming) h += `<input id="agname" type="text" maxlength="40" value="${esc(l.name)}" placeholder="${ar ? 'اسم القائمة' : 'List name'}"><button type="button" data-aact="rsave">${ar ? 'حفظ' : 'Save name'}</button>`;
+    else h += `<button type="button" data-aact="rename">${ar ? 'إعادة التسمية' : 'Rename'}</button>`;
+    h += `<button type="button" data-aact="copy">${ar ? 'انسخ رابط القائمة' : 'Copy list link'}</button>`;
+    if (S.lists.length > 1 || l.items.length) h += `<button type="button" data-aact="del" class="${confirmDel ? 'danger' : ''}">${confirmDel ? (ar ? 'اضغط مجددًا للحذف' : 'Tap again to delete') : (ar ? 'حذف القائمة' : 'Delete list')}</button>`;
+    h += `</div>`;
+    if (!l.items.length) {
+      h += `<div class="agempty"><p><b>${ar ? 'القائمة فارغة' : 'This list is empty'}</b></p><p>${ar ? 'افتح أي كوكبة أو نجم أو كوكب واضغط ☆ احفظ ليظهر هنا.' : 'Open any constellation, star or planet and tap ☆ Save to add it here.'}</p></div>`;
+    } else {
+      h += `<ol class="agitems">${l.items.map((it, i) => {
+        const inf = info(it, lang) || {title: it.ref || it.key, sub: '', color: 'var(--line)', type: ''};
+        return `<li class="agi"><div class="agrow"><span class="agn">${i + 1}</span><span class="agdot" style="background:${inf.color}"></span>
+          <button type="button" class="agtitle" data-aopen="${i}"><b>${esc(inf.title)}</b>${inf.sub ? ` <span class="agsub" ${/[؀-ۿ]/.test(inf.sub) ? 'lang="ar"' : ''}>${esc(inf.sub)}</span>` : ''}<span class="agtype">${esc(inf.type)}</span></button>
+          <span class="agctl">${it.t === 'star' ? `<label class="agck" title="${ar ? 'للمقارنة' : 'Compare'}"><input type="checkbox" data-acmp="${i}"${cmp.has(idOf(it)) ? ' checked' : ''}> ${ar ? 'قارن' : 'Compare'}</label>` : ''}
+          <button type="button" data-aup="${i}" aria-label="${ar ? 'إلى الأعلى' : 'Move up'}"${i === 0 ? ' aria-disabled="true"' : ''}>↑</button><button type="button" data-adown="${i}" aria-label="${ar ? 'إلى الأسفل' : 'Move down'}"${i === l.items.length - 1 ? ' aria-disabled="true"' : ''}>↓</button><button type="button" data-arm="${i}" aria-label="${ar ? 'إزالة' : 'Remove'}">✕</button></span></div>
+          <textarea class="agnote" data-anote="${i}" rows="1" placeholder="${ar ? 'ملاحظاتك للحديث…' : 'Your talking points…'}">${esc(it.note || '')}</textarea></li>`;
+      }).join('')}</ol>`;
+      const nc = l.items.filter(it => it.t === 'star' && cmp.has(idOf(it)));
+      h += `<div class="agbar"><button type="button" data-aact="start" class="agstart">${ar ? '▶ ابدأ العرض من الأول' : '▶ Start presenting from item 1'}</button>${l.items.some(it => it.t === 'star') ? `<span class="muted" style="font-size:15px">${nc.length >= 2 ? (ar ? `المقارنة: ${nc.length} نجوم` : `Comparing ${nc.length} stars`) : (ar ? 'اختر نجمين أو أكثر بخانة «قارن» لمقارنتها.' : 'Tick Compare on two or more stars to compare them.')}</span>` : ''}</div>`;
+      if (nc.length >= 2) h += compareHTML(nc, lang);
+    }
+    h += `<p class="vref" style="white-space:normal;margin-top:16px">${ar ? 'تُحفظ قوائمك في هذا المتصفح على جهازك فقط. لنقلها إلى جهاز آخر استعمل «انسخ رابط القائمة» وافتح الرابط هناك.' : 'Your lists are kept in this browser on this device only. To move a list to another device, use Copy list link and open the link there.'}</p>`;
+    return h + `</div>`;
+  }
+  function shareLink(l) {
+    const data = {n: l.name, i: l.items.map(({t, key, ref, cul, note}) => ({t, key, ref, cul, note}))};
+    const b64 = btoa(unescape(encodeURIComponent(JSON.stringify(data)))).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+    return location.href.split('#')[0] + '#ag=' + b64;
+  }
+  function importFromHash() {
+    const h = location.hash; if (!h.startsWith('#ag=')) return false;
+    try {
+      let b = h.slice(4).replace(/-/g, '+').replace(/_/g, '/'); while (b.length % 4) b += '=';
+      const d = JSON.parse(decodeURIComponent(escape(atob(b))));
+      const items = (d.i || []).filter(it => it && TYPES[it.t] && typeof it.key === 'string').slice(0, 200).map(it => ({t: it.t, key: it.key, ref: it.ref || '', cul: it.cul || '', note: String(it.note || '').slice(0, 2000)}));
+      const l = {id: uid(), name: (String(d.n || '').slice(0, 40) || (state.lang === 'ar' ? 'قائمتي' : 'My list')) + (state.lang === 'ar' ? ' (مشاركة)' : ' (shared)'), items};
+      S.lists.push(l); S.active = l.id; save(); state.cul = 'guide';
+      try { history.replaceState(null, '', '#guide'); } catch (e) {}
+      return true;
+    } catch (e) { return false; }
+  }
+  function bindGuide(card) {
+    const l = active(), ar = state.lang === 'ar', re = () => render();
+    card.querySelectorAll('[data-al]').forEach(b => b.addEventListener('click', () => { S.active = b.dataset.al; cmp.clear(); renaming = false; confirmDel = false; save(); re(); }));
+    const nb = card.querySelector('[data-anew]'); if (nb) nb.addEventListener('click', () => { const name = prompt(ar ? 'اسم القائمة الجديدة' : 'Name for the new list', ar ? 'جولة الليلة' : "Tonight's tour"); if (name === null) return; const x = {id: uid(), name: name.trim().slice(0, 40), items: []}; S.lists.push(x); S.active = x.id; save(); re(); });
+    card.querySelectorAll('[data-aact]').forEach(b => b.addEventListener('click', () => {
+      const a = b.dataset.aact;
+      if (a === 'rename') { renaming = true; re(); const i = document.getElementById('agname'); if (i) i.focus(); }
+      else if (a === 'rsave') { l.name = (document.getElementById('agname').value || '').trim().slice(0, 40); renaming = false; save(); re(); }
+      else if (a === 'del') { if (!confirmDel) { confirmDel = true; re(); return; } confirmDel = false; S.lists = S.lists.filter(x => x.id !== l.id); if (!S.lists.length) S.lists = [{id: uid(), name: '', items: []}]; S.active = S.lists[0].id; save(); re(); }
+      else if (a === 'copy') { const link = shareLink(l); (navigator.clipboard && navigator.clipboard.writeText ? navigator.clipboard.writeText(link) : Promise.reject()).then(() => toast(ar ? 'نُسخ الرابط' : 'Link copied'), () => { prompt(ar ? 'انسخ هذا الرابط' : 'Copy this link', link); }); }
+      else if (a === 'start' && l.items.length) open(l.items[0], l.id, 0);
+    }));
+    const ni = document.getElementById('agname'); if (ni) ni.addEventListener('keydown', ev => { if (ev.key === 'Enter') { l.name = ni.value.trim().slice(0, 40); renaming = false; save(); re(); } });
+    card.querySelectorAll('[data-aopen]').forEach(b => b.addEventListener('click', () => { const i = +b.dataset.aopen; open(l.items[i], l.id, i); }));
+    const mv = (i, d) => { const j = i + d; if (j < 0 || j >= l.items.length) return; [l.items[i], l.items[j]] = [l.items[j], l.items[i]]; save(); re(); };
+    card.querySelectorAll('[data-aup]').forEach(b => b.addEventListener('click', () => mv(+b.dataset.aup, -1)));
+    card.querySelectorAll('[data-adown]').forEach(b => b.addEventListener('click', () => mv(+b.dataset.adown, 1)));
+    card.querySelectorAll('[data-arm]').forEach(b => b.addEventListener('click', () => { l.items.splice(+b.dataset.arm, 1); save(); re(); }));
+    card.querySelectorAll('[data-acmp]').forEach(c => c.addEventListener('change', () => { const id = idOf(l.items[+c.dataset.acmp]); if (c.checked) cmp.add(id); else cmp.delete(id); re(); }));
+    card.querySelectorAll('[data-anote]').forEach(t => {
+      const fit = () => { t.style.height = 'auto'; t.style.height = (t.scrollHeight + 2) + 'px'; }; fit();
+      t.addEventListener('input', () => { l.items[+t.dataset.anote].note = t.value.slice(0, 2000); fit(); clearTimeout(t._h); t._h = setTimeout(save, 300); });
+    });
+  }
+  load();
+  return {btn, info, guideHTML, bindGuide, navBar, bindNav, updateCount, importFromHash, total};
+})();
+
 function render() {
   writeHash();
-  document.querySelector('.layout').classList.toggle('cal-mode', state.cul === 'calendar');
+  document.querySelector('.layout').classList.toggle('cal-mode', state.cul === 'calendar' || state.cul === 'guide');
+  if (state.cul === 'guide') {
+    document.querySelectorAll('#cultures input').forEach(i => { i.checked = i.value === 'guide'; i.closest('.chip').classList.remove('none'); });
+    const card = document.getElementById('card'), ar = state.lang === 'ar';
+    card.style.setProperty('--cc', '#e9a23b');
+    let h = `<div class="card-head"><div><div class="eyebrow"><span class="dot"></span>★ AstroGuide</div><h2${ar ? ' lang="ar" style="font-family:var(--f-ar)"' : ''}>${ar ? 'كوكباتك ونجومك المحفوظة' : 'Your saved stars and constellations'}</h2></div></div>`;
+    h += `<div class="langs" role="group" aria-label="Language">${[['en', 'English'], ['ar', 'العربية']].map(([id, l]) => `<button type="button" data-lang="${id}" aria-pressed="${(ar ? 'ar' : 'en') === id}"${id === 'ar' ? ' lang="ar"' : ''}>${l}</button>`).join('')}</div>`;
+    h += AG.guideHTML(ar ? 'ar' : 'en');
+    card.innerHTML = h;
+    card.querySelectorAll('[data-lang]').forEach(b => b.addEventListener('click', () => { state.lang = b.dataset.lang; try { localStorage.setItem('osms-lang', state.lang); } catch (e) {} render(); }));
+    AG.bindGuide(card);
+    return;
+  }
   if (state.cul === 'calendar') {
     document.querySelectorAll('#cultures input').forEach(i => { i.checked = i.value === 'calendar'; i.closest('.chip').classList.remove('none'); });
     const card = document.getElementById('card'), ar = state.lang === 'ar';
@@ -1351,7 +1668,8 @@ function render() {
   const card = document.getElementById('card');
   card.style.setProperty('--cc', `var(--c-${state.cul})`);
   card.style.animation = 'none'; void card.offsetWidth; card.style.animation = '';
-  let h = `<div class="card-head"><div><div class="eyebrow"><span class="dot"></span>${state.cul === 'science' ? (state.lang === 'ar' ? 'العلم' : 'Science') : cname(state.cul) + ' sky'}</div><h2>${esc(c.latin)}</h2><div class="gls"${state.lang === 'ar' && c.glossAr ? ' lang="ar" dir="rtl" style="font-family:var(--f-ar)"' : ''}>${esc(state.lang === 'ar' && c.glossAr ? c.glossAr : c.gloss)}</div></div><div class="arn" lang="ar">${esc(c.ar)}</div></div>`;
+  let h = `<div class="card-head"><div><div class="eyebrow"><span class="dot"></span>${state.cul === 'science' ? (state.lang === 'ar' ? 'العلم' : 'Science') : cname(state.cul) + ' sky'}</div><h2>${esc(c.latin)}</h2><div class="gls"${state.lang === 'ar' && c.glossAr ? ' lang="ar" dir="rtl" style="font-family:var(--f-ar)"' : ''}>${esc(state.lang === 'ar' && c.glossAr ? c.glossAr : c.gloss)}</div></div><div><div class="arn" lang="ar">${esc(c.ar)}</div>${state.con !== 'QUR' ? `<div style="text-align:end">${AG.btn({t: 'con', key: state.con, cul: state.cul}, state.lang)}</div>` : ''}</div></div>`;
+  h = AG.navBar(state.lang === 'af' ? 'en' : state.lang) + h;
   const L = state.lang;
   const chart = DATA.charts[state.con];
   const pos = state.cul === 'science' ? null : (POS.pos[state.con] || {})[state.cul];
@@ -1419,6 +1737,7 @@ function render() {
   card.querySelectorAll('[data-lang]').forEach(b => b.addEventListener('click', () => { state.lang = b.dataset.lang; try { localStorage.setItem('osms-lang', state.lang); } catch (e) {} render(); }));
   card.querySelectorAll('[data-con]').forEach(b => b.addEventListener('click', () => { state.con = b.dataset.con; render(); }));
   const kb = card.querySelector('#kidbtn'); if (kb) kb.addEventListener('click', () => { KIDS = !KIDS; try { localStorage.setItem('osms-kids', KIDS ? '1' : '0'); } catch (e) {} render(); });
+  AG.bindNav(card);
 }
 
 function applySkin(v) {
@@ -1428,15 +1747,16 @@ function init() {
   let sk = ''; try { sk = localStorage.getItem('osms-skin') || ''; } catch (e) {}
   applySkin(sk); const sel = document.getElementById('skin'); sel.value = sk;
   sel.addEventListener('change', () => { applySkin(sel.value); try { localStorage.setItem('osms-skin', sel.value); } catch (e) {} });
-  readHash();
+  if (!AG.importFromHash()) readHash();
   if (!hasLore(state.con, state.cul)) state.con = firstFor(state.cul);
   buildCultures();
+  AG.updateCount();
   buildList();
   const total = Object.values(DATA.lore).reduce((n, v) => n + Object.keys(v).length, 0);
   document.getElementById('count').textContent = `88 constellations · ${CULTURES.length} cultures · ${total} stories · science`;
   document.getElementById('q').addEventListener('input', ev => buildList(ev.target.value));
   if (matchMedia('(max-width: 860px)').matches) document.getElementById('index').open = false;
-  window.addEventListener('hashchange', () => { if (readHash()) { if (!hasLore(state.con, state.cul)) state.con = firstFor(state.cul); buildList(document.getElementById('q').value); render(); } });
+  window.addEventListener('hashchange', () => { if (AG.importFromHash()) { render(); return; } if (readHash()) { if (!hasLore(state.con, state.cul)) state.con = firstFor(state.cul); buildList(document.getElementById('q').value); render(); } });
   render();
 }
 init();
