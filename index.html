@@ -416,6 +416,22 @@ h2 { font-family: var(--f-display); font-weight: 400; font-size: clamp(28px, 4vw
 .srcs a, .src a, .by a, .vref a { color: inherit; text-decoration: underline; text-decoration-color: color-mix(in srgb, currentColor 45%, transparent); text-underline-offset: 2px; }
 .srcs a:hover, .src a:hover, .by a:hover, .vref a:hover { text-decoration-color: currentColor; }
 .srcbody .credit { margin-top: 0; border-top: 0; padding-top: 0; }
+
+.fbform h3 { font: 400 24px/1.2 var(--f-display); margin: 0 0 6px; }
+.fbrow { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); gap: 12px 18px; margin: 10px 0 12px; }
+.fbform label { display: flex; flex-direction: column; gap: 5px; font-size: 15px; color: var(--ink); }
+.fbopt { color: var(--muted); font-size: 13.5px; }
+.fbform input, .fbform select, .fbform textarea { font: inherit; font-size: 16px; padding: 8px 10px; border: 1px solid var(--line); border-radius: 8px; background: var(--panel); color: var(--ink); width: 100%; box-sizing: border-box; }
+.fbform textarea { resize: vertical; min-height: 120px; }
+.fbform input:focus-visible, .fbform select:focus-visible, .fbform textarea:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+.fbmsg { max-width: 760px; }
+.fbhp { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
+.fbbar { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-top: 12px; }
+.fbbtn { font: inherit; font-size: 16px; padding: 7px 20px; border-radius: 999px; border: 1px solid var(--accent); background: var(--accent); color: var(--panel); font-weight: 600; cursor: pointer; }
+.fbbtn:disabled { opacity: .6; cursor: default; }
+.fbmsgline { color: var(--muted); font-size: 15px; }
+.fbok p { font-size: 18px; margin: 4px 0 12px; }
+#fbbox.rtl { font-family: var(--f-ar); }
 </style>
 </head>
 <body>
@@ -453,7 +469,7 @@ h2 { font-family: var(--f-display); font-weight: 400; font-size: clamp(28px, 4vw
     <main class="card" id="card" aria-live="polite"><div id="nojs" class="none-box"><p><b>Loading the Sky Guide…</b></p><p>If this message stays, the app you opened the file in is only previewing it and does not run the page. Open the file in a web browser instead: Chrome, Safari, Edge or Firefox. On a phone, tap Share or ⋮ and choose “Open in Chrome” or “Open in Safari”.</p><p dir="rtl" lang="ar" style="font-family:var(--f-ar)">إذا بقيت هذه الرسالة ظاهرة، فالتطبيق الذي فتحت فيه الملف يعرض معاينة فقط ولا يشغّل الصفحة. افتح الملف في متصفح ويب مثل كروم أو سفاري أو إيدج أو فايرفوكس. على الهاتف اضغط «مشاركة» أو ⋮ واختر «فتح في كروم» أو «فتح في سفاري».</p></div></main>
   </div>
 
-  <div class="srcrow" role="tablist"><button type="button" class="srctab" data-sp="sources" aria-expanded="false" aria-controls="sources">Sources <span lang="ar">المصادر</span></button><button type="button" class="srctab" data-sp="credits" aria-expanded="false" aria-controls="credits">Credits <span lang="ar">الإعداد</span></button></div>
+  <div class="srcrow" role="tablist"><button type="button" class="srctab" data-sp="sources" aria-expanded="false" aria-controls="sources">Sources <span lang="ar">المصادر</span></button><button type="button" class="srctab" data-sp="credits" aria-expanded="false" aria-controls="credits">Credits <span lang="ar">الإعداد</span></button><button type="button" class="srctab" data-sp="feedback" aria-expanded="false" aria-controls="feedback">Feedback <span lang="ar">ملاحظاتك</span></button></div>
   <section class="srcs" id="sources" hidden>
     <div class="srcbody">
       <p class="srcnote">Every story, verse and fact on this page comes from the sources below. Tap a name to open it. Each story also names its own source underneath it.</p>
@@ -471,6 +487,7 @@ h2 { font-family: var(--f-display); font-weight: 400; font-size: clamp(28px, 4vw
       </div>
     </div>
   </section>
+  <section class="srcs" id="feedback" hidden><div class="srcbody" id="fbbox"></div></section>
   <section class="srcs" id="credits" hidden>
     <div class="srcbody">
       <footer class="credit">
@@ -526,7 +543,7 @@ function srcLinks(line) { return String(line || '').split(/;\s*/).map(part => { 
 // free text such as "Sources: HYG ...; OpenNGC ...": link the first mention of each known source
 function linkText(t) { let out = esc(t); const used = new Set(); SRCS.forEach(([re, u]) => { if (used.has(u)) return; const m = out.match(re); if (m && !/<a [^>]*$/.test(out.slice(0, m.index))) { out = out.slice(0, m.index) + srcA(u, m[0]) + out.slice(m.index + m[0].length); used.add(u); } }); return out; }
 document.addEventListener('click', ev => { const t = ev.target.closest('.srctab'); if (!t) return; const id = t.dataset.sp, open = t.getAttribute('aria-expanded') !== 'true';
-  document.querySelectorAll('.srctab').forEach(b => { const on = open && b.dataset.sp === id; b.setAttribute('aria-expanded', on); const pnl = document.getElementById(b.dataset.sp); if (pnl) pnl.hidden = !on; }); });
+  document.querySelectorAll('.srctab').forEach(b => { const on = open && b.dataset.sp === id; b.setAttribute('aria-expanded', on); const pnl = document.getElementById(b.dataset.sp); if (pnl) pnl.hidden = !on; }); if (open && id === 'feedback') fbRender(); });
 function esc(s) { return s.replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
 
 function buildCultures() {
@@ -1781,8 +1798,63 @@ const AG = (() => {
   return {btn, info, guideHTML, bindGuide, navBar, bindNav, updateCount, importFromHash, total};
 })();
 
+
+/* ---------- Feedback: sent to the owner's Google Form ---------- */
+const FB = {url: 'https://docs.google.com/forms/d/e/1FAIpQLScozkqJMwmrHlOfCnMeouZEureiwztVFgIIL2dXjwcSkZ9Pmg/formResponse',
+            name: 'entry.1242525159', email: 'entry.2051052095', type: 'entry.740548683', msg: 'entry.1190509643'};
+const FB_TYPES = [['Suggestion', 'اقتراح'], ['Mistake in the content', 'خطأ في المحتوى'], ['Something not working', 'شيء لا يعمل كما ينبغي'], ['Other', 'غير ذلك']];
+const FBT = {
+  en: {h: 'Send feedback', intro: 'Tell me what you think, point out a mistake, or suggest something new. Only I see your message; nothing you send is shown on this page.',
+       name: 'Name', opt: 'optional', email: 'Email', emailHint: 'only if you would like a reply', type: 'Type', choose: 'Choose…', msg: 'Message', send: 'Send', sending: 'Sending…',
+       need: 'Please write a message first.', badEmail: 'That email address does not look right. Fix it or leave the box empty.', wait: 'Please wait a few seconds before sending again.',
+       ok: 'Thank you! Your message has been sent.', again: 'Send another message', fail: 'Sorry, the message could not be sent. Check your internet connection and try again.'},
+  ar: {h: 'أرسل ملاحظاتك', intro: 'أخبرني برأيك، أو نبّهني إلى خطأ، أو اقترح شيئًا جديدًا. لا يرى رسالتك أحد غيري، ولا يظهر شيء منها في هذه الصفحة.',
+       name: 'الاسم', opt: 'اختياري', email: 'البريد الإلكتروني', emailHint: 'فقط إن أردت ردًّا', type: 'النوع', choose: 'اختر…', msg: 'الرسالة', send: 'إرسال', sending: 'جارٍ الإرسال…',
+       need: 'اكتب رسالتك أولًا من فضلك.', badEmail: 'يبدو أن البريد الإلكتروني غير صحيح. صحّحه أو اترك الخانة فارغة.', wait: 'انتظر بضع ثوانٍ قبل أن ترسل مرة أخرى.',
+       ok: 'شكرًا لك! أُرسلت رسالتك.', again: 'أرسل رسالة أخرى', fail: 'عذرًا، تعذّر إرسال الرسالة. تحقّق من اتصالك بالإنترنت ثم حاول مرة أخرى.'}
+};
+let fbLast = 0, fbDone = false;
+function fbPlace() {
+  if (state.cul === 'guide') return 'AstroGuide'; if (state.cul === 'calendar') return 'Sky calendar';
+  const c = byKey[state.con]; return (c ? c.latin : state.con) + ' · ' + cname(state.cul);
+}
+function fbRender() {
+  const box = document.getElementById('fbbox'); if (!box) return;
+  const L = state.lang === 'ar' ? 'ar' : 'en', t = FBT[L], ar = L === 'ar';
+  const old = {}; box.querySelectorAll('[data-fb]').forEach(x => { old[x.dataset.fb] = x.value; });
+  box.setAttribute('dir', ar ? 'rtl' : 'ltr'); box.setAttribute('lang', L); box.classList.toggle('rtl', ar);
+  if (fbDone) { box.innerHTML = `<div class="fbok" role="status"><p>${t.ok}</p><button type="button" class="fbbtn" id="fbagain">${t.again}</button></div>`; box.querySelector('#fbagain').addEventListener('click', () => { fbDone = false; fbRender(); }); return; }
+  box.innerHTML = `<form class="fbform" id="fbform" novalidate><h3>${t.h}</h3><p class="srcnote">${t.intro}</p>
+    <div class="fbrow"><label><span>${t.name} <span class="fbopt">(${t.opt})</span></span><input type="text" data-fb="name" maxlength="80" autocomplete="name"></label>
+    <label><span>${t.email} <span class="fbopt">(${t.opt}${ar ? '، ' : ', '}${t.emailHint})</span></span><input type="email" data-fb="email" maxlength="120" autocomplete="email" dir="ltr"></label>
+    <label><span>${t.type} <span class="fbopt">(${t.opt})</span></span><select data-fb="type"><option value="">${t.choose}</option>${FB_TYPES.map(([v, a]) => `<option value="${esc(v)}">${ar ? a : v}</option>`).join('')}</select></label></div>
+    <label class="fbmsg"><span>${t.msg}</span><textarea data-fb="msg" rows="5" maxlength="3000" required></textarea></label>
+    <input type="text" data-fb="hp" class="fbhp" tabindex="-1" autocomplete="off" aria-hidden="true">
+    <div class="fbbar"><button type="submit" class="fbbtn">${t.send}</button><span class="fbmsgline" role="status" aria-live="polite"></span></div></form>`;
+  box.querySelectorAll('[data-fb]').forEach(x => { if (old[x.dataset.fb] != null) x.value = old[x.dataset.fb]; });
+  box.querySelector('#fbform').addEventListener('submit', fbSend);
+}
+async function fbSend(ev) {
+  ev.preventDefault();
+  const f = ev.target, L = state.lang === 'ar' ? 'ar' : 'en', t = FBT[L], line = f.querySelector('.fbmsgline'), btn = f.querySelector('button[type=submit]');
+  const v = k => (f.querySelector(`[data-fb="${k}"]`).value || '').trim();
+  if (v('hp')) return;                                         // a bot filled the hidden box
+  if (!v('msg')) { line.textContent = t.need; f.querySelector('[data-fb="msg"]').focus(); return; }
+  if (v('email') && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v('email'))) { line.textContent = t.badEmail; f.querySelector('[data-fb="email"]').focus(); return; }
+  if (Date.now() - fbLast < 15000) { line.textContent = t.wait; return; }
+  const body = new URLSearchParams();
+  body.set(FB.name, v('name')); body.set(FB.email, v('email')); if (v('type')) body.set(FB.type, v('type'));
+  body.set(FB.msg, v('msg') + '\n\n(Sent from: ' + fbPlace() + ', ' + (L === 'ar' ? 'Arabic' : 'English') + ')');
+  btn.disabled = true; btn.textContent = t.sending; line.textContent = '';
+  try {
+    await fetch(FB.url, {method: 'POST', mode: 'no-cors', body});   // Google does not let pages read the reply, so a completed request counts as sent
+    fbLast = Date.now(); fbDone = true; fbRender();
+  } catch (e) { btn.disabled = false; btn.textContent = t.send; line.textContent = t.fail; }
+}
+
 function render() {
   writeHash();
+  { const fp = document.getElementById('feedback'); if (fp && !fp.hidden) fbRender(); }
   document.querySelector('.layout').classList.toggle('cal-mode', state.cul === 'calendar' || state.cul === 'guide');
   if (state.cul === 'guide') {
     document.querySelectorAll('#cultures input').forEach(i => { i.checked = i.value === 'guide'; i.closest('.chip').classList.remove('none'); });
