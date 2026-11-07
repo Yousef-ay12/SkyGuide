@@ -249,6 +249,11 @@ h2 { font-family: var(--f-display); font-weight: 400; font-size: clamp(28px, 4vw
 .plg { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 250px), 1fr)); gap: 10px; }
 .plc { border: 1px solid var(--line); border-radius: 6px; padding: 10px 12px; background: var(--bg); }
 .plc h4 { margin: 0 0 4px; font-size: 19px; display: flex; align-items: center; gap: 8px; }
+.plc h4 .swl { display: none; }
+.plc h4 > * { flex-shrink: 0; }
+.starc h4 .swl { display: none; }
+.starc h4 > .agsave, .starc h4 > .swbtn, .starc h4 > span { flex-shrink: 0; }
+.starc h4 > bdi { min-width: 0; overflow-wrap: anywhere; -webkit-hyphens: auto; hyphens: auto; }
 .plc .pd { width: 14px; height: 14px; border-radius: 50%; background: var(--pc); box-shadow: 0 0 0 1px var(--line); }
 .plc p { margin: 0 0 4px; font-size: 16px; line-height: 1.4; }
 .keyd { margin-top: 12px; }
@@ -1787,7 +1792,7 @@ function swBtn(name, fov, lang, tUTC) {
   const ar = lang === 'ar', tip = ar ? 'يفتح موقع Stellarium Web في نافذة جديدة، ويعرض السماء من المكان والليلة المختارين في تقويم السماء.' : 'Opens Stellarium Web in a new tab, showing the sky from the place and night chosen in the Sky calendar.';
   let href = 'https://stellarium-web.org/';
   try { href = swHref(name, fov || 30, tUTC || 0); } catch (e) {}
-  return `<a class="swbtn" href="${esc(href)}" target="_blank" rel="noopener" data-sw="${esc(name)}" data-swf="${fov || 30}"${tUTC ? ` data-swt="${tUTC}"` : ''} title="${esc(tip)}"${ar ? ' dir="rtl" lang="ar"' : ''}>${ar ? 'اعرضه في <bdi dir="ltr">Stellarium Web</bdi>' : 'View in Stellarium Web'}</a>`;
+  return `<a class="swbtn" href="${esc(href)}" target="_blank" rel="noopener" data-sw="${esc(name)}" data-swf="${fov || 30}"${tUTC ? ` data-swt="${tUTC}"` : ''} title="${esc(tip)}" aria-label="${ar ? 'اعرضه في Stellarium Web' : 'View in Stellarium Web'}"${ar ? ' dir="rtl" lang="ar"' : ''}>${ar ? '<span class="swl">اعرضه في </span><bdi dir="ltr">Stellarium<span class="swl"> Web</span></bdi>' : '<span class="swl">View in </span>Stellarium<span class="swl"> Web</span>'}</a>`;
 }
 // work out the link at the moment of the click, so it always uses the current place and night
 ['click', 'auxclick', 'contextmenu', 'focusin'].forEach(evn => document.addEventListener(evn, ev => {
