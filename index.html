@@ -120,6 +120,7 @@ h1 { font-family: var(--f-display); font-weight: 400; font-size: clamp(30px, 5vw
 .card-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-start; gap: 6px 20px; border-bottom: 1px solid var(--line); padding-bottom: 14px; margin-bottom: 18px; }
 .eyebrow { font-family: var(--f-mono); font-size: 12px; letter-spacing: .1em; text-transform: uppercase; display: flex; align-items: center; gap: 8px; color: var(--cc); margin-bottom: 6px; }
 .eyebrow .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--cc); }
+@media (max-width: 640px) { .card-head .eyebrow { width: 0; white-space: nowrap; overflow: visible; } .card-head.ebwide .eyebrow { width: auto; white-space: normal; } }
 h2 { font-family: var(--f-display); font-weight: 400; font-size: clamp(28px, 4vw, 40px); line-height: 1.1; margin: 0; text-wrap: balance; }
 .card-head .gls { color: var(--muted); font-size: 18px; margin-top: 2px; }
 .card-head .arn { font-family: var(--f-ar); font-size: 30px; color: var(--accent); direction: rtl; line-height: 1.3; }
@@ -1721,6 +1722,16 @@ function swHref(name, fov, tUTC) {
   const date = new Date(t).toISOString().replace(/\.\d+Z$/, 'Z');
   return 'https://stellarium-web.org/skysource/' + encodeURIComponent(name) + '?fov=' + (fov || 30).toFixed(2) + '&date=' + date + '&lat=' + pl.lat.toFixed(2) + '&lng=' + pl.lon.toFixed(2) + '&elev=0';
 }
+// On phones the long culture label (e.g. SOUTHERN AFRICAN SKY) runs across the box so the Arabic name and buttons stay on the right;
+// if it would touch the Arabic name, fall back to the normal layout.
+function fitEyebrow(card) {
+  const head = card.querySelector('.card-head'); if (!head) return; head.classList.remove('ebwide');
+  const eb = head.querySelector('.eyebrow'), arn = head.querySelector('.arn'); if (!eb || !arn) return;
+  const r1 = document.createRange(); r1.selectNodeContents(eb); const r2 = document.createRange(); r2.selectNodeContents(arn);
+  const e = r1.getBoundingClientRect(), a = r2.getBoundingClientRect();
+  if (e.right > a.left - 8 && e.bottom > a.top && e.top < a.bottom) head.classList.add('ebwide');
+}
+addEventListener('resize', () => { const c = document.getElementById('card'); if (c) fitEyebrow(c); });
 function swBtn(name, fov, lang, tUTC) {
   if (!name) return '';
   const ar = lang === 'ar', tip = ar ? 'يفتح موقع Stellarium Web في نافذة جديدة، ويعرض السماء من المكان والليلة المختارين في تقويم السماء.' : 'Opens Stellarium Web in a new tab, showing the sky from the place and night chosen in the Sky calendar.';
@@ -2411,6 +2422,7 @@ function render() {
     h += `<span class="sect-lbl" style="margin-top:18px">${cname(state.cul)} stories exist for</span><div class="links">${withCul.map(x => `<button type="button" data-con="${x.key}" style="--cc:var(--c-${state.cul})"><span class="dot"></span>${esc(x.latin)}</button>`).join('')}</div></div>`;
   }
   card.innerHTML = h;
+  fitEyebrow(card);
   card.querySelectorAll('[data-cul]').forEach(b => b.addEventListener('click', () => setCulture(b.dataset.cul)));
   card.querySelectorAll('[data-lang]').forEach(b => b.addEventListener('click', () => { state.lang = b.dataset.lang; try { localStorage.setItem('osms-lang', state.lang); } catch (e) {} render(); }));
   card.querySelectorAll('[data-con]').forEach(b => b.addEventListener('click', () => { state.con = b.dataset.con; render(); }));
