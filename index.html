@@ -4,6 +4,14 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Sky Guide</title>
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#121a33">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-title" content="Sky Guide">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -498,6 +506,10 @@ h2 { font-family: var(--f-display); font-weight: 400; font-size: clamp(28px, 4vw
 .tourbtn { font: inherit; font-size: 14px; padding: 4px 12px; border: 1px solid var(--line); border-radius: 999px; background: var(--panel); color: var(--ink); cursor: pointer; display: inline-flex; align-items: center; gap: 6px; }
 .tourbtn span { display: inline-grid; place-items: center; width: 18px; height: 18px; border-radius: 50%; background: var(--accent); color: var(--panel); font-weight: 700; font-size: 12px; }
 .tourbtn:hover, .tourbtn:focus-visible { border-color: var(--accent); }
+.tourbtn[hidden] { display: none; }
+.hbrow { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.offtoast { position: fixed; z-index: 950; left: 50%; bottom: 20px; transform: translateX(-50%); max-width: min(420px, calc(100vw - 32px)); background: var(--panel); color: var(--ink); border: 1px solid var(--accent); border-radius: 12px; padding: 10px 14px; box-shadow: 0 8px 26px rgba(0,0,0,.25); font-size: 15px; }
+.tournote .ish { display: inline-block; padding: 0 4px; border: 1px solid var(--line); border-radius: 5px; font-size: 13px; }
 .tour { position: fixed; inset: 0; z-index: 1000; }
 .tt-hole { position: fixed; border-radius: 10px; box-shadow: 0 0 0 9999px rgba(5, 10, 25, .62); outline: 2px solid var(--accent); transition: all .2s ease; pointer-events: none; }
 .tt-tip { position: fixed; z-index: 1001; background: var(--panel); color: var(--ink); border: 1px solid var(--line); border-radius: 14px; padding: 14px 16px 12px; box-shadow: 0 10px 30px rgba(0,0,0,.3); max-width: calc(100vw - 24px); box-sizing: border-box; }
@@ -539,7 +551,8 @@ h2 { font-family: var(--f-display); font-weight: 400; font-size: clamp(28px, 4vw
           <option value="red">Night red (for stargazing)</option>
         </select>
       </label>
-      <button type="button" class="tourbtn" id="tourbtn" aria-label="How to use this page: a step-by-step tour"><span aria-hidden="true">?</span> How to use</button>
+      <div class="hbrow"><button type="button" class="tourbtn" id="tourbtn" aria-label="How to use this page: a step-by-step tour"><span aria-hidden="true">?</span> How to use</button>
+      <button type="button" class="tourbtn" id="installbtn" hidden aria-label="Install Sky Guide as an app on this device"><span aria-hidden="true">↓</span> Install app</button></div>
       <div class="count" id="count"></div>
     </div>
   </header>
@@ -729,6 +742,43 @@ const TOUR = (() => {
   }
   document.addEventListener('click', ev => { if (ev.target.closest && ev.target.closest('#tourbtn')) start(); });
   return {start, end, note};
+})();
+
+/* ---------- installable app: offline helper, Android install button, iPhone tip ---------- */
+const APP = (() => {
+  const standalone = () => (window.matchMedia && matchMedia('(display-mode: standalone)').matches) || navigator.standalone === true;
+  const ios = /iP(hone|ad|od)/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  const safari = /Safari/.test(navigator.userAgent) && !/CriOS|FxiOS|EdgiOS|OPiOS|GSA\//.test(navigator.userAgent);
+  let deferred = null;
+  function toast(msg) {
+    let t = document.getElementById('offtoast'); if (t) t.remove();
+    t = document.createElement('div'); t.id = 'offtoast'; t.className = 'offtoast'; t.setAttribute('role', 'status'); t.setAttribute('dir', state.lang === 'ar' ? 'rtl' : 'ltr'); t.textContent = msg;
+    document.body.appendChild(t); setTimeout(() => t.remove(), 4500);
+  }
+  // the offline helper runs only on the real site (not in previews or when opened as a file)
+  if ('serviceWorker' in navigator && /^(yousef-ay12\.github\.io|localhost|127\.0\.0\.1)$/.test(location.hostname)) {
+    addEventListener('load', () => { navigator.serviceWorker.register('sw.js').catch(() => {}); });
+  }
+  // Android and computers: Chrome tells the page when installing is possible
+  addEventListener('beforeinstallprompt', ev => { ev.preventDefault(); deferred = ev; const b = document.getElementById('installbtn'); if (b) b.hidden = false; });
+  addEventListener('appinstalled', () => { deferred = null; const b = document.getElementById('installbtn'); if (b) b.hidden = true; });
+  document.addEventListener('click', async ev => {
+    if (!(ev.target.closest && ev.target.closest('#installbtn')) || !deferred) return;
+    const d = deferred; deferred = null; document.getElementById('installbtn').hidden = true;
+    try { await d.prompt(); } catch (e) {}
+  });
+  // iPhone and iPad in Safari: a one-time tip, after the first-visit tour note is done
+  function iosTip() {
+    if (!ios || !safari || standalone() || document.getElementById('tournote') || document.getElementById('installnote')) return;
+    let seen = true; try { seen = !localStorage.getItem('osms-tour') || !!localStorage.getItem('osms-install'); } catch (e) {}
+    if (seen) return;
+    const ar = state.lang === 'ar', n = document.createElement('div'); n.id = 'installnote'; n.className = 'tournote'; n.setAttribute('role', 'status'); n.setAttribute('dir', ar ? 'rtl' : 'ltr');
+    n.innerHTML = ar ? `<b>أضف Sky Guide إلى الشاشة الرئيسية</b><span>اضغط زر المشاركة <span class="ish" aria-hidden="true">⬆︎</span> في Safari، ثم «إضافة إلى الشاشة الرئيسية». سيفتح مثل التطبيق ويعمل دون إنترنت.</span><div><button type="button" class="main">حسنًا</button></div>`
+                     : `<b>Add Sky Guide to your Home Screen</b><span>In Safari, tap Share <span class="ish" aria-hidden="true">⬆︎</span>, then “Add to Home Screen”. It opens like an app and works offline.</span><div><button type="button" class="main">Got it</button></div>`;
+    n.querySelector('button').addEventListener('click', () => { try { localStorage.setItem('osms-install', 'seen'); } catch (e) {} n.remove(); });
+    document.body.appendChild(n);
+  }
+  return {toast, iosTip, standalone};
 })();
 
 /* ---------- main navigation: five section tabs, and a culture menu under Stories ---------- */
@@ -1742,6 +1792,7 @@ function swBtn(name, fov, lang, tUTC) {
 // work out the link at the moment of the click, so it always uses the current place and night
 ['click', 'auxclick', 'contextmenu', 'focusin'].forEach(evn => document.addEventListener(evn, ev => {
   const a = ev.target.closest && ev.target.closest('a.swbtn'); if (!a) return;
+  if (navigator.onLine === false) { ev.preventDefault(); APP.toast(state.lang === 'ar' ? 'يحتاج Stellarium Web إلى اتصال بالإنترنت. حاول مرة أخرى عندما تكون متصلًا.' : 'Stellarium Web needs an internet connection. Try again when you are online.'); return; }
   try { a.href = swHref(a.dataset.sw, +a.dataset.swf, a.dataset.swt ? +a.dataset.swt : 0); } catch (e) {}
 }, true));
 
@@ -2440,7 +2491,7 @@ function init() {
   if (!AG.importFromHash()) readHash();
   if (!hasLore(state.con, state.cul)) state.con = firstFor(state.cul);
   buildCultures(); buildNav();
-  setTimeout(() => { try { TOUR.note(); } catch (e) {} }, 1200);
+  setTimeout(() => { try { TOUR.note(); } catch (e) {} try { APP.iosTip(); } catch (e) {} }, 1200);
   AG.updateCount();
   buildList();
   const total = Object.values(DATA.lore).reduce((n, v) => n + Object.keys(v).length, 0);
