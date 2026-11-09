@@ -937,7 +937,7 @@ const QUIZ = (() => {
     },
     compare(lvl, ar) {
       const st = starsFor(lvl);
-      for (let t = 0; t < 60; t++) { const a = pick(st), b = pick(st); if (a === b) continue; const m = pick(['closer', 'bigger', 'brighter', 'hotter']);
+      for (let t = 0; t < 60; t++) { const a = pick(st), b = pick(st); if (a === b) continue; const m = pick(KIDS ? ['closer', 'bigger', 'hotter'] : ['closer', 'bigger', 'brighter', 'hotter']);
         let win, q, exp;
         if (m === 'closer') { if (!a.dist || !b.dist || Math.max(a.dist, b.dist) / Math.min(a.dist, b.dist) < 1.6) continue; win = a.dist < b.dist ? a : b;
           q = ar ? 'أي النجمين أقرب إلينا؟' : 'Which star is closer to us?'; exp = ar ? `${starName(a, true)}: ${ly(a.dist, true)}. ${starName(b, true)}: ${ly(b.dist, true)}.` : `${starName(a, false)}: ${ly(a.dist, false)}. ${starName(b, false)}: ${ly(b.dist, false)}.`; }
@@ -1046,7 +1046,7 @@ const QUIZ = (() => {
     if (G && G.lang !== state.lang && G.picked == null && !G.end) G = null;   // language changed: start again in the new language
     card.style.setProperty('--cc', '#8b7cf6');
     let h = `<div class="card-head"><div><div class="eyebrow"${ar ? ' lang="ar" style="letter-spacing:0;text-transform:none;font-family:var(--f-ar);font-size:15px"' : ''}><span class="dot"></span>${t.eyebrow}</div><h2${ar ? ' lang="ar" style="font-family:var(--f-ar)"' : ''}>${t.h}</h2>${G ? '' : `<p class="gls"${ar ? ' lang="ar" dir="rtl"' : ''}>${t.sub}</p>`}</div></div>`;
-    h += `<div class="langs" role="group" aria-label="Language">${[['en', 'English'], ['ar', 'العربية']].map(([id, l]) => `<button type="button" data-lang="${id}" aria-pressed="${lang === id}"${id === 'ar' ? ' lang="ar"' : ''}>${l}</button>`).join('')}</div>`;
+    h += `<div class="sci-tools"><div class="langs" role="group" aria-label="Language">${[['en', 'English'], ['ar', 'العربية']].map(([id, l]) => `<button type="button" data-lang="${id}" aria-pressed="${lang === id}"${id === 'ar' ? ' lang="ar"' : ''}>${l}</button>`).join('')}</div>${kidBtn(ar)}</div>`;
     h += `<div class="quiz${ar ? ' rtl' : ''}" id="quiz"${ar ? ' dir="rtl" lang="ar"' : ''}>` + (!G ? setupHTML(t, ar) : G.end ? endHTML(t, ar) : questionHTML(t, ar)) + `</div>`;
     card.innerHTML = h;
     card.querySelectorAll('[data-lang]').forEach(b => b.addEventListener('click', () => { state.lang = b.dataset.lang; try { localStorage.setItem('osms-lang', state.lang); } catch (e) {} render(); }));
@@ -1886,6 +1886,9 @@ function sizeTxt(R, name, lang) {
   return t;
 }
 let KIDS = false;
+// the kids switch, also shown on Plan a night and the Quiz
+function kidBtn(ar) { return `<button type="button" class="kidbtn" data-kid aria-pressed="${KIDS}">${ar ? '🧒 للأطفال' : '🧒 For kids'}</button>`; }
+document.addEventListener('click', ev => { const b = ev.target.closest && ev.target.closest('[data-kid]'); if (!b) return; KIDS = !KIDS; try { localStorage.setItem('osms-kids', KIDS ? '1' : '0'); } catch (e) {} render(); });
 try { KIDS = localStorage.getItem('osms-kids') === '1'; } catch (e) {}
 function kidStar(s, lang) {
   const ar = lang === 'ar', R = starRadius(s), out = [];
@@ -2265,7 +2268,7 @@ const PLAN = (() => {
     card.style.setProperty('--cc', 'var(--c-cal)');
     const N = night();
     let h = `<div class="card-head"><div><div class="eyebrow"${ar ? ' lang="ar" style="letter-spacing:0;text-transform:none;font-family:var(--f-ar);font-size:15px"' : ''}><span class="dot"></span>${t.eyebrow}</div><h2${ar ? ' lang="ar" style="font-family:var(--f-ar)"' : ''}>${t.title}</h2></div></div>`;
-    h += `<div class="langs" role="group" aria-label="Language">${[['en', 'English'], ['ar', 'العربية']].map(([id, l]) => `<button type="button" data-lang="${id}" aria-pressed="${lang === id}"${id === 'ar' ? ' lang="ar"' : ''}>${l}</button>`).join('')}</div>`;
+    h += `<div class="sci-tools"><div class="langs" role="group" aria-label="Language">${[['en', 'English'], ['ar', 'العربية']].map(([id, l]) => `<button type="button" data-lang="${id}" aria-pressed="${lang === id}"${id === 'ar' ? ' lang="ar"' : ''}>${l}</button>`).join('')}</div>${!P.done && P.step >= 3 && stepsOrder()[P.step - 3] === 'sci' ? kidBtn(ar) : ''}</div>`;
     h += `<div class="plan${ar ? ' rtl' : ''}" id="plan"${ar ? ' dir="rtl" lang="ar"' : ''}>` + stepBar(t, ar);
     if (P.done) {
       h += `<div class="pdone"><h3>${t.doneT}</h3><p>${t.doneP}</p><div class="pbtns"><button type="button" class="pbtn main" data-pact="save">${t.saveAll}</button><button type="button" class="pbtn" data-pact="again">${t.again}</button></div><p class="pmsg" role="status"></p></div>`;
