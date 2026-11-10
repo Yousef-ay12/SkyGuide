@@ -221,6 +221,12 @@ h2 { font-family: var(--f-display); font-weight: 400; font-size: clamp(28px, 4vw
 .dsos .cat { font-family: var(--f-mono); font-size: 13px; color: var(--accent); padding-top: 3px; direction: ltr; }
 .dsos .dn { font-weight: 600; }
 .dsos .dm { color: var(--muted); font-size: 15.5px; }
+.dsos .dfact { margin: 6px 0 0; font-size: 15.5px; line-height: 1.5; }
+.dsos .dfact span { color: var(--accent); }
+.dsod { margin-top: 4px; font-size: 15px; }
+.dsod > summary { cursor: pointer; color: var(--accent); font-size: 14.5px; width: fit-content; max-width: 100%; padding: 2px 0; }
+.dsod > p { margin: 4px 0 2px; line-height: 1.5; }
+.dsod .dkid { background: var(--accent-soft); border-radius: 8px; padding: 6px 10px; }
 .ftable { display: grid; grid-template-columns: minmax(120px, auto) minmax(0, 1fr); gap: 4px 16px; margin: 0 0 14px; max-width: 72ch; }
 .ftable dt { font-family: var(--f-mono); font-size: 11.5px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); padding-top: 4px; }
 .rtl .ftable dt { font-family: var(--f-ar); font-size: 14px; letter-spacing: 0; }
@@ -655,6 +661,7 @@ h2 { font-family: var(--f-display); font-weight: 400; font-size: clamp(28px, 4vw
         <section><h3>Japanese sky <span lang="ar">سماء اليابان</span></h3><ul><li><a href="https://en.wikipedia.org/wiki/H%C5%8Dei_Nojiri" target="_blank" rel="noopener">Hōei Nojiri, collector of Japanese star folklore</a></li><li><a href="https://en.wikipedia.org/wiki/The_Pillow_Book" target="_blank" rel="noopener">Sei Shōnagon, The Pillow Book (around 1000)</a></li><li><a href="https://en.wikipedia.org/wiki/Pleiades" target="_blank" rel="noopener">The Pleiades (Subaru)</a></li></ul></section>
         <section><h3>Southern African sky <span lang="ar">سماء جنوب أفريقيا</span></h3><ul><li><a href="https://assa.saao.ac.za/astronomy-in-south-africa/ethnoastronomy/" target="_blank" rel="noopener">Astronomical Society of Southern Africa, &#x27;African Ethnoastronomy&#x27;</a></li><li><a href="https://assa.saao.ac.za/wp-content/uploads/sites/23/2014/08/Venus-Rising-2014-P-G-Alcock.pdf" target="_blank" rel="noopener">P. G. Alcock, Venus Rising: South African Astronomical Beliefs, Customs and Observations (2014, free PDF)</a></li><li><a href="https://www.rmg.co.uk/stories/space-astronomy/south-african-star-myths" target="_blank" rel="noopener">Royal Museums Greenwich, &#x27;South African star myths&#x27;</a></li><li><a href="https://lloydbleekcollection.cs.uct.ac.za/" target="_blank" rel="noopener">The Lloyd and Bleek Collection, University of Cape Town (the /Xam notebooks)</a></li></ul></section>
         <section><h3>Star charts and science <span lang="ar">خرائط النجوم والعلم</span></h3><ul><li><a href="https://github.com/ofrohn/d3-celestial" target="_blank" rel="noopener">d3-celestial star and constellation data (star charts)</a></li><li><a href="https://github.com/astronexus/HYG-Database" target="_blank" rel="noopener">HYG star catalogue 4.1 (distances, brightness, colour)</a></li><li><a href="https://github.com/brettonw/YaleBrightStarCatalog" target="_blank" rel="noopener">Yale Bright Star Catalogue (star types and double stars)</a></li><li><a href="https://github.com/mattiaverga/OpenNGC" target="_blank" rel="noopener">OpenNGC (galaxies, clusters and nebulae)</a></li><li><a href="https://exoplanetarchive.ipac.caltech.edu/" target="_blank" rel="noopener">NASA Exoplanet Archive (planets around other stars)</a></li><li><a href="https://github.com/OpenExoplanetCatalogue/oec_gzip" target="_blank" rel="noopener">Open Exoplanet Catalogue (the copy of the NASA list used here)</a></li><li><a href="https://nssdc.gsfc.nasa.gov/planetary/planetfact.html" target="_blank" rel="noopener">NASA planetary fact sheets</a></li><li><a href="https://solarsystem.nasa.gov/moons/overview/" target="_blank" rel="noopener">NASA, Moons of the Solar System</a></li><li><a href="https://minorplanetcenter.org/iau/NatSats/NaturalSatellites.html" target="_blank" rel="noopener">IAU Minor Planet Center, natural satellites (moon counts)</a></li><li><a href="https://solarsystem.nasa.gov/" target="_blank" rel="noopener">NASA Solar System Exploration (planet facts)</a></li><li><a href="https://arxiv.org/abs/1008.3913" target="_blank" rel="noopener">G. Torres (2010), bolometric corrections used for star sizes</a></li><li><a href="https://en.wikipedia.org/wiki/IAU_designated_constellations" target="_blank" rel="noopener">IAU designated constellations</a></li></ul></section>
+        <section><h3>Deep-sky objects <span lang="ar">الأجرام السماوية العميقة</span></h3><ul><li><a href="https://science.nasa.gov/mission/hubble/science/explore-the-night-sky/hubble-messier-catalog/" target="_blank" rel="noopener">NASA, Hubble's Messier Catalog</a></li><li><a href="https://science.nasa.gov/mission/hubble/science/explore-the-night-sky/hubble-caldwell-catalog/" target="_blank" rel="noopener">NASA, Hubble's Caldwell Catalog</a></li><li><a href="https://esahubble.org/" target="_blank" rel="noopener">ESA/Hubble</a></li><li><a href="https://www.eso.org/public/news/eso0905/" target="_blank" rel="noopener">ESO, the Carina Nebula (eso0905)</a></li><li><a href="https://noirlab.edu/public/" target="_blank" rel="noopener">NOIRLab</a></li><li><a href="https://eventhorizontelescope.org/" target="_blank" rel="noopener">Event Horizon Telescope (the M87 black hole)</a></li><li><a href="https://en.wikipedia.org/wiki/Abd_al-Rahman_al-Sufi" target="_blank" rel="noopener">Al-Sufi and the Andromeda Galaxy (964)</a></li><li><a href="https://en.wikipedia.org/wiki/Brocchi%27s_Cluster" target="_blank" rel="noopener">Brocchi's Cluster (the Coathanger)</a></li><li><a href="https://en.wikipedia.org/wiki/IC_2391" target="_blank" rel="noopener">IC 2391 (Omicron Velorum Cluster)</a></li></ul></section>
         <section><h3>Sky calendar and tour planner <span lang="ar">تقويم السماء ومخطط الجولة</span></h3><ul><li><a href="https://ssd.jpl.nasa.gov/planets/approx_pos.html" target="_blank" rel="noopener">NASA JPL, approximate positions of the planets</a></li><li><a href="https://scilit.com/publications/51fd7a0c8a0349e0fc83a6c83259052f" target="_blank" rel="noopener">K. Krisciunas and B. Schaefer (1991), a model of the brightness of moonlight</a></li><li><a href="https://unihedron.com/forum/index.php?topic=40.0" target="_blank" rel="noopener">Sky quality meter readings to faintest visible star (Unihedron)</a></li><li><a href="https://darksky.org/" target="_blank" rel="noopener">DarkSky International, certified dark-sky places</a></li><li><a href="https://darksky.org/news/alula-manara-and-algharameel-nature-reserves-officially-named-as-saudi-arabias-and-gccs-first-ever-dark-sky-park-in-boost-to-astronomy-and-astrotourism-ambitions/" target="_blank" rel="noopener">AlUla dark-sky reserves (DarkSky International)</a></li></ul></section>
       </div>
     </div>
@@ -828,7 +835,8 @@ const QUIZ = (() => {
     ['compare', 'Which star is closer, bigger or brighter?', 'أي النجمين أقرب أو أكبر أو أسطع؟'],
     ['colour', 'Star colours and heat', 'ألوان النجوم وحرارتها'],
     ['story', 'Stories and names', 'القصص والأسماء'],
-    ['planet', 'Planets and the Sun', 'الكواكب والشمس']];
+    ['planet', 'Planets and the Sun', 'الكواكب والشمس'],
+    ['dso', 'Deep-sky objects', 'الأجرام السماوية العميقة']];
   const COUNTS = [5, 10, 15, 20];
   const EASY_CONS = ['Ori', 'UMa', 'UMi', 'Cas', 'Cyg', 'Sco', 'Leo', 'Tau', 'Gem', 'Cru', 'Lyr', 'Aql', 'Peg', 'And', 'Per', 'Sgr', 'Boo', 'Vir', 'CMa', 'Aur', 'Cen', 'Dra', 'Her', 'Cep', 'Del', 'Aqr', 'Cnc', 'Lib', 'Ari', 'Cap', 'Psc', 'CMi'];
   const CUL_AR = {arab: 'سماء العرب', greek: 'سماء الإغريق', egypt: 'سماء مصر القديمة', china: 'سماء الصين', japan: 'سماء اليابان', india: 'سماء الهند', safrica: 'سماء جنوب أفريقيا'};
@@ -859,6 +867,8 @@ const QUIZ = (() => {
     ['neptune', 'On which planet does one year last about 165 Earth years?', 'على أي كوكب تدوم السنة نحو 165 سنة أرضية؟', ['neptune', 2]],
     ['earth', 'Whose moon is slowly drifting away, by about 3.8 cm a year?', 'قمرُ أيِّ كوكب يبتعد عنه ببطء، نحو 3.8 سم كل سنة؟', ['earth', 2]],
     ['pluto', 'Which world was called the ninth planet until 2006?', 'أي عالم كان يُسمّى الكوكب التاسع حتى سنة 2006؟', ['pluto', 0]]];
+  const DCAT = {PN: 'pn', GCl: 'gcl', OCl: 'ocl', G: 'gal', SNR: 'snr', DrkN: 'dark', HII: 'neb', Neb: 'neb', 'Cl+N': 'neb', RfN: 'neb', '*Ass': 'ass'};
+  const DCAT_N = {pn: ['planetary nebula', 'سديم كوكبي', 'PN'], gcl: ['globular cluster', 'عنقود كروي', 'GCl'], ocl: ['open cluster', 'عنقود مفتوح', 'OCl'], gal: ['galaxy', 'مجرة', 'G'], snr: ['supernova remnant', 'بقايا مستعر أعظم', 'SNR'], dark: ['dark nebula', 'سديم مظلم', 'DrkN'], neb: ['nebula where stars are born', 'سديم تولد فيه النجوم', 'HII'], ass: ['star cloud or star group', 'سحابة أو مجموعة نجوم', '*Ass']};
   const PLANETS = ['mercury', 'venus', 'earth', 'mars', 'jupiter', 'saturn', 'uranus', 'neptune'];
 
   let S = {count: 10, level: 'easy', topic: 'all', best: {}};
@@ -884,7 +894,8 @@ const QUIZ = (() => {
     Object.keys(DATA.lore).forEach(k => Object.keys(DATA.lore[k]).forEach(cul => { const e = DATA.lore[k][cul]; if (!CULTURES.find(c => c.id === cul)) return;
       (e.stories || []).forEach((st, i) => { const arT = e.ar && e.ar.stories && e.ar.stories[i] && e.ar.stories[i].title; stories.push({key: k, cul, en: st.title, ar: arT || null}); }); }));
     const tcount = {}; stories.forEach(x => { const t = x.en.toLowerCase(); tcount[t] = (tcount[t] || new Set()).add(x.cul); });
-    return (POOL = {stars, cons, charts, homes, stories: stories.filter(x => tcount[x.en.toLowerCase()].size === 1)});
+    const dsos = []; Object.keys(DATA.sci).forEach(k => (DATA.sci[k].parts || []).forEach(pt => (pt.dsos || []).forEach(d => { if (d.name && DSO_FACTS[d.id] && DCAT[d.type]) dsos.push(Object.assign({con: k}, d)); })));
+    return (POOL = {stars, cons, charts, homes, dsos, stories: stories.filter(x => tcount[x.en.toLowerCase()].size === 1)});
   }
   const starsFor = lvl => { const s = pools().stars; return lvl === 'easy' ? s.filter(x => x.mag <= 2.1) : s; };
   const consFor = lvl => lvl === 'easy' ? EASY_CONS.filter(k => DATA.sci[k]) : pools().cons;
@@ -972,6 +983,27 @@ const QUIZ = (() => {
       if (ar) return {q: `ما الاسم اللاتيني لكوكبة «${esc(byKey[k].ar)}»؟`, opts: opts.map(x => `<bdi dir="ltr">${esc(byKey[x].latin)}</bdi>`), ans: opts.indexOf(k), exp: `اسمها اللاتيني ${esc(byKey[k].latin)}.`, go: k + '-science'};
       return {q: `What is ${esc(byKey[k].latin)} called in Arabic?`, opts: opts.map(x => `<span lang="ar" dir="rtl">${esc(byKey[x].ar)}</span>`), ans: opts.indexOf(k),
         exp: `${esc(byKey[k].latin)}${byKey[k].gloss ? ` (${esc(byKey[k].gloss)})` : ''} is called <span lang="ar">${esc(byKey[k].ar)}</span> in Arabic.`, go: k + '-science'};
+    },
+    dso(lvl, ar) {
+      const all = pools().dsos, pool = lvl === 'easy' ? all.filter(d => /^M\d/.test(d.cat || '') || ['C041', 'C099', 'NGC5139', 'NGC0104', 'ESO056-115', 'NGC0292', 'NGC3372', 'NGC4755', 'NGC2070', 'NGC5128'].includes(d.id)) : all;
+      const nm = d => esc(d.id === 'NGC6705' ? 'Wild Duck Cluster' : d.name), the = d => /(Nebula|Cluster|Galaxy|Galaxies|Cloud|Box|Planetary|Snowball|Coalsack|Hyades|Pleiades.*|Planetary)$/.test(d.name) || /^(Ghost|Lower|Coathanger|Small|Double)/.test(d.name) || d.id === 'NGC6705' ? 'the ' : '', cn = c => DCAT_N[c][ar ? 1 : 0], an = w => (/^[aeiou]/i.test(w) ? 'an ' : 'a ') + w;
+      const why = d => { const ti = DSO_TYPE_INFO[d.type]; return esc((ti ? ti[ar ? 3 : 1].split(/(?<=[.؟!])\s/)[0] + ' ' : '') + DSO_FACTS[d.id][ar ? 1 : 0]); };
+      const r = Math.random();
+      if (r < 0.45) {   // what kind of object is it?
+        const d = pick(pool), c = DCAT[d.type]; const opts = shuffle([c, ...shuffle(Object.keys(DCAT_N).filter(x => x !== c)).slice(0, 3)]);
+        return {q: ar ? `ما نوع ${nm(d)}؟` : `What kind of object is ${the(d)}${nm(d)}?`, opts: opts.map(cn), ans: opts.indexOf(c), exp: `<b>${nm(d)}</b>: ${why(d)}`, go: d.con + '-science'};
+      }
+      if (r < 0.8) {   // which of these is a ...?
+        for (let t = 0; t < 30; t++) { const d = pick(pool), c = DCAT[d.type]; const others = shuffle(pool.filter(x => DCAT[x.type] !== c)); const picked = [], seenC = new Set([c]);
+          for (const x of others) { if (seenC.has(DCAT[x.type])) continue; seenC.add(DCAT[x.type]); picked.push(x); if (picked.length === 3) break; }
+          if (picked.length < 3) continue; const opts = shuffle([d, ...picked]);
+          return {q: ar ? `أيٌّ من هذه ${cn(c)}؟` : `Which of these is ${an(cn(c))}?`, opts: opts.map(nm), ans: opts.indexOf(d), exp: `<b>${nm(d)}</b>: ${why(d)}`, go: d.con + '-science'}; }
+        return null;
+      }
+      // which description fits this type?
+      const c = pick(Object.keys(DCAT_N)), code = DCAT_N[c][2], first = k => DSO_TYPE_INFO[k][ar ? 3 : 1].split(/(?<=[.؟!])\s/)[0];
+      const opts = shuffle([c, ...shuffle(Object.keys(DCAT_N).filter(x => x !== c)).slice(0, 3)]);
+      return {q: ar ? (c === 'neb' ? 'ما السديم الذي تولد فيه النجوم؟' : esc(DSO_TYPE_INFO[code][2])) : `What is ${an(cn(c))}?`, opts: opts.map(x => esc(first(DCAT_N[x][2]))), ans: opts.indexOf(c), exp: esc(DSO_TYPE_INFO[code][ar ? 3 : 1]), go: (all.find(d => DCAT[d.type] === c) || {con: 'Ori'}).con + '-science'};
     },
     planet(lvl, ar) {
       if (Math.random() < 0.08) {
@@ -1984,6 +2016,122 @@ function visTxt(v, lang) {
     + (ar ? ' (يمكنك تغيير المكان من تقويم السماء.)' : ' (Change the place in the Sky calendar.)');
   return ar ? `أفضل وقت لرؤيتها نحو التاسعة مساءً في شهر ${m}. ${where}. ${jtxt}` : `Best placed around 9 pm in ${m}. ${where}. ${jtxt}`;
 }
+/* ---------- deep-sky objects: what each type is, and a fact for each named object ---------- */
+// [question EN, answer EN, question AR, answer AR, kids EN, kids AR]
+const DSO_TYPE_INFO = {
+  PN: ['What is a planetary nebula?', 'The glowing shell of gas that a dying star like the Sun throws off at the end of its life. The leftover core, a small hot white dwarf, makes the gas shine. It has nothing to do with planets: in early telescopes these round glows just looked like planets.',
+       'ما السديم الكوكبي؟', 'غلاف متوهج من الغاز يقذفه نجم يحتضر، مثل الشمس، في آخر حياته. ويبقى قلبه قزمًا أبيض صغيرًا حارًّا يجعل الغاز يتوهج. ولا علاقة له بالكواكب، وإنما بدت هذه الأقراص المستديرة في التلسكوبات الأولى شبيهة بالكواكب.',
+       'It is the colourful puff a star like our Sun blows out when it gets very old.', 'هو نفخة ملونة من الغاز يطلقها نجم مثل شمسنا حين يكبر في السن كثيرًا.'],
+  GCl: ['What is a globular cluster?', 'A ball of hundreds of thousands, sometimes millions, of very old stars packed tightly together by gravity. Many are over 10 billion years old, almost as old as the universe. About 150 of them circle the Milky Way.',
+        'ما العنقود الكروي؟', 'كرة من مئات الآلاف، وأحيانًا الملايين، من النجوم القديمة جدًّا، تجمعها الجاذبية متراصّة. كثير منها عمره أكثر من 10 مليارات سنة، أي قريب من عمر الكون. ويدور نحو 150 منها حول مجرة درب التبانة.',
+        'It is like a giant ball of glitter made of very old stars.', 'هو مثل كرة عملاقة من البريق، مصنوعة من نجوم قديمة جدًّا.'],
+  OCl: ['What is an open cluster?', 'A loose family of young stars that were born together from the same cloud of gas. They hold together for a few hundred million years, then slowly drift apart. Our Sun was probably born in a cluster like this.',
+        'ما العنقود المفتوح؟', 'عائلة متفرقة من النجوم الشابة وُلدت معًا من سحابة الغاز نفسها. تبقى متقاربة بضع مئات من ملايين السنين ثم تتباعد ببطء. والأرجح أن شمسنا وُلدت في عنقود كهذا.',
+        'It is a family of brother and sister stars that were born at the same time.', 'هو عائلة من النجوم الإخوة وُلدت كلها في الوقت نفسه.'],
+  G: ['What is a galaxy?', 'A huge island of stars, gas and dust held together by gravity, with millions to trillions of stars. Our Sun is one star in the Milky Way galaxy. Every galaxy listed here is far outside the Milky Way, so its light is millions of years old.',
+      'ما المجرة؟', 'جزيرة هائلة من النجوم والغاز والغبار تجمعها الجاذبية، فيها من ملايين النجوم إلى آلاف المليارات. وشمسنا نجم واحد في مجرة درب التبانة. وكل مجرة هنا تقع بعيدًا خارج درب التبانة، فضوؤها الذي نراه عمره ملايين السنين.',
+      'It is a giant city of billions of stars. We live in one called the Milky Way.', 'هي مدينة عملاقة فيها مليارات النجوم، ونحن نعيش في واحدة اسمها درب التبانة.'],
+  HII: ['What is an emission nebula?', 'A giant cloud of gas where new stars are being born. Hot young stars inside it make the hydrogen gas glow, mostly in red.',
+        'ما سديم الانبعاث؟', 'سحابة غاز عملاقة تولد فيها نجوم جديدة. والنجوم الشابة الحارة داخلها تجعل غاز الهيدروجين يتوهج، وأغلبه باللون الأحمر.',
+        'It is a glowing cloud where baby stars are born.', 'هو سحابة متوهجة تولد فيها النجوم الصغيرة.'],
+  Neb: ['What is a nebula?', 'A cloud of gas and dust in space. Some glow red because hot young stars light up their gas, some shine blue because their dust reflects starlight, and many are places where new stars are being born.',
+        'ما السديم؟', 'سحابة من الغاز والغبار في الفضاء. بعضها يتوهج بالأحمر لأن النجوم الشابة الحارة تضيء غازها، وبعضها يلمع بالأزرق لأن غباره يعكس ضوء النجوم، وكثير منها أماكن تولد فيها نجوم جديدة.',
+        'It is a big cloud in space, and many of them are nurseries for new stars.', 'هو سحابة كبيرة في الفضاء، وكثير منها حضانة للنجوم الجديدة.'],
+  'Cl+N': ['What is a cluster with a nebula?', 'A group of newborn stars still inside the cloud of gas they were born from. Their strong light makes the leftover gas glow around them.',
+           'ما العنقود مع السديم؟', 'مجموعة من النجوم حديثة الولادة ما زالت داخل سحابة الغاز التي وُلدت منها. وضوؤها القوي يجعل بقية الغاز تتوهج من حولها.',
+           'It is a nest of newborn stars, still wrapped in the cloud they came from.', 'هو عشّ لنجوم حديثة الولادة، ما زالت ملفوفة في السحابة التي جاءت منها.'],
+  RfN: ['What is a reflection nebula?', 'A cloud of dust that does not shine by itself: it reflects the light of nearby stars, like fog lit by a car\'s headlights. It usually looks blue, for the same reason the sky is blue.',
+        'ما السديم العاكس؟', 'سحابة من الغبار لا تضيء بنفسها، بل تعكس ضوء النجوم القريبة منها، كالضباب حين تضيئه مصابيح السيارة. ويبدو عادةً أزرق، للسبب نفسه الذي يجعل السماء زرقاء.',
+        'It is space dust lit up by a star, like fog in a torch beam.', 'هو غبار فضائي يضيئه نجم، كالضباب في ضوء المصباح.'],
+  DrkN: ['What is a dark nebula?', 'A thick cloud of cold dust and gas that blocks the light of the stars and glowing gas behind it, so it looks like a dark shape or hole in the sky. New stars may one day form inside it.',
+         'ما السديم المظلم؟', 'سحابة كثيفة من الغبار والغاز البارد تحجب ضوء النجوم والغاز المتوهج خلفها، فتبدو شكلًا مظلمًا أو ثقبًا في السماء. وقد تتكون داخلها يومًا ما نجوم جديدة.',
+         'It is a thick cloud of space dust that blocks the stars behind it, like a shadow.', 'هو سحابة كثيفة من الغبار الفضائي تحجب النجوم خلفها، كأنها ظل.'],
+  SNR: ['What is a supernova remnant?', 'The expanding wreck of a giant star that blew up in a supernova explosion. Its shock waves keep spreading for thousands of years, and they scatter elements like iron and calcium into space, the same atoms that later end up in planets and in us.',
+        'ما بقايا المستعر الأعظم؟', 'حطام نجم عملاق انفجر انفجار مستعر أعظم وما زال يتمدد. وتظل موجاته الصادمة تنتشر آلاف السنين، وتنثر في الفضاء عناصر مثل الحديد والكالسيوم، وهي الذرات نفسها التي تصير لاحقًا جزءًا من الكواكب ومنّا نحن.',
+        'It is what is left after a giant star goes BOOM.', 'هو ما يبقى بعد أن ينفجر نجم عملاق انفجارًا هائلًا.'],
+  '*Ass': ['What is a star group or star cloud?', 'A rich patch of stars that looks like a group from Earth. Some are crowded parts of the Milky Way seen through a gap in the dust; others are stars at different distances that only happen to line up.',
+           'ما مجموعة النجوم أو سحابة النجوم؟', 'رقعة غنية بالنجوم تبدو من الأرض مجموعةً واحدة. بعضها أجزاء مزدحمة من درب التبانة نراها من فجوة في الغبار، وبعضها نجوم على أبعاد مختلفة تصادف أنها اصطفّت معًا.',
+           'It is a bunch of stars that looks like a group from where we stand.', 'هي مجموعة من النجوم تبدو متجمعة من المكان الذي نقف فيه.']
+};
+// a fun fact for each named object: [English, Arabic]
+const DSO_FACTS = {
+  NGC3031: ["Named after Johann Bode, who found it in 1774 together with its neighbour, the Cigar Galaxy. Its gravity is stirring the Cigar Galaxy up.", 'سُمّيت باسم يوهان بوده الذي اكتشفها سنة 1774 مع جارتها مجرة السيجار، وجاذبيتها تثير مجرة السيجار وتضطربها.'],
+  NGC5457: ['A spiral we see face-on, about 170,000 light years across: nearly twice as wide as the Milky Way.', 'مجرة حلزونية نراها من الأمام، عرضها نحو 170,000 سنة ضوئية، أي قرابة ضعف عرض درب التبانة.'],
+  NGC3034: ["A 'starburst' galaxy: a close pass by Bode's Galaxy set off a burst of star birth, and it now makes new stars about ten times faster than the Milky Way.", 'مجرة «انفجار نجمي»: أثار مرور مجرة بوده قربها موجة من ولادة النجوم، فهي تصنع الآن نجومًا جديدة أسرع من درب التبانة بنحو عشر مرات.'],
+  NGC3587: ['Two dark patches inside this round cloud look like the eyes of an owl, which gave it its name.', 'بقعتان مظلمتان داخل هذه السحابة المستديرة تشبهان عيني بومة، ومنهما جاء اسمه.'],
+  NGC6543: ['One of the most detailed planetary nebulae known, full of rings, shells and jets. In 1864 it was the first nebula whose light was split into a spectrum, which proved that nebulae like it are made of glowing gas.', 'من أكثر السدم الكوكبية تفصيلًا، مليء بالحلقات والأغلفة والنفثات. وفي سنة 1864 كان أول سديم يُحلَّل ضوؤه إلى طيف، فأثبت ذلك أن السدم المشابهة له مصنوعة من غاز متوهج.'],
+  NGC7023: ['A cloud of dust lit up by a hot young star in its middle. Its soft petals of light gave it the name of the iris flower.', 'سحابة من الغبار يضيئها نجم شاب حار في وسطها، وأعطتها بتلاتها الضوئية الناعمة اسم زهرة السوسن.'],
+  NGC6205: ['Holds several hundred thousand stars. In 1974 the Arecibo radio telescope beamed a message towards it, and it will take about 25,000 years to get there.', 'يضم عدة مئات الآلاف من النجوم. وفي سنة 1974 أرسل تلسكوب أريسيبو الراديوي رسالة نحوه، وستحتاج نحو 25,000 سنة لتصل إليه.'],
+  NGC6720: ['The ring is gas thrown off by a dying star, which now sits in the middle as a tiny white dwarf. Our Sun may make something similar in about 5 billion years.', 'الحلقة غاز قذفه نجم يحتضر، وهو الآن قزم أبيض صغير في وسطها. وقد تصنع شمسنا شيئًا مشابهًا بعد نحو 5 مليارات سنة.'],
+  NGC7000: ["Its shape looks like the continent of North America, with even a 'Gulf of Mexico' made by a dark cloud of dust.", 'شكله يشبه قارة أمريكا الشمالية، وفيه حتى «خليج مكسيك» تصنعه سحابة مظلمة من الغبار.'],
+  NGC6960: ['Part of the Cygnus Loop, the remains of a star that exploded roughly 10,000 to 20,000 years ago. The bright star 52 Cygni sits in front of it by chance.', 'جزء من حلقة الدجاجة، وهي بقايا نجم انفجر قبل نحو 10,000 إلى 20,000 سنة. والنجم اللامع 52 الدجاجة يقع أمامه مصادفةً.'],
+  NGC6992: ['The eastern side of the same exploded star. Its thin glowing threads are shock waves still spreading out through space.', 'الجانب الشرقي من النجم المنفجر نفسه، وخيوطه الرقيقة المتوهجة موجات صادمة ما زالت تنتشر في الفضاء.'],
+  NGC0457: ["Also called the E.T. Cluster: two bright stars look like eyes, and the other stars make a body with outstretched arms.", 'يُسمّى أيضًا عنقود «إي تي»: نجمان لامعان يشبهان عينين، وبقية النجوم تصنع جسمًا بذراعين ممدودتين.'],
+  NGC0869: ['One half of the Double Cluster, two young star clusters side by side that are easy to see with binoculars and have been known since ancient times.', 'نصف العنقود المزدوج، وهما عنقودان نجميان شابان متجاوران يسهل رؤيتهما بالمنظار، ومعروفان منذ العصور القديمة.'],
+  NGC0884: ['The other half of the Double Cluster. Both clusters are only about 13 to 14 million years old, very young for stars.', 'النصف الآخر من العنقود المزدوج، وعمر العنقودين نحو 13 إلى 14 مليون سنة فقط، وهو عمر صغير جدًّا للنجوم.'],
+  C014: ['Two star clusters side by side, each with hundreds of stars. On a dark night they show as a fuzzy patch without a telescope.', 'عنقودان نجميان متجاوران، في كل منهما مئات النجوم، ويظهران في الليالي المظلمة بقعةً ضبابية دون تلسكوب.'],
+  NGC1499: ['Its long shape looks like the US state of California. It stretches about five full Moons across the sky, but it is very faint to the eye.', 'شكله الطويل يشبه ولاية كاليفورنيا الأمريكية، ويمتد في السماء بطول نحو خمسة أقمار بدر، لكنه باهت جدًّا للعين.'],
+  NGC0224: ['The farthest thing most people can see without a telescope, about 2.5 million light years away. Al-Sufi described it as a "small cloud" in 964. It is coming towards us and should merge with the Milky Way in about 4.5 billion years.', 'أبعد ما يستطيع أغلب الناس رؤيته دون تلسكوب، على بعد نحو 2.5 مليون سنة ضوئية. وصفها الصوفي بأنها «لطخة سحابية» سنة 964. وهي تقترب منا، ويُتوقع أن تندمج مع درب التبانة بعد نحو 4.5 مليارات سنة.'],
+  NGC7662: ['Named for its pale blue colour and round shape in small telescopes.', 'سُمّي بهذا لونه الأزرق الباهت وشكله المستدير في التلسكوبات الصغيرة.'],
+  NGC0598: ['The third-largest galaxy in our Local Group, after Andromeda and the Milky Way. On very dark nights, sharp eyes can just see it without a telescope.', 'ثالث أكبر مجرة في مجموعتنا المحلية بعد المرأة المسلسلة ودرب التبانة، وفي الليالي شديدة الظلمة تستطيع العين الحادة رؤيتها بالكاد دون تلسكوب.'],
+  Mel022: ["Most people see six or seven stars, but the cluster holds more than 1,000. The blue haze around them is a dust cloud they are passing through. In Japan it is called Subaru, and the car company's logo shows its stars.", 'يرى أغلب الناس ستة نجوم أو سبعة، لكن العنقود يضم أكثر من 1,000 نجم. والضباب الأزرق حولها سحابة غبار تمر بها. وتُسمّى في اليابان «سوبارو»، ويظهر نجومها في شعار شركة السيارات.'],
+  C041: ['The nearest star cluster to the Sun, about 150 light years away. It makes the V-shaped face of the Bull, but bright Aldebaran is much closer to us and not part of it.', 'أقرب عنقود نجمي إلى الشمس، على بعد نحو 150 سنة ضوئية، ويصنع وجه الثور على شكل حرف V. أما الدبران اللامع فأقرب إلينا بكثير وليس جزءًا منه.'],
+  NGC1952: ['What is left of a star whose explosion was seen in 1054 and recorded by Chinese astronomers; it was bright enough to see in daylight for weeks. At its heart, a neutron star spins about 30 times a second.', 'بقايا نجم شوهد انفجاره سنة 1054 وسجّله الفلكيون الصينيون، وكان ساطعًا حتى رُئي في النهار أسابيع. وفي قلبه نجم نيوتروني يدور نحو 30 مرة في الثانية.'],
+  NGC2392: ['Its shells of gas look like a face inside the furry hood of a parka.', 'أغلفة الغاز فيه تشبه وجهًا داخل قلنسوة معطف من الفرو.'],
+  NGC2632: ["Also called Praesepe, the manger. Ancient Greek sky-watchers used it to forecast the weather: if it could not be seen on a clear night, rain was coming. Galileo was the first to see that it is made of many stars.", 'يُسمّى أيضًا «المذود». واستعمله راصدو السماء الإغريق القدماء للتنبؤ بالطقس: إذا لم يُرَ في ليلة صافية فالمطر قادم. وكان غاليليو أول من رأى أنه مكوّن من نجوم كثيرة.'],
+  NGC4594: ['A bright core with a dark lane of dust along its edge makes it look like a wide-brimmed sombrero hat. We see it almost exactly edge-on.', 'قلب لامع وحزام مظلم من الغبار على حافته يجعلانها تشبه قبعة السومبريرو العريضة، ونراها من الجانب تقريبًا.'],
+  NGC4486: ['Home of the first black hole ever photographed, in 2019. That black hole is about 6.5 billion times heavier than the Sun.', 'موطن أول ثقب أسود صُوّر في التاريخ، سنة 2019، وكتلته نحو 6.5 مليارات ضعف كتلة الشمس.'],
+  NGC6475: ['Ptolemy described it around the year 130 as a cloudy patch following the sting of the Scorpion, which is why it carries his name.', 'وصفه بطليموس نحو سنة 130 بأنه بقعة سحابية تتبع إبرة العقرب، ولذلك يحمل اسمه.'],
+  NGC6405: ['Its stars make the shape of a butterfly with open wings.', 'نجومه تصنع شكل فراشة فاتحة جناحيها.'],
+  IC4715: ['Not a real cluster but a window through the dust, where we look thousands of light years deep into a crowded arm of the Milky Way.', 'ليس عنقودًا حقيقيًّا، بل نافذة في الغبار نطل منها آلاف السنين الضوئية في عمق ذراع مزدحمة من درب التبانة.'],
+  NGC6523: ['A giant cloud where new stars are being born, split by a dark lane that looks like a lagoon. From a dark site you can see it without a telescope.', 'سحابة عملاقة تولد فيها نجوم جديدة، يقسمها حزام مظلم يشبه البحيرة، ويمكن رؤيتها من موقع مظلم دون تلسكوب.'],
+  NGC7293: ["One of the closest planetary nebulae to us. Its look has earned it the nickname 'the Eye of God'.", 'من أقرب السدم الكوكبية إلينا، وأكسبه شكله لقب «عين الإله».'],
+  NGC7009: ['Thin streams of gas on both sides make it look like the planet Saturn with its rings seen edge-on.', 'تيّاران رفيعان من الغاز على جانبيه يجعلانه يشبه كوكب زحل وحلقاته مرئية من الجانب.'],
+  NGC1976: ['The nearest big star nursery to Earth. Four bright young stars in its middle, called the Trapezium, light up the whole cloud.', 'أقرب حضانة نجوم كبيرة إلى الأرض، وأربعة نجوم شابة لامعة في وسطها تُسمّى «شبه المنحرف» تضيء السحابة كلها.'],
+  B033: ["A dark cloud of dust shaped like a horse's head, seen against glowing red gas behind it.", 'سحابة مظلمة من الغبار على شكل رأس حصان، تظهر أمام غاز أحمر متوهج خلفها.'],
+  NGC1982: ['A small part of the Orion Nebula, cut off from it by a lane of dark dust. Jean-Jacques de Mairan described it before 1731.', 'جزء صغير من سديم الجبار يفصله عنه حزام من الغبار المظلم، ووصفه جان جاك دو ميران قبل سنة 1731.'],
+  NGC1980: ["A young star cluster at the tip of Orion's sword, just south of the Orion Nebula, around the bright star Hatysa.", 'عنقود نجمي شاب عند طرف سيف الجبار، جنوب سديم الجبار مباشرة، حول النجم اللامع «هاتيسا».'],
+  NGC2360: ['Found in 1783 by Caroline Herschel, one of the first women to discover comets and star clusters.', 'اكتشفته كارولين هرشل سنة 1783، وهي من أوائل النساء اللواتي اكتشفن المذنبات والعناقيد النجمية.'],
+  NGC3372: ['About four times bigger than the Orion Nebula and far brighter. It holds Eta Carinae, a star over 100 times heavier than the Sun that briefly became one of the brightest in the sky in 1843.', 'أكبر من سديم الجبار بنحو أربع مرات وأسطع منه بكثير، وفيه نجم «إيتا القاعدة» الذي تزيد كتلته على 100 ضعف كتلة الشمس، وصار سنة 1843 لفترة قصيرة من ألمع نجوم السماء.'],
+  NGC3532: ['Through a telescope its stars sparkle like coins at the bottom of a wishing well. It was among the very first pictures taken by the Hubble Space Telescope, in May 1990.', 'تتلألأ نجومه في التلسكوب كالقطع النقدية في قاع بئر الأمنيات، وكان من أوائل الصور التي التقطها تلسكوب هابل الفضائي في مايو 1990.'],
+  IC2602: ['It looks like a smaller Pleiades, with the bright star Theta Carinae at its centre. You can see it without a telescope from southern skies.', 'يبدو كثريّا أصغر، وفي وسطه النجم اللامع «ثيتا القاعدة»، ويمكن رؤيته دون تلسكوب من سماء الجنوب.'],
+  IC2391: ['A bright young cluster around the star Omicron Velorum. Al-Sufi described it as a "nebulous star" around 964.', 'عنقود شاب لامع حول النجم «أوميكرون الشراع»، ووصفه الصوفي نحو سنة 964 بأنه «نجم سحابي».'],
+  NGC5236: ['One of the closest and brightest barred spiral galaxies. Six supernovae have been seen in it in the last hundred years or so.', 'من أقرب المجرات الحلزونية ذات القضيب وألمعها، وقد شوهدت فيها ستة مستعرات عظمى خلال نحو مئة سنة.'],
+  NGC3242: ['In a small telescope it looks about the same size as the planet Jupiter, which gave it its name.', 'يبدو في التلسكوب الصغير بحجم كوكب المشتري تقريبًا، ومن هنا جاء اسمه.'],
+  NGC4038: ["Two galaxies in the middle of a crash. Long streams of stars thrown out by the collision look like an insect's antennae.", 'مجرتان في منتصف تصادم، وتيارات النجوم الطويلة التي قذفها التصادم تشبه قرني استشعار حشرة.'],
+  NGC4755: ['John Herschel called it "a casket of variously coloured precious stones" because of its blue-white stars and one bright orange one.', 'وصفه جون هرشل بأنه «صندوق من الأحجار الكريمة المختلفة الألوان» لنجومه الزرقاء البيضاء ونجم برتقالي لامع بينها.'],
+  C099: ['The darkest patch in the southern Milky Way: a cloud of dust about 600 light years away. Aboriginal Australians see it as the head of the Emu in the Sky.', 'أشد البقع ظلمة في درب التبانة الجنوبي، وهو سحابة غبار على بعد نحو 600 سنة ضوئية، ويراه السكان الأصليون في أستراليا رأس «طائر الإيمو في السماء».'],
+  NGC4609: ['It seems to sit on the edge of the Coalsack, but it is far behind the dust cloud, thousands of light years away.', 'يبدو كأنه على حافة كيس الفحم، لكنه بعيد خلف سحابة الغبار بآلاف السنين الضوئية.'],
+  NGC3766: ['Its stars glitter like a string of pearls, which gave it its name.', 'تتلألأ نجومه كعقد من اللؤلؤ، ومن هنا جاء اسمه.'],
+  NGC5139: ['The biggest globular cluster around the Milky Way, with about 10 million stars. It may be the leftover core of a small galaxy our galaxy swallowed. Ptolemy listed it as a single star.', 'أكبر عنقود كروي حول درب التبانة، فيه نحو 10 ملايين نجم، وقد يكون بقية قلب مجرة صغيرة ابتلعتها مجرتنا. وقد عدّه بطليموس نجمًا واحدًا.'],
+  NGC5128: ['A giant galaxy with a dark lane of dust across it and huge jets blasting out from the black hole at its centre. It is one of the strongest radio sources in the sky.', 'مجرة عملاقة يعبرها حزام مظلم من الغبار، وتنطلق نفثات هائلة من الثقب الأسود في مركزها، وهي من أقوى مصادر موجات الراديو في السماء.'],
+  NGC3918: ['It shines a bright blue in a telescope, a little like the planet Uranus.', 'يلمع بلون أزرق ساطع في التلسكوب، فيشبه قليلًا كوكب أورانوس.'],
+  NGC5194: ['The first galaxy in which spiral arms were seen, by Lord Rosse in 1845. A smaller galaxy is pulling on the end of one of its arms.', 'أول مجرة رُئيت فيها أذرع حلزونية، رآها اللورد روس سنة 1845، ومجرة أصغر تجذب طرف إحدى أذرعها.'],
+  NGC5055: ['Its many short, patchy spiral arms look like the seeds in a sunflower.', 'أذرعها الحلزونية الكثيرة القصيرة المتقطعة تشبه البذور في زهرة دوّار الشمس.'],
+  NGC4826: ['A dark band of dust in front of its bright centre looks like a black eye. Strangely, the gas near its centre spins the opposite way to the gas further out.', 'حزام مظلم من الغبار أمام مركزها اللامع يشبه عينًا متورّمة سوداء. والغريب أن الغاز قرب مركزها يدور في اتجاه معاكس للغاز الأبعد عنه.'],
+  NGC4254: ['A spiral galaxy with one arm stretched longer than the others, pulled by the gravity of a passing galaxy.', 'مجرة حلزونية إحدى أذرعها أطول من الأخرى، شدّتها جاذبية مجرة مارّة.'],
+  'ESO056-115': ['A small galaxy that circles the Milky Way. It is so bright and close that from the south you can see it without a telescope, like a detached piece of the Milky Way.', 'مجرة صغيرة تدور حول درب التبانة، وهي ساطعة وقريبة حتى يمكن رؤيتها من الجنوب دون تلسكوب، كأنها قطعة منفصلة من درب التبانة.'],
+  NGC2070: ['The biggest and brightest star nursery in our neighbourhood of galaxies. If it were as close as the Orion Nebula, it would be bright enough to cast shadows on Earth.', 'أكبر حضانة نجوم وألمعها في جوارنا من المجرات، ولو كانت قريبة كسديم الجبار لكانت ساطعة حتى تُلقي ظلالًا على الأرض.'],
+  NGC1316: ['A giant galaxy that grew by swallowing smaller galaxies. It is one of the brightest radio sources in the sky.', 'مجرة عملاقة كبرت بابتلاع مجرات أصغر، وهي من ألمع مصادر موجات الراديو في السماء.'],
+  'ESO356-004': ['A small, faint galaxy that circles the Milky Way. It has six globular clusters of its own.', 'مجرة صغيرة باهتة تدور حول درب التبانة، ولها ستة عناقيد كروية خاصة بها.'],
+  NGC2264: ['Its stars make the outline of a Christmas tree, and the dark Cone Nebula sits at its tip.', 'نجومه ترسم شكل شجرة عيد الميلاد، ويقع سديم المخروط المظلم عند قمتها.'],
+  NGC2237: ['A huge round cloud shaped like a rose. Young stars at its centre have blown a hole in the middle with their light.', 'سحابة مستديرة ضخمة على شكل وردة، والنجوم الشابة في مركزها فتحت بضوئها فجوة في وسطها.'],
+  NGC6087: ['Named after S Normae, a yellow supergiant in its middle that gets brighter and fainter every 9.75 days.', 'سُمّي باسم «إس الزاوية»، وهو عملاق أصفر في وسطه يزداد سطوعه ويخفت كل 9.75 أيام.'],
+  NGC0253: ['Discovered by Caroline Herschel in 1783. It is also called the Silver Coin Galaxy and is busy making new stars at a high rate.', 'اكتشفتها كارولين هرشل سنة 1783، وتُسمّى أيضًا «مجرة القطعة الفضية»، وهي تصنع نجومًا جديدة بمعدل عالٍ.'],
+  NGC6705: ['Called the Wild Duck Cluster because its brightest stars make a V like a flock of flying ducks. It holds more than 2,900 stars, one of the richest open clusters known.', 'يُسمّى عنقود البط البري لأن ألمع نجومه ترسم حرف V كسرب من البط الطائر، ويضم أكثر من 2,900 نجم، فهو من أغنى العناقيد المفتوحة المعروفة.'],
+  NGC3115: ['Seen edge-on, it looks like a spindle. A black hole about a billion times heavier than the Sun sits at its centre.', 'تبدو من الجانب كمِغزل، وفي مركزها ثقب أسود كتلته نحو مليار ضعف كتلة الشمس.'],
+  NGC0292: ['A small galaxy that circles the Milky Way and can be seen without a telescope from the south. The pull of the Large Magellanic Cloud and the Milky Way is slowly tearing it apart.', 'مجرة صغيرة تدور حول درب التبانة ويمكن رؤيتها من الجنوب دون تلسكوب، وجاذبية سحابة ماجلان الكبرى ودرب التبانة تمزّقها ببطء.'],
+  NGC0104: ['The second-brightest globular cluster after Omega Centauri, with about a million stars packed into a ball some 120 light years wide.', 'ثاني ألمع عنقود كروي بعد أوميغا القنطور، فيه نحو مليون نجم متراصّة في كرة عرضها نحو 120 سنة ضوئية.'],
+  Cl399: ["Ten stars that look like an upside-down coat hanger. Al-Sufi described it in his Book of Fixed Stars in 964. It is not a real cluster: the stars are at different distances and only line up by chance.", 'عشرة نجوم تشبه علّاقة ملابس مقلوبة، وصفها الصوفي في كتابه «صور الكواكب الثابتة» سنة 964. وهي ليست عنقودًا حقيقيًّا، فنجومها على أبعاد مختلفة وتصادف أنها اصطفّت.'],
+  NGC6853: ['The first planetary nebula ever found, by Charles Messier in 1764. Its shape looks like a dumbbell or an apple core.', 'أول سديم كوكبي اكتُشف، اكتشفه شارل مسييه سنة 1764، وشكله يشبه الدمبل أو لبّ التفاحة.']
+};
+
+function dsoMore(d, ar) {
+  const f = DSO_FACTS[d.id], ti = DSO_TYPE_INFO[d.type]; let h = '';
+  if (f) h += `<p class="dfact"><span aria-hidden="true">✦ </span>${esc(f[ar ? 1 : 0])}</p>`;
+  if (ti) h += `<details class="dsod"><summary>${esc(ti[ar ? 2 : 0])}</summary><p>${esc(ti[ar ? 3 : 1])}</p>${KIDS ? `<p class="dkid">🧒 ${esc(ti[ar ? 5 : 4])}</p>` : ''}</details>`;
+  return h;
+}
 function dsoHTML(list, lang) {
   const ar = lang === 'ar';
   if (!list.length) return `<p class="muted" style="max-width:68ch">${T[lang].noDso}</p>`;
@@ -1993,7 +2141,7 @@ function dsoHTML(list, lang) {
     const bits = [DTYPE[lang][d.type] || d.type];
     if (d.dist) bits.push(`${ar ? 'على بعد' : ''} ${distTxt(d.dist, lang)}`.trim());
     if (see) bits.push(see);
-    return `<li data-dso="${esc(d.id)}"><span class="cat">${esc(d.cat || '')}</span><div><div class="dn" dir="auto">${esc(d.name || d.cat)}${AG.btn({t: 'dso', key: state.con, ref: d.id}, lang, true)}${swBtn(swDsoName(d), 6, lang)}</div><div class="dm">${esc(bits.join(' · '))}</div></div></li>`;
+    return `<li data-dso="${esc(d.id)}"><span class="cat">${esc(d.cat || '')}</span><div><div class="dn" dir="auto">${esc(d.name || d.cat)}${AG.btn({t: 'dso', key: state.con, ref: d.id}, lang, true)}${swBtn(swDsoName(d), 6, lang)}</div><div class="dm">${esc(bits.join(' · '))}</div>${dsoMore(d, ar)}</div></li>`;
   }).join('')}</ul>`;
 }
 function partHTML(p, lang, many) {
