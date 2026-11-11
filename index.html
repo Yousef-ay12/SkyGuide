@@ -644,6 +644,11 @@ html.ask-open { overflow: hidden; }
 .ip-i[aria-checked=true] { border-color: var(--accent); background: var(--accent-soft); }
 .ip-i[aria-checked=true] span { color: var(--ink); font-weight: 600; }
 .ip-go { padding: 12px 16px 16px; border-top: 1px solid var(--line); display: flex; justify-content: flex-end; }
+.ip-how { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 14px; align-items: start; padding: 8px 16px 14px; }
+.ip-how img { width: 76px; height: 76px; border-radius: 18px; box-shadow: 0 2px 8px rgba(0,0,0,.35); }
+.ip-how ol { margin: 0; padding-inline-start: 20px; display: grid; gap: 8px; font-size: 16.5px; line-height: 1.45; }
+.ip-how .ish { display: inline-block; padding: 0 5px; border: 1px solid var(--line); border-radius: 6px; }
+.ip-go { gap: 10px; }
 .ip-cr { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 14px; }
 .tournote [data-iconpick] { font: inherit; background: transparent; border: 1px solid var(--line); color: var(--ink); border-radius: 999px; padding: 6px 14px; cursor: pointer; }
 @keyframes ippulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(217,173,92,.0); } 50% { box-shadow: 0 0 0 6px rgba(217,173,92,.45); } }
@@ -1190,7 +1195,7 @@ const APP = (() => {
   addEventListener('beforeinstallprompt', ev => { ev.preventDefault(); deferred = ev; const b = document.getElementById('installbtn'); if (b) b.hidden = false; });
   addEventListener('appinstalled', () => { deferred = null; const b = document.getElementById('installbtn'); if (b) b.hidden = true; });
   document.addEventListener('click', ev => {
-    if (ev.target.closest && ev.target.closest('#installbtn') && deferred) { pick('android'); return; }
+    if (ev.target.closest && ev.target.closest('#installbtn')) { if (deferred) pick('android'); else if (ios) pick('ios'); return; }
     if (ev.target.closest && ev.target.closest('[data-iconpick]')) pick(ios && safari ? 'ios' : deferred ? 'android' : 'info');
   });
   const getIcon = () => { try { return localStorage.getItem('osms-icon') || 'classic'; } catch (e) { return 'classic'; } };
@@ -1217,10 +1222,28 @@ const APP = (() => {
       if (mode === 'android') {
         if (sel === at && deferred) { const d = deferred; deferred = null; document.getElementById('installbtn').hidden = true; try { await d.prompt(); } catch (e) {} }
         else { try { sessionStorage.setItem('osms-iconready', '1'); } catch (e) {} location.reload(); }
-      } else if (mode === 'ios') toast(ar ? 'تم. الآن اضغط زر المشاركة ⬆︎ ثم «إضافة إلى الشاشة الرئيسية».' : 'Done. Now tap Share ⬆︎, then “Add to Home Screen”.');
+      } else if (mode === 'ios') howto(sel);
       else toast(installed ? (ar ? 'تم الحفظ. احذف التطبيق من الشاشة الرئيسية وأضفه مرة أخرى لترى الأيقونة الجديدة.' : 'Saved. Remove the app from your home screen and add it again to see the new icon.') : (ar ? 'تم الحفظ. ستُستخدم هذه الأيقونة عندما تثبّت Sky Guide.' : 'Saved. This icon will be used when you install Sky Guide.'));
     };
     setTimeout(() => { const c = box.querySelector('.ip-i[aria-checked=true]') || box.querySelector('.ip-i'); c.focus(); c.scrollIntoView({block: 'nearest'}); }, 30);
+  }
+  // iPhone and iPad: show the Install button too; it leads to the icon picker, then these steps
+  if (ios && !standalone()) addEventListener('DOMContentLoaded', () => { const b = document.getElementById('installbtn'); if (b) b.hidden = false; });
+  function howto(sel) {
+    const ar = state.lang === 'ar', ic = (APP_ICONS.find(x => x[0] === sel) || APP_ICONS[0]), chrome = /CriOS/.test(navigator.userAgent), ipad = /iPad/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+    const where = chrome ? (ar ? 'في أعلى الشاشة بجانب شريط العنوان' : 'at the top, next to the address bar') : ipad ? (ar ? 'في أعلى الشاشة' : 'at the top of the screen') : (ar ? 'في أسفل الشاشة' : 'at the bottom of the screen');
+    const box = document.createElement('div'); box.id = 'iconpick'; box.className = 'ipick'; box.setAttribute('dir', ar ? 'rtl' : 'ltr'); box.setAttribute('lang', ar ? 'ar' : 'en');
+    box.innerHTML = `<div class="ip-in" role="dialog" aria-modal="true" aria-labelledby="ip-h"><div class="ip-top"><h3 id="ip-h">${ar ? 'أضف Sky Guide إلى شاشتك الرئيسية' : 'Add Sky Guide to your Home Screen'}</h3><button type="button" class="ip-x" aria-label="${ar ? 'إغلاق' : 'Close'}">✕</button></div>
+      <div class="ip-how"><img src="${ic[3]}" alt=""><ol>
+        <li>${ar ? `اضغط زر المشاركة <span class="ish">⬆︎</span> ${where}.` : `Tap the Share button <span class="ish">⬆︎</span> ${where}.`}</li>
+        <li>${ar ? 'مرّر للأسفل واضغط «إضافة إلى الشاشة الرئيسية». قد تحتاج إلى الضغط على «المزيد» أولًا.' : 'Scroll down and tap “Add to Home Screen”. You may need to tap “More” or “View More” first.'}</li>
+        <li>${ar ? 'اضغط «إضافة». ستظهر أيقونتك على الشاشة الرئيسية، ويفتح Sky Guide مثل التطبيق ويعمل دون إنترنت.' : 'Tap “Add”. Your icon appears on the Home Screen, and Sky Guide opens like an app and works offline.'}</li></ol></div>
+      <div class="ip-go"><button type="button" class="pbtn" data-iconpick>${ar ? 'غيّر الأيقونة' : 'Change icon'}</button><button type="button" class="pbtn main ip-done">${ar ? 'حسنًا' : 'Got it'}</button></div></div>`;
+    document.body.appendChild(box); document.documentElement.classList.add('ask-open');
+    const close = () => { box.remove(); document.documentElement.classList.remove('ask-open'); };
+    box.addEventListener('click', ev => { if (ev.target === box) close(); if (ev.target.closest('[data-iconpick]')) close(); });
+    box.querySelector('.ip-x').onclick = close; box.querySelector('.ip-done').onclick = () => { try { localStorage.setItem('osms-install', 'seen'); } catch (e) {} const n = document.getElementById('installnote'); if (n) n.remove(); close(); };
+    setTimeout(() => box.querySelector('.ip-done').focus(), 30);
   }
   // after the page reloads with the new icon, ask for one more tap to install
   addEventListener('load', () => { let r = null; try { r = sessionStorage.getItem('osms-iconready'); sessionStorage.removeItem('osms-iconready'); } catch (e) {}
