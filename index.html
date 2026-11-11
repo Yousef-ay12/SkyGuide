@@ -225,7 +225,15 @@ h2 { font-family: var(--f-display); font-weight: 400; font-size: clamp(28px, 4vw
 .dchips { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 18px; }
 .dchips a { text-decoration: none; color: var(--ink); border: 1px solid var(--line); border-radius: 999px; padding: 5px 12px; font-size: 15px; background: var(--panel); }
 .dchips a span { color: var(--muted); font-size: 13px; }
-.dgroup { margin: 0 0 26px; scroll-margin-top: 70px; }
+.dgroup { margin: 0 0 12px; scroll-margin-top: 70px; border: 1px solid var(--line); border-radius: 12px; background: var(--panel); }
+.dgroup > summary { list-style: none; cursor: pointer; display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 2px 10px; align-items: center; padding: 12px 16px; }
+.dgroup > summary::-webkit-details-marker { display: none; }
+.dgroup .pd-ar { grid-row: 1 / span 2; color: var(--accent); transition: transform .2s; display: inline-block; }
+.dgroup[open] .pd-ar { transform: rotate(90deg); }
+[dir=rtl] .dgroup:not([open]) .pd-ar { transform: scaleX(-1); }
+.dgroup .dg-t { font-weight: 600; font-size: 19px; }
+.dgroup .dg-sub { color: var(--muted); font-size: 14.5px; }
+.dgroup > .dgrid { padding: 4px 12px 14px; }
 .dgroup h3 { margin: 0 0 6px; font-size: 22px; }
 .dgroup .dn-n { color: var(--muted); font-size: 15px; font-weight: 400; }
 .dg-what { max-width: 72ch; margin: 0 0 12px; color: var(--muted); line-height: 1.5; }
@@ -244,6 +252,20 @@ h2 { font-family: var(--f-display); font-weight: 400; font-size: clamp(28px, 4vw
 .dbody .dm a { color: inherit; }
 .dbody .dfact { margin: 6px 0 0; font-size: 15px; line-height: 1.5; }
 .dbody .dfact span { color: var(--accent); }
+.dsofold { margin: 18px 0 12px; border: 1px solid var(--line); border-radius: 12px; max-width: 72ch; }
+.dsofold > summary { list-style: none; cursor: pointer; display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 2px 10px; padding: 11px 14px; }
+.dsofold > summary::-webkit-details-marker { display: none; }
+.dsofold .pd-ar { color: var(--accent); transition: transform .2s; display: inline-block; }
+.dsofold[open] .pd-ar { transform: rotate(90deg); }
+[dir=rtl] .dsofold:not([open]) .pd-ar { transform: scaleX(-1); }
+.dsofold .df-t { font-weight: 600; font-size: 17px; }
+.dsofold .dn-n { color: var(--muted); font-weight: 400; }
+@media (max-width: 520px) { .dsofold .df-h { grid-column: 2; } }
+.dsofold .dn-n { letter-spacing: 0; }
+.dsofold .df-h { font-size: 14px; color: var(--muted); }
+.dsofold .df-h::after { content: attr(data-o); }
+.dsofold[open] .df-h::after { content: attr(data-c); }
+.dsofold > .dsos { padding: 0 14px 6px; }
 .dsos .dfact { margin: 6px 0 0; font-size: 15.5px; line-height: 1.5; }
 .dsos .dfact span { color: var(--accent); }
 .dsod { margin-top: 4px; font-size: 15px; }
@@ -607,28 +629,6 @@ h2 { font-family: var(--f-display); font-weight: 400; font-size: clamp(28px, 4vw
 .tourbtn span { display: inline-grid; place-items: center; width: 18px; height: 18px; border-radius: 50%; background: var(--accent); color: var(--panel); font-weight: 700; font-size: 12px; }
 .tourbtn:hover, .tourbtn:focus-visible { border-color: var(--accent); }
 .tourbtn[hidden] { display: none; }
-.askbox { position: fixed; inset: 0; z-index: 960; background: rgba(5, 8, 20, .55); display: flex; justify-content: center; align-items: flex-start; padding: 8vh 16px 16px; }
-.askbox[hidden] { display: none; }
-html.ask-open { overflow: hidden; }
-.ask-in { width: min(640px, 100%); max-height: 84vh; display: flex; flex-direction: column; background: var(--panel); color: var(--ink); border: 1px solid var(--line); border-radius: 16px; box-shadow: 0 20px 60px rgba(0,0,0,.4); overflow: hidden; }
-.ask-top { display: flex; align-items: center; gap: 10px; padding: 12px 14px; border-bottom: 1px solid var(--line); }
-.ask-ic { font-size: 22px; color: var(--accent); }
-.ask-top input { flex: 1; min-width: 0; font: inherit; font-size: 18px; border: 0; background: transparent; color: var(--ink); outline: none; padding: 6px 0; }
-.ask-x { flex: none; width: 34px; height: 34px; border-radius: 50%; border: 1px solid var(--line); background: transparent; color: var(--muted); font-size: 15px; cursor: pointer; }
-.ask-res { overflow-y: auto; padding: 8px; display: grid; gap: 4px; }
-.ask-r { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 2px 10px; text-align: start; font: inherit; padding: 10px 12px; border-radius: 10px; border: 1px solid transparent; background: transparent; color: var(--ink); cursor: pointer; }
-.ask-r.on, .ask-r:hover { border-color: var(--accent); background: var(--accent-soft); }
-.ask-t { font-weight: 600; font-size: 17px; grid-column: 1; grid-row: 1; overflow-wrap: anywhere; }
-.ask-k { grid-column: 2; grid-row: 1; font-family: var(--f-mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); align-self: center; }
-.askbox[lang=ar] .ask-k { font-family: var(--f-ar); font-size: 13px; letter-spacing: 0; }
-.ask-l { grid-column: 1 / -1; color: var(--muted); font-size: 15px; line-height: 1.45; overflow-wrap: anywhere; }
-.ask-f { color: var(--ink); }
-.ask-ar { font-family: var(--f-ar); font-weight: 400; color: var(--muted); }
-.ask-cat { font-family: var(--f-mono); font-size: 13px; font-weight: 400; color: var(--accent); }
-.ask-try, .ask-none { margin: 6px 6px 4px; color: var(--muted); }
-.ask-ex { display: flex; flex-wrap: wrap; gap: 8px; padding: 0 6px 6px; }
-.ask-ex button { font: inherit; font-size: 15px; padding: 6px 12px; border-radius: 999px; border: 1px solid var(--line); background: transparent; color: var(--ink); cursor: pointer; }
-.ask-note { margin: 0; padding: 8px 14px 10px; border-top: 1px solid var(--line); font-size: 13.5px; color: var(--muted); }
 .hbrow { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
 .offtoast { position: fixed; z-index: 950; left: 50%; bottom: 20px; transform: translateX(-50%); max-width: min(420px, calc(100vw - 32px)); background: var(--panel); color: var(--ink); border: 1px solid var(--accent); border-radius: 12px; padding: 10px 14px; box-shadow: 0 8px 26px rgba(0,0,0,.25); font-size: 15px; }
 .tournote .ish { display: inline-block; padding: 0 4px; border: 1px solid var(--line); border-radius: 5px; font-size: 13px; }
@@ -673,7 +673,7 @@ html.ask-open { overflow: hidden; }
           <option value="red">Night red (for stargazing)</option>
         </select>
       </label>
-      <div class="hbrow"><button type="button" class="tourbtn askbtn" id="askbtn" aria-label="Ask Sky Guide: search stars, constellations, M42 and more"><span aria-hidden="true">⌕</span> Search</button><button type="button" class="tourbtn" id="tourbtn" aria-label="How to use this page: a step-by-step tour"><span aria-hidden="true">?</span> How to use</button>
+      <div class="hbrow"><button type="button" class="tourbtn" id="tourbtn" aria-label="How to use this page: a step-by-step tour"><span aria-hidden="true">?</span> How to use</button>
       <button type="button" class="tourbtn" id="installbtn" hidden aria-label="Install Sky Guide as an app on this device"><span aria-hidden="true">↓</span> Install app</button></div>
       <div class="count" id="count"></div>
     </div>
@@ -801,7 +801,6 @@ const TOUR = (() => {
     {sel: '.ntab[data-tab=plan]', en: ['Plan a night', 'A step-by-step planner: choose a place and night, pick what is up, then read the science and the stories.'], ar: ['خطّط لليلتك', 'مخطط خطوة بخطوة: اختر المكان والليلة، ثم ما يظهر في السماء، ثم اقرأ العلم والقصص.']},
     {sel: '.ntab[data-tab=guide]', en: ['Saved lists', 'Everything you saved, in your own lists with notes. Compare stars and present a list one item at a time.'], ar: ['القوائم المحفوظة', 'كل ما حفظته في قوائمك مع ملاحظاتك، وقارن بين النجوم واعرض القائمة عنصرًا بعد عنصر.']},
     {sel: '.ntab[data-tab=quiz]', en: ['Quiz', 'Test your knowledge: which constellation is this, how far and how big are the stars, the stories and the planets. Pick 5 to 20 questions.'], ar: ['اختبر معلوماتك', 'اختبر معلوماتك: ما هذه الكوكبة، وكم تبعد النجوم وما حجمها، والقصص والكواكب. اختر من 5 إلى 20 سؤالًا.']},
-    {sel: '#askbtn', en: ['Search', 'Look up any star, constellation, planet or story, or type a catalogue number such as M42 or NGC 6720. You can ask things like "How far is Rigel?". It works offline.'], ar: ['البحث', 'ابحث عن أي نجم أو كوكبة أو كوكب أو قصة، أو اكتب رقمًا مثل M42 أو NGC 6720. ويمكنك أن تسأل مثل «كم يبعد رجل الجبار؟». ويعمل دون إنترنت.']},
     {sel: '.skins', en: ['Screen colour', 'Light, dark and more. Use Night red outside: it keeps your eyes used to the dark.'], ar: ['لون الشاشة', 'فاتح أو داكن وغيرهما. استخدم «الأحمر الليلي» في الخارج، فهو يحافظ على تكيّف عينيك مع الظلام.']},
     {sel: '.srcrow', en: ['Sources, Credits and Feedback', 'Where everything comes from, who made the site, and a form to send your comments.'], ar: ['المصادر والإعداد والملاحظات', 'مصادر كل ما في الموقع، ومن أعدّه، ونموذج لإرسال ملاحظاتك.']}
   ];
@@ -1149,164 +1148,6 @@ const QUIZ = (() => {
       render(); top(); }));
   }
   return {render, _make: MAKE};
-})();
-
-/* ---------- Ask Sky Guide: search everything on the page, offline, and jump to the answer ---------- */
-const ASK = (() => {
-  // Messier objects that are not in Sky Guide's object lists, so a search for them still answers
-  const MORE_M = {M5: ['GCl', 'Ser', ''], M9: ['GCl', 'Oph', ''], M12: ['GCl', 'Oph', ''], M16: ['Cl+N', 'Ser', 'Eagle Nebula'], M17: ['HII', 'Sgr', 'Omega Nebula'], M18: ['OCl', 'Sgr', ''], M20: ['HII', 'Sgr', 'Trifid Nebula'], M22: ['GCl', 'Sgr', ''], M28: ['GCl', 'Sgr', ''], M40: ['*Ass', 'UMa', 'Winnecke 4'], M54: ['GCl', 'Sgr', ''], M55: ['GCl', 'Sgr', ''], M58: ['G', 'Vir', ''], M59: ['G', 'Vir', ''], M61: ['G', 'Vir', ''], M62: ['GCl', 'Oph', ''], M69: ['GCl', 'Sgr', ''], M70: ['GCl', 'Sgr', ''], M73: ['*Ass', 'Aqr', ''], M75: ['GCl', 'Sgr', ''], M76: ['PN', 'Per', 'Little Dumbbell Nebula'], M84: ['G', 'Vir', ''], M88: ['G', 'Com', ''], M89: ['G', 'Vir', ''], M90: ['G', 'Vir', ''], M91: ['G', 'Com', ''], M98: ['G', 'Com', ''], M102: ['G', 'Dra', ''], M107: ['GCl', 'Oph', ''], M108: ['G', 'UMa', 'Surfboard Galaxy']};
-  // extra names people use
-  const STAR_ALIAS = {Betelgeuse: ['منكب الجوزاء'], Polaris: ['north star', 'pole star', 'النجم القطبي', 'نجم الشمال'], Sirius: ['dog star', 'الشعرى'], Procyon: ['الشعرى الشامية'], Canopus: ['سهيل اليمني'], 'Rigil Kentaurus': ['alpha centauri', 'رجل القنطور']};
-  const DSO_ALIAS = {Mel022: ['الثريا', 'subaru'], NGC1976: ['سديم الجبار', 'great orion nebula'], NGC0224: ['مجرة المرأة المسلسلة', 'مجرة اندروميدا'], 'ESO056-115': ['سحابة ماجلان الكبرى', 'lmc'], NGC0292: ['سحابة ماجلان الصغرى', 'smc'], NGC2632: ['خلية النحل', 'المعلف', 'praesepe'], C041: ['القلائص'], C099: ['كيس الفحم'], NGC5139: ['اوميغا القنطور'], NGC1952: ['سديم السرطان'], NGC6720: ['سديم الحلقة'], C014: ['العنقود المزدوج'], NGC4486: ['virgo a', 'black hole'], NGC6705: ['wild duck cluster', 'عنقود البط البري'], NGC6853: ['سديم الدمبل'], B033: ['سديم رأس الحصان'], NGC3372: ['سديم القاعدة'], NGC2070: ['سديم العنكبوت'], NGC0104: ['47 الطوقان']};
-  const sciKeyFor = abbr => DATA.sci[abbr] ? abbr : (Object.keys(DATA.sci).find(k => (DATA.sci[k].parts || []).some(p => p.abbr === abbr)) || null);
-  const PAGES = [
-    ['calendar', 'Sky calendar', 'تقويم السماء', 'calendar tonight sky planets up tonight what can i see visible moon phase meteor showers events الليلة تقويم ماذا ارى'],
-    ['plan', 'Plan a night', 'خطط لليلة', 'plan night tour observing session خطط ليلة جولة'],
-    ['guide', 'Saved lists', 'القوائم المحفوظة', 'saved lists my list favourites favorites star save القوائم المحفوظة قائمتي'],
-    ['quiz', 'Quiz', 'اختبر معلوماتك', 'quiz test knowledge questions game اختبار اسئلة'],
-    ['#sources', 'Sources', 'المصادر', 'sources references books المصادر'],
-    ['#credits', 'Credits', 'شكر وتقدير', 'credits thanks شكر'],
-    ['#feedback', 'Feedback', 'ملاحظاتك', 'feedback contact message suggestion mistake ملاحظات تواصل'],
-    ['#tour', 'How to use', 'طريقة الاستخدام', 'how to use help guide tour مساعدة طريقة الاستخدام']];
-
-  // ---- text clean-up so "Bételgeuse", "m 42", "NGC 1976" and Arabic with or without vowel marks all match ----
-  const AR_NORM = s => s.replace(/[ً-ْٰـ]/g, '').replace(/[أإآٱ]/g, 'ا').replace(/ى/g, 'ي').replace(/ة/g, 'ه').replace(/ؤ/g, 'و').replace(/ئ/g, 'ي');
-  const norm = s => AR_NORM(String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase())
-    .replace(/[’'`´"“”«»()?؟!.,،:;]/g, ' ').replace(/\s+/g, ' ').trim();
-  // catalogue numbers: "Messier 42", "m 42" -> "m42"; "NGC 0457" -> "ngc457"; "Caldwell 99" -> "c99"
-  const cat = s => norm(s).replace(/\bmessier\b/g, 'm').replace(/\bcaldwell\b/g, 'c').replace(/\b(m|ngc|ic|c|mel|cr|b)\s*0*(\d+)/g, '$1$2');
-  const STOP = new Set('how far is what the a an of in to from does do whats where which who are was tell me about away big size large wide distance light years arabic name called star constellation nebula galaxy cluster object كم يبعد ما هو هي ماذا اين في من عن الى نجم كوكبه كوكبة اسم بالعربي بالعربية حجم'.split(' '));
-  const words = q => norm(q).split(' ').filter(w => w && !STOP.has(w));
-  function lev(a, b) { if (Math.abs(a.length - b.length) > 2) return 9; const d = Array.from({length: b.length + 1}, (_, i) => i);
-    for (let i = 1; i <= a.length; i++) { let prev = d[0]; d[0] = i; for (let j = 1; j <= b.length; j++) { const t = d[j]; d[j] = Math.min(d[j] + 1, d[j - 1] + 1, prev + (a[i - 1] === b[j - 1] ? 0 : 1)); prev = t; } } return d[b.length]; }
-
-  // ---- the index: one entry per thing you can look up ----
-  let IDX = null;
-  function build() {
-    if (IDX) return IDX; IDX = [];
-    const add = (kind, names, data) => IDX.push(Object.assign({kind, keys: names.filter(Boolean).map(norm), cats: (data.catKeys || []).map(cat)}, data));
-    DATA.constellations.forEach(c => { if (c.key === 'QUR') return; const cul = CULTURES.filter(x => (DATA.lore[c.key] || {})[x.id]).map(x => x.id);
-      add('con', [c.latin, c.gloss, c.ar, c.key, c.gloss && c.gloss.replace(/^the /i, '')], {key: c.key, c, cul}); });
-    const seen = new Set();
-    Object.keys(DATA.sci).forEach(k => (DATA.sci[k].parts || []).forEach(p => {
-      (p.stars || []).forEach(s => { if (!s.name || seen.has(s.name)) return; seen.add(s.name); add('star', [s.name, s.bayer, DATA.starAr[s.name], ...(STAR_ALIAS[s.name] || [])], {key: k, s}); });
-      (p.dsos || []).forEach(d => { const nums = [d.cat, d.id, d.id.replace(/^ESO/, 'ESO ')]; add('dso', [d.name, d.cat, ...(DSO_ALIAS[d.id] || [])], {key: k, d, catKeys: nums}); });
-    }));
-    (DATA.sci.SOL ? DATA.sci.SOL.bodies : []).forEach(b => add('planet', [b.en, b.ar, b.id], {key: 'SOL', b}));
-    Object.keys(DATA.lore).forEach(k => Object.keys(DATA.lore[k]).forEach(cul => { const e = DATA.lore[k][cul]; if (!CULTURES.find(c => c.id === cul)) return;
-      (e.stories || []).forEach((st, i) => add('story', [st.title, e.ar && e.ar.stories && e.ar.stories[i] && e.ar.stories[i].title], {key: k, cul, title: st.title, arTitle: e.ar && e.ar.stories && e.ar.stories[i] && e.ar.stories[i].title})); }));
-    PAGES.forEach(([id, en, ar, extra]) => add('page', [en, ar], {id, en, ar, extra: norm(extra)}));
-    return IDX;
-  }
-
-  // ---- what the question is asking about ----
-  function intent(q) { const n = norm(q);
-    if (/\b(far|distance|away)\b|كم يبعد|المسافه|بعد/.test(n)) return 'dist';
-    if (/\b(big|size|large|wide|radius)\b|حجم|كبر/.test(n)) return 'size';
-    if (/\barabic\b|بالعربي/.test(n)) return 'ar';
-    if (/\b(tonight|visible|up now|see now)\b|الليله/.test(n)) return 'tonight';
-    return ''; }
-
-  function search(q) {
-    const idx = build(), it = intent(q), qc = cat(q), ws = words(q), full = ws.join(' '), nq = norm(q); const out = [];
-    if (!ws.length && !/\d/.test(qc)) return {it, list: []};
-    const catHit = qc.match(/\b(m|ngc|ic|c|mel|cr|b|eso)\d+/g) || [];
-    idx.forEach(e => { let sc = 0;
-      if (catHit.length && e.cats.some(c => catHit.includes(c))) sc = 100;
-      e.keys.forEach(k => { if (!k) return;
-        if (k === nq) sc = Math.max(sc, 95);
-        if (k === full) sc = Math.max(sc, 90);
-        else if (full.length >= 2 && k.startsWith(full)) sc = Math.max(sc, 70);
-        else if (full.length >= 3 && (' ' + k).includes(' ' + full)) sc = Math.max(sc, 60);
-        else if (full.length >= 4 && k.includes(full)) sc = Math.max(sc, 45);
-        else if (full.length >= 4) { const kw = k.split(' '); const hits = ws.filter(w => w.length >= 3 && kw.some(x => x === w || (w.length >= 5 && lev(w, x) <= (w.length >= 8 ? 2 : 1)))).length;
-          if (hits) sc = Math.max(sc, 20 + 15 * hits / ws.length); } });
-      if (e.kind === 'page' && ws.some(w => w.length >= 3 && e.extra.split(' ').includes(w))) sc = Math.max(sc, it === 'tonight' ? 95 : 40);
-      if (sc) { if (e.kind === 'con' || e.kind === 'planet') sc += 3; if (e.kind === 'star' && e.s.mag < 2) sc += 2; if (e.kind === 'story') sc -= 8; out.push([sc, e]); } });
-    out.sort((a, b) => b[0] - a[0]);
-    if (out.length && out[0][0] === 100) return {it, list: out.filter(x => x[0] === 100).slice(0, 8).map(x => x[1])};   // a catalogue number: only exact matches
-    return {it, list: out.slice(0, 8).map(x => x[1])};
-  }
-
-  // ---- one line of answer for each result ----
-  function line(e, it, ar) {
-    const L = ar ? 'ar' : 'en', con = k => esc(ar ? (byKey[k] || {}).ar || k : (byKey[k] || {}).latin || k), SER = {Ser: ['Serpens', 'الحية']}, ly = d => ar ? `نحو ${nf(sig(d))} سنة ضوئية` : `about ${nf(sig(d))} light years`;
-    if (e.kind === 'star') { const s = e.s, R = starRadius(s);
-      if (it === 'dist' && s.dist) return ar ? `يبعد ${esc(s.name)} ${ly(s.dist)}.` : `${esc(s.name)} is ${ly(s.dist)} away.`;
-      if (it === 'size' && R) return esc(sizeTxt(R, s.name, L));
-      if (it === 'ar' && DATA.starAr[s.name]) return ar ? `اسمه العربي: <span lang="ar">${esc(DATA.starAr[s.name])}</span>` : `Arabic name: <span lang="ar">${esc(DATA.starAr[s.name])}</span>`;
-      return [ar ? `نجم في كوكبة ${con(e.key)}` : `Star in ${con(e.key)}`, s.dist ? ly(s.dist) : '', R ? (ar ? `أعرض من الشمس ${nf(sig(R), R < 10 ? 1 : 0)} مرة` : `${nf(sig(R), R < 10 ? 1 : 0)}× wider than the Sun`) : ''].filter(Boolean).join(' · '); }
-    if (e.kind === 'dso' || e.kind === 'mdso') { const d = e.d, ty = (DTYPE[L] || DTYPE.en)[d.type] || d.type, f = DSO_FACTS[d.id];
-      const bits = [esc(ty), (ar ? 'في ' : 'in ') + (e.abbr && SER[e.abbr] ? SER[e.abbr][ar ? 1 : 0] : con(e.key))]; if (d.dist && it !== 'size') bits.push(ly(d.dist));
-      return bits.join(' · ') + (e.kind === 'mdso' ? (ar ? ' · ليس في قوائم Sky Guide بعد' : ' · not in Sky Guide\'s lists yet') : f ? `<br><span class="ask-f">${esc(f[ar ? 1 : 0].split(/(?<=[.!؟])\s/)[0])}</span>` : ''); }
-    if (e.kind === 'con') { const c = e.c;
-      if (it === 'ar') return ar ? `بالعربية: <span lang="ar">${esc(c.ar)}</span>` : `In Arabic: <span lang="ar">${esc(c.ar)}</span>`;
-      return [c.gloss ? esc(c.gloss) : '', `<span lang="ar">${esc(c.ar)}</span>`, e.cul.length ? (ar ? `قصص من ${e.cul.length} ثقافات` : `stories from ${e.cul.length} culture${e.cul.length > 1 ? 's' : ''}`) : ''].filter(Boolean).join(' · '); }
-    if (e.kind === 'planet') { const b = e.b; const f = b['facts_' + L] && b['facts_' + L][0];
-      return (it === 'tonight' ? (ar ? 'انظر تقويم السماء لترى أين هو الليلة. ' : 'See the Sky calendar for where it is tonight. ') : '') + esc(f || ''); }
-    if (e.kind === 'story') { const cu = CULTURES.find(c => c.id === e.cul); return ar ? `قصة من ${esc(cu ? cu.name : e.cul)} · ${con(e.key)}` : `Story · ${esc(cu ? cu.name : e.cul)} sky · ${con(e.key)}`; }
-    if (e.kind === 'page') return ar ? 'افتح هذا القسم' : 'Open this section';
-    return '';
-  }
-  function title(e, ar) {
-    if (e.kind === 'star') return esc(e.s.name) + (DATA.starAr[e.s.name] ? ` <span class="ask-ar" lang="ar">${esc(DATA.starAr[e.s.name])}</span>` : '');
-    if (e.kind === 'dso' || e.kind === 'mdso') { const d = e.d; const c = d.cat && d.cat !== d.name ? d.cat : ''; return esc(d.name || c) + (c && d.name ? ` <span class="ask-cat">${esc(c)}</span>` : ''); }
-    if (e.kind === 'con') return esc(e.c.latin);
-    if (e.kind === 'planet') return esc(ar ? e.b.ar : e.b.en);
-    if (e.kind === 'story') return esc(ar && e.arTitle ? e.arTitle : e.title);
-    if (e.kind === 'page') return esc(ar ? e.ar : e.en);
-  }
-  const KIND = {star: ['Star', 'نجم'], dso: ['Deep sky', 'جرم عميق'], mdso: ['Deep sky', 'جرم عميق'], con: ['Constellation', 'كوكبة'], planet: ['Solar System', 'المجموعة الشمسية'], story: ['Story', 'قصة'], page: ['Section', 'قسم']};
-
-  // ---- jumping to the answer ----
-  function go(e) {
-    close();
-    const top = () => { const c = document.getElementById('card'); if (c) window.scrollTo({top: c.getBoundingClientRect().top + scrollY - 10, behavior: 'smooth'}); };
-    if (e.kind === 'page') {
-      if (e.id === '#tour') { TOUR.start(); return; }
-      if (e.id[0] === '#') { const t = document.querySelector(`.srctab[data-sp="${e.id.slice(1)}"]`); if (t) { if (t.getAttribute('aria-expanded') !== 'true') t.click(); setTimeout(() => t.scrollIntoView({behavior: 'smooth', block: 'start'}), 50); } return; }
-      setCulture(e.id); top(); return; }
-    if (e.kind === 'con') { state.focus = null; state.con = e.key; setCulture(e.cul.includes(state.cul) ? state.cul : state.cul === 'science' || !e.cul.length ? 'science' : e.cul[0]); top(); return; }
-    if (e.kind === 'story') { state.focus = null; state.con = e.key; setCulture(e.cul); top(); return; }
-    state.focus = e.kind === 'star' ? `[data-star="${CSS.escape(e.s.name)}"]` : e.kind === 'dso' ? `[data-dso="${CSS.escape(e.d.id)}"]` : e.kind === 'planet' ? `[data-planet="${e.b.id}"]` : null;
-    if (!e.key) return; state.con = e.key; setCulture('science'); if (!state.focus) top();
-  }
-
-  // ---- the search panel ----
-  let box = null, results = [], sel = 0, lastFocus = null;
-  const EX = {en: ['How far is Rigel?', 'M42', 'Orion in Arabic', 'Ring Nebula', 'How big is Betelgeuse?', 'Planets tonight', 'NGC 5139', 'Andromeda'],
-              ar: ['كم يبعد رجل الجبار؟', 'M42', 'الثريا', 'سديم الجبار', 'المشتري', 'حجم منكب الجوزاء', 'الدب الأكبر', 'NGC 5139']};
-  function open(q) {
-    lastFocus = document.activeElement; const ar = state.lang === 'ar';
-    if (!box) { box = document.createElement('div'); box.id = 'askbox'; box.className = 'askbox'; document.body.appendChild(box);
-      box.addEventListener('click', ev => { if (ev.target === box) close(); }); }
-    box.setAttribute('dir', ar ? 'rtl' : 'ltr'); box.setAttribute('lang', ar ? 'ar' : 'en');
-    box.innerHTML = `<div class="ask-in" role="dialog" aria-modal="true" aria-label="${ar ? 'اسأل Sky Guide' : 'Ask Sky Guide'}">
-      <div class="ask-top"><span class="ask-ic" aria-hidden="true">⌕</span><input id="askq" type="text" inputmode="search" enterkeyhint="search" autocomplete="off" spellcheck="false" placeholder="${ar ? 'نجم، كوكبة، M42، «كم يبعد رجل الجبار؟»…' : 'A star, constellation, M42, “how far is Rigel?”…'}" aria-label="${ar ? 'اسأل Sky Guide' : 'Ask Sky Guide'}" aria-controls="askres"><button type="button" class="ask-x" aria-label="${ar ? 'إغلاق' : 'Close'}">✕</button></div>
-      <div id="askres" class="ask-res" role="listbox"></div>
-      <p class="ask-note">${ar ? 'يبحث في كل ما في Sky Guide، ويعمل دون إنترنت.' : 'Searches everything in Sky Guide, and works offline.'}</p></div>`;
-    box.hidden = false; document.documentElement.classList.add('ask-open');
-    const inp = box.querySelector('#askq'); inp.value = q || ''; inp.addEventListener('input', () => { sel = 0; draw(); });
-    inp.addEventListener('keydown', ev => { if (ev.key === 'ArrowDown') { sel = Math.min(sel + 1, results.length - 1); draw(true); ev.preventDefault(); } else if (ev.key === 'ArrowUp') { sel = Math.max(sel - 1, 0); draw(true); ev.preventDefault(); } else if (ev.key === 'Enter') { ev.preventDefault(); if (results[sel]) go(results[sel]); } });
-    box.querySelector('.ask-x').onclick = close;
-    draw(); setTimeout(() => inp.focus(), 30);
-  }
-  function draw(keepList) {
-    const ar = state.lang === 'ar', inp = box.querySelector('#askq'), res = box.querySelector('#askres'), q = inp.value;
-    if (!q.trim()) { results = []; res.innerHTML = `<p class="ask-try">${ar ? 'جرّب:' : 'Try:'}</p><div class="ask-ex">${EX[ar ? 'ar' : 'en'].map(x => `<button type="button" data-ex="${esc(x)}">${esc(x)}</button>`).join('')}</div>`;
-      res.querySelectorAll('[data-ex]').forEach(b => b.onclick = () => { inp.value = b.dataset.ex; sel = 0; draw(); inp.focus(); }); return; }
-    const r = search(q); results = r.list;
-    if (!results.length) { res.innerHTML = `<p class="ask-none">${ar ? 'لم أجد شيئًا بهذا الاسم في Sky Guide. جرّب اسم نجم أو كوكبة أو رقمًا مثل M42 أو NGC 6720.' : 'Nothing in Sky Guide matches that. Try a star or constellation name, or a number such as M42 or NGC 6720.'}</p>`; return; }
-    res.innerHTML = results.map((e, i) => `<button type="button" class="ask-r${i === sel ? ' on' : ''}" role="option" aria-selected="${i === sel}" data-i="${i}"><span class="ask-k">${KIND[e.kind][ar ? 1 : 0]}</span><span class="ask-t">${title(e, ar)}</span><span class="ask-l">${line(e, r.it, ar)}</span></button>`).join('');
-    res.querySelectorAll('[data-i]').forEach(b => b.onclick = () => go(results[+b.dataset.i]));
-    if (keepList) { const on = res.querySelector('.on'); if (on) on.scrollIntoView({block: 'nearest'}); }
-  }
-  function close() { if (!box || box.hidden) return; box.hidden = true; document.documentElement.classList.remove('ask-open'); const lf = lastFocus; setTimeout(() => { if (lf && lf.focus && lf.id !== 'askbtn') try { lf.focus({preventScroll: true}); } catch (e) {} }, 0); }
-  document.addEventListener('keydown', ev => {
-    if (ev.key === 'Escape' && box && !box.hidden) { close(); return; }
-    if (ev.key === '/' && !(box && !box.hidden) && !/^(INPUT|TEXTAREA|SELECT)$/.test((document.activeElement || {}).tagName || '')) { ev.preventDefault(); open(''); } });
-  document.addEventListener('click', ev => { if (ev.target.closest && ev.target.closest('#askbtn')) open(''); });
-  return {open, close, search, _line: line};
 })();
 
 /* ---------- installable app: offline helper, Android install button, iPhone tip ---------- */
@@ -2357,6 +2198,12 @@ function dsoMore(d, ar) {
   if (ti) h += `<details class="dsod"><summary>${esc(ti[ar ? 2 : 0])}</summary><p>${esc(ti[ar ? 3 : 1])}</p>${KIDS ? `<p class="dkid">🧒 ${esc(ti[ar ? 5 : 4])}</p>` : ''}</details>`;
   return h;
 }
+// the deep-sky list on a constellation page: folded until tapped
+function dsoFold(title, list, lang) {
+  const ar = lang === 'ar', n = (list || []).length;
+  if (!n) return `<span class="sci-sub">${title}</span>${dsoHTML(list || [], lang)}`;
+  return `<details class="dsofold"><summary><span class="pd-ar" aria-hidden="true">▸</span><span class="df-t">${title} <span class="dn-n">· ${n}</span></span><span class="df-h" data-o="${ar ? 'اضغط لعرضها' : 'Tap to show'}" data-c="${ar ? 'اضغط لطيّها' : 'Tap to fold'}"></span></summary>${dsoHTML(list, lang)}</details>`;
+}
 function dsoHTML(list, lang) {
   const ar = lang === 'ar';
   if (!list.length) return `<p class="muted" style="max-width:68ch">${T[lang].noDso}</p>`;
@@ -2394,7 +2241,7 @@ function partHTML(p, lang, many) {
   }
   h += `</p>`;
   if (p.note) h += `<p class="vis" style="margin-top:10px">${esc(ar ? p.noteAr : p.note)}</p>`;
-  h += `<span class="sci-sub">${t.dso}</span>${dsoHTML(p.dsos, lang)}`;
+  h += dsoFold(t.dso, p.dsos, lang);
   return h + `</section>`;
 }
 const SYN = 29.530588853, NM0 = Date.UTC(2000, 0, 6, 18, 14);
@@ -2464,6 +2311,7 @@ function allDsos() {
   Object.keys(DATA.sci).forEach(k => (DATA.sci[k].parts || []).forEach(p => (p.dsos || []).forEach(d => { if (!out.some(x => x.d.id === d.id)) out.push({d, key: k}); })));
   return out;
 }
+const DSO_SKY2 = id => { const p = DSO_POS[id]; if (!p) return ''; const am = Math.max(8, Math.min(60, Math.round(p[2] * 60))); return `https://archive.stsci.edu/cgi-bin/dss_search?v=poss2ukstu_red&r=${p[0]}&d=${p[1]}&e=J2000&h=${Math.round(am * 0.75)}&w=${am}&f=gif&c=none&fov=NONE&v3=`; };
 const DSO_SKY = id => { const p = DSO_POS[id]; return p ? `https://alasky.cds.unistra.fr/hips-image-services/hips2fits?hips=CDS%2FP%2FDSS2%2Fcolor&width=480&height=360&fov=${p[2]}&projection=TAN&coordsys=icrs&ra=${p[0]}&dec=${p[1]}&format=jpg` : ''; };
 function dsoCardHTML(o, lang) {
   const d = o.d, ar = lang === 'ar', sc = dsoScope(d), ex = DSO_SEE[d.id] ? DSO_SEE[d.id][ar ? 2 : 1] : '';
@@ -2471,21 +2319,28 @@ function dsoCardHTML(o, lang) {
   if (d.dist) bits.push(esc(distTxt(d.dist, lang)));
   if (sc) bits.push(esc(`${ar ? 'لرؤيته' : 'To see it'}: ${sc[lang]}${ex ? (ar ? '، ' : ', ') + ex : ''}`));
   const p = DSO_POS[d.id], f = DSO_FACTS[d.id], nm = d.name || d.cat;
-  return `<article class="dcard" data-dso="${esc(d.id)}"><div class="dimg"${p ? ` data-sky="${esc(DSO_SKY(d.id))}" data-wiki="${esc(p[3] || '')}"` : ''}><span class="dph">${ar ? 'الصورة تحتاج إلى اتصال بالإنترنت' : 'The picture needs an internet connection'}</span></div>`
+  return `<article class="dcard" data-dso="${esc(d.id)}"><div class="dimg"${p ? ` data-sky="${esc(DSO_SKY(d.id))}" data-sky2="${esc(DSO_SKY2(d.id))}" data-wiki="${esc(p[3] || '')}"` : ''}><span class="dph">${ar ? 'جارٍ تحميل الصورة…' : 'Loading picture…'}</span></div>`
     + `<div class="dbody"><h4><bdi dir="ltr">${esc(nm)}</bdi>${d.name && d.cat ? ` <span class="dcat">${esc(d.cat)}</span>` : ''}<span class="hbtns">${AG.btn({t: 'dso', key: o.key, ref: d.id}, lang, true)}${swBtn(swDsoName(d), 6, lang)}</span></h4>`
-    + `<p class="dm">${bits.join(' · ')}</p>${f ? `<p class="dfact"><span aria-hidden="true">✦ </span>${esc(f[ar ? 1 : 0])}</p>` : ''}</div></article>`;
+    + `<p class="dm">${bits.join(' · ')}</p>${f ? `<p class="dfact"><span aria-hidden="true">✦ </span>${esc(f[ar ? 1 : 0])}</p>` : ''}${(() => { const ti = DSO_TYPE_INFO[d.type]; return ti ? `<details class="dsod"><summary>${esc(ti[ar ? 2 : 0])}</summary><p>${esc(ti[ar ? 3 : 1])}</p>${KIDS ? `<p class="dkid">🧒 ${esc(ti[ar ? 5 : 4])}</p>` : ''}</details>` : ''; })()}</div></article>`;
 }
+const DSO_CATS = [
+  ['m', 'Messier catalogue', 'فهرس مسييه', "Charles Messier's famous list from the 1700s", 'قائمة شارل مسييه الشهيرة من القرن الثامن عشر'],
+  ['c', 'Caldwell catalogue', 'فهرس كالدويل', "Patrick Moore's list for amateur astronomers, 1995", 'قائمة باتريك مور لهواة الفلك، 1995'],
+  ['ngc', 'NGC catalogue', 'فهرس NGC', 'The New General Catalogue by J. L. E. Dreyer, 1888', 'الفهرس العام الجديد لدرير، 1888'],
+  ['ic', 'IC catalogue', 'فهرس IC', "Dreyer's Index Catalogues, 1895 and 1908", 'فهارس درير الإضافية، 1895 و1908'],
+  ['o', 'Other catalogues', 'فهارس أخرى', 'Melotte, Collinder, Barnard and ESO lists', 'قوائم ميلوت وكولندر وبارنارد والمرصد الأوروبي الجنوبي']];
+function dsoCatOf(d) { if (/^M\d+$/.test(d.cat || '')) return 'm'; if (/^Caldwell/.test(d.cat || '')) return 'c'; if (/^NGC/.test(d.id)) return 'ngc'; if (/^IC/.test(d.id)) return 'ic'; return 'o'; }
+function dsoNum(d) { const m = /(\d+)/.exec(/^M\d+$/.test(d.cat || '') || /^Caldwell/.test(d.cat || '') ? d.cat : d.id); return m ? +m[1] : 1e9; }
 function dsoSectionHTML(lang) {
-  const ar = lang === 'ar', all = allDsos(), mnum = d => { const m = /^M(\d+)$/.exec(d.cat || ''); return m ? +m[1] : 999; };
-  const nM = all.filter(o => mnum(o.d) < 999).length;
-  let h = `<p class="dsec-in">${ar ? `${all.length} جرمًا من أجمل ما في السماء خارج المجموعة الشمسية، منها كل أجرام قائمة مسييه الـ${nM}، مرتبة حسب نوعها. الصورة الأولى لكل جرم صورة مشهورة من ويكيميديا كومنز (أغلبها من ناسا ووكالة الفضاء الأوروبية والمرصد الأوروبي الجنوبي) إن وُجدت، وإلا فصورة حقيقية للسماء من مسح DSS2.` : `${all.length} of the finest sights beyond the Solar System, including all ${nM} objects in Messier's catalogue, grouped by kind. Each picture is a famous photo from Wikimedia Commons (mostly NASA, ESA and ESO) where there is one, otherwise a real photo of that patch of sky from the DSS2 sky survey.`}</p>`;
-  const groups = DSO_GROUPS.map(g => [g, all.filter(o => g[1].includes(o.d.type)).sort((a, b) => mnum(a.d) - mnum(b.d) || String(a.d.name || a.d.cat).localeCompare(String(b.d.name || b.d.cat)))]).filter(x => x[1].length);
-  h += `<nav class="dchips" aria-label="${ar ? 'الأنواع' : 'Kinds'}">${groups.map(([g, l]) => `<a href="#dg-${g[0]}" data-dg="${g[0]}">${ar ? g[3] : g[2]} <span>${l.length}</span></a>`).join('')}</nav>`;
-  groups.forEach(([g, l]) => { const ti = DSO_TYPE_INFO[g[4]];
-    h += `<section class="dgroup" id="dg-${g[0]}"><h3>${ar ? g[3] : g[2]} <span class="dn-n">${l.length}</span></h3>`;
-    if (ti) h += `<p class="dg-what">${esc(ti[ar ? 3 : 1])}${KIDS ? `<span class="dkid">🧒 ${esc(ti[ar ? 5 : 4])}</span>` : ''}</p>`;
-    h += `<div class="dgrid">${l.map(o => dsoCardHTML(o, lang)).join('')}</div></section>`; });
-  h += `<p class="vref" style="white-space:normal">${ar ? 'الصور: ويكيميديا كومنز (لكل صورة صاحبها ورخصتها، اضغط على «المصدر» تحت الصورة)؛ مسح السماء DSS2 الملوّن (معهد علوم مقراب الفضاء STScI ومرصد بالومار/معهد كاليفورنيا للتقنية) عبر خدمة hips2fits من مركز CDS في ستراسبورغ.' : 'Pictures: Wikimedia Commons (each photo has its own author and licence: tap "Source" under it); DSS2 colour sky survey (STScI, Palomar Observatory/Caltech, UK Schmidt), via the CDS hips2fits service, Strasbourg.'}</p>`;
+  const ar = lang === 'ar', all = allDsos();
+  let h = `<p class="dsec-in">${ar ? `${all.length} جرمًا من أجمل ما في السماء خارج المجموعة الشمسية، مقسّمة حسب الفهرس الذي تنتمي إليه، ومنها كل أجرام فهرس مسييه الـ110. اضغط على أي فهرس لفتحه. الصورة لكل جرم صورة مشهورة من ويكيميديا كومنز (أغلبها من ناسا ووكالة الفضاء الأوروبية والمرصد الأوروبي الجنوبي) إن وُجدت، وإلا فصورة حقيقية للسماء من مسح DSS.` : `${all.length} of the finest sights beyond the Solar System, sorted by the catalogue they belong to, including all 110 Messier objects. Tap a catalogue to open it. Each picture is a famous photo from Wikimedia Commons (mostly NASA, ESA and ESO) where there is one, otherwise a real photo of that patch of sky from the DSS sky survey.`}</p>`;
+  DSO_CATS.forEach(([id, en, a, sub, subAr]) => {
+    const l = all.filter(o => dsoCatOf(o.d) === id).sort((x, y) => dsoNum(x.d) - dsoNum(y.d) || String(x.d.name || x.d.cat).localeCompare(String(y.d.name || y.d.cat)));
+    if (!l.length) return;
+    h += `<details class="dgroup" id="dg-${id}"><summary><span class="pd-ar" aria-hidden="true">▸</span><span class="dg-t">${ar ? a : en} <span class="dn-n">· ${l.length}</span></span><span class="dg-sub">${ar ? subAr : sub}</span></summary>`
+      + `<div class="dgrid">${l.map(o => dsoCardHTML(o, lang)).join('')}</div></details>`;
+  });
+  h += `<p class="vref" style="white-space:normal">${ar ? 'الصور: ويكيميديا كومنز (لكل صورة صاحبها ورخصتها، اضغط على «المصدر» تحت الصورة)؛ مسح السماء DSS الملوّن (معهد علوم مقراب الفضاء STScI ومرصد بالومار/معهد كاليفورنيا للتقنية) عبر خدمة hips2fits من مركز CDS في ستراسبورغ.' : 'Pictures: Wikimedia Commons (each photo has its own author and licence: tap "Source" under it); DSS colour sky survey (STScI, Palomar Observatory/Caltech, UK Schmidt), via the CDS hips2fits service, Strasbourg.'}</p>`;
   return h;
 }
 // pictures load only when a card scrolls into view: a Wikipedia photo first, the sky-survey photo if there is none
@@ -2494,35 +2349,45 @@ const DSO_IMG = (() => {
   const cache = {};
   async function wikiThumb(title) {
     if (!title) return null; if (title in cache) return cache[title];
-    try { const r = await fetch('https://en.wikipedia.org/api/rest_v1/page/summary/' + encodeURIComponent(title).replace(/%2F/g, '/'), {headers: {accept: 'application/json'}});
+    try { const ctl = 'AbortController' in window ? new AbortController() : null; if (ctl) setTimeout(() => ctl.abort(), 8000);
+      const r = await fetch('https://en.wikipedia.org/api/rest_v1/page/summary/' + encodeURIComponent(title).replace(/%2F/g, '/'), ctl ? {signal: ctl.signal} : {});
       if (!r.ok) return (cache[title] = null); const j = await r.json(); const t = j.thumbnail && j.thumbnail.source;
       if (!t || /\.svg/i.test(t)) return (cache[title] = null);
       const file = decodeURIComponent((t.split('/').slice(-2, -1)[0] || ''));
-      return (cache[title] = {src: t.replace(/\/\d+px-/, '/480px-'), file, page: j.content_urls && j.content_urls.desktop && j.content_urls.desktop.page});
+      return (cache[title] = {src: t, file, page: j.content_urls && j.content_urls.desktop && j.content_urls.desktop.page});
     } catch (e) { return null; }
   }
   function show(box, src, credit, alt) {
     const img = new Image(); img.alt = alt; img.decoding = 'async';
     img.onload = () => { box.querySelector('.dph') && box.querySelector('.dph').remove(); box.prepend(img); box.classList.add('ok'); box.insertAdjacentHTML('beforeend', credit); };
-    img.onerror = () => { if (box.dataset.tried !== 'sky' && box.dataset.sky) { box.dataset.tried = 'sky'; show(box, box.dataset.sky, skyCredit(), alt); } };
+    img.onerror = () => {
+      if (!box.dataset.tried && box.dataset.sky) { box.dataset.tried = 'sky'; show(box, box.dataset.sky, skyCredit(), alt); }
+      else if (box.dataset.tried === 'sky' && box.dataset.sky2) { box.dataset.tried = 'sky2'; show(box, box.dataset.sky2, `<span class="dcr">${state.lang === 'ar' ? 'مسح DSS، STScI' : 'DSS sky survey, STScI'}</span>`, alt); }
+      else { const ph = box.querySelector('.dph'); if (ph) ph.textContent = navigator.onLine === false ? (state.lang === 'ar' ? 'الصورة تحتاج إلى اتصال بالإنترنت' : 'The picture needs an internet connection') : (state.lang === 'ar' ? 'الصورة غير متاحة الآن' : 'Picture not available right now'); delete box.dataset.done; }
+    };
     img.src = src;
   }
+  const img404 = box => { const ph = box.querySelector('.dph'); if (ph) ph.textContent = state.lang === 'ar' ? 'الصورة غير متاحة الآن' : 'Picture not available right now'; };
   const skyCredit = () => `<span class="dcr">${state.lang === 'ar' ? 'مسح DSS2' : 'DSS2 sky survey'}</span>`;
   async function load(box) {
-    if (box.dataset.done) return; box.dataset.done = '1'; if (navigator.onLine === false) return;
+    if (box.dataset.done) return; box.dataset.done = '1';
+    if (navigator.onLine === false) { const ph = box.querySelector('.dph'); if (ph) ph.textContent = state.lang === 'ar' ? 'الصورة تحتاج إلى اتصال بالإنترنت' : 'The picture needs an internet connection'; delete box.dataset.done; return; }
     const alt = (state.lang === 'ar' ? 'صورة ' : 'Picture of ') + (box.closest('.dcard').querySelector('h4 bdi') || {}).textContent;
     const w = await wikiThumb(box.dataset.wiki);
     if (w) show(box, w.src, `<a class="dcr" href="${esc(w.file ? 'https://commons.wikimedia.org/wiki/File:' + encodeURIComponent(w.file) : w.page || '#')}" target="_blank" rel="noopener">${state.lang === 'ar' ? 'المصدر: ويكيميديا كومنز' : 'Source: Wikimedia Commons'}</a>`, alt);
     else if (box.dataset.sky) { box.dataset.tried = 'sky'; show(box, box.dataset.sky, skyCredit(), alt); }
+    else img404(box);
   }
   let io = null;
   function watch(root) {
     const boxes = root.querySelectorAll('.dimg[data-sky]'); if (!boxes.length) return;
     if (!('IntersectionObserver' in window)) { boxes.forEach(load); return; }
     if (io) io.disconnect();
-    io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { io.unobserve(e.target); load(e.target); } }), {rootMargin: '400px 0px'});
-    boxes.forEach(b => io.observe(b));
+    io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting && e.boundingClientRect.width > 0 && !e.target.closest('details:not([open])')) { io.unobserve(e.target); load(e.target); } }), {rootMargin: '400px 0px'});
+    boxes.forEach(b => { io.observe(b); const r = b.getBoundingClientRect(); if (r.width && !b.closest('details:not([open])') && r.top < innerHeight + 400 && r.bottom > -400) load(b); });
   }
+  // opening a folded catalogue starts its pictures
+  document.addEventListener('toggle', ev => { const d = ev.target; if (!d.matches || !d.matches('.dgroup') || !d.open) return; d.querySelectorAll('.dimg[data-sky]').forEach(b => { if (io) { io.unobserve(b); io.observe(b); } const r = b.getBoundingClientRect(); if (r.width && r.top < innerHeight + 400) load(b); }); }, true);
   addEventListener('online', () => document.querySelectorAll('.dimg[data-done]:not(.ok)').forEach(b => { delete b.dataset.done; delete b.dataset.tried; load(b); }));
   return {watch};
 })();
@@ -2535,7 +2400,7 @@ function sciHTML(key, lang) {
   else if (sc.special === 'dso') h += dsoSectionHTML(lang);
   else if (sc.special) {
     h += factTable(sc.facts, ar) + `<ul class="facts">${(ar ? sc.ar : sc.en).map(f => `<li>${esc(f)}</li>`).join('')}</ul>`;
-    if (sc.dsos) h += `<span class="sci-sub">${T[lang].dso.split(' في ')[0].replace(' in this constellation', '')}</span>${dsoHTML(sc.dsos, lang)}`;
+    if (sc.dsos) h += dsoFold(T[lang].dso.split(' في ')[0].replace(' in this constellation', ''), sc.dsos, lang);
   } else sc.parts.forEach(p => { h += partHTML(p, lang, sc.parts.length > 1); });
   h += `<p class="vref" style="white-space:normal;margin-top:18px">${linkText(ar ? 'المصادر: فهرس نجوم HYG 4.1 (هيباركوس وغيره) للمسافات والأنواع؛ OpenNGC لأجرام السماء العميقة؛ أرشيف ناسا للكواكب الخارجية (نسخة أكتوبر 2026) للكواكب. الحرارة مقدّرة من الطيف، والمسافات تقريبية.' : 'Sources: HYG star catalogue 4.1 (Hipparcos and others) for distances and types; OpenNGC for deep-sky objects; NASA Exoplanet Archive (October 2026 copy) for planets. Temperatures are estimated from each star\'s spectrum, and distances are approximate.')}</p>`;
   return h + `</div>`;
@@ -2929,6 +2794,7 @@ const AG = (() => {
     }));
     if (state.focus) {
       const el = card.querySelector(state.focus); state.focus = null;
+      if (el) { let d = el.closest('details'); while (d) { d.open = true; d = d.parentElement && d.parentElement.closest('details'); } }
       if (el) setTimeout(() => { el.scrollIntoView({behavior: 'smooth', block: 'center'}); el.classList.add('agflash'); setTimeout(() => el.classList.remove('agflash'), 1600); }, 60);
     }
   }
