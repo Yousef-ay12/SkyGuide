@@ -2423,10 +2423,11 @@ function dsoHTML(list, lang) {
   }).join('')}</ul>`;
 }
 // the official IAU chart of a constellation (IAU and Sky & Telescope, via the IAU Office of Astronomy for Education), shown in the site's sky colours; loaded only when opened
-function iauSlug(name) { name = {'Serpens Cauda': 'Serpens', 'Serpens Caput': 'Serpens', 'Corona Austrina': 'Corona Australis'}[name] || name; return name.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z]+/g, '-').replace(/^-|-$/g, ''); }
+function iauSlug(name) { name = {'Corona Austrina': 'Corona Australis'}[name] || name; return name.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z]+/g, '-').replace(/^-|-$/g, ''); }
 // the official IAU chart(s) of a constellation, shown in the site's sky colours.
 // Each picture is tried from this site first (iau/), then from the IAU Office of Astronomy for Education, and if both fail the drawn chart is shown instead.
-function iauParts(key) { const sc = DATA.sci[key]; return sc && sc.parts ? sc.parts : []; }
+// Serpens comes in two pieces on either side of Ophiuchus, and the IAU draws a chart for each
+function iauParts(key) { const sc = DATA.sci[key]; if (!sc || !sc.parts) return []; return sc.parts.flatMap(p => p.abbr === 'Ser' ? [{name: 'Serpens Caput', ar: 'رأس الحية'}, {name: 'Serpens Cauda', ar: 'ذنب الحية'}] : [p]); }
 function iauFig(key, lang, cls) {
   const parts = iauParts(key); if (!parts.length) return '';
   const ar = lang === 'ar', many = parts.length > 1, fb = DATA.charts[key] ? ' data-fb="1"' : '';
