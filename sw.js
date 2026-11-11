@@ -8,7 +8,7 @@ const SKY = 'skyguide-sky-v1';         // sky-survey photos (sealed copies take 
 const MAX_PICS = 150, MAX_SKY = 40;
 const CORE = ['./', 'manifest.webmanifest', 'icons/icon-192.png', 'icons/icon-512.png', 'icons/apple-touch-icon.png',
   'fonts/marcellus.woff', 'fonts/crimsonpro.woff', 'fonts/crimsonpro-italic.woff', 'fonts/plexmono-400.woff', 'fonts/plexmono-500.woff', 'fonts/amiri-400.woff', 'fonts/amiri-700.woff'];
-const PIC_HOSTS = /(^|\.)(astro4edu\.org|wikipedia\.org|wikimedia\.org|alasky\.cds\.unistra\.fr|archive\.stsci\.edu)$/;
+const PIC_HOSTS = /(^|\.)(wikipedia\.org|wikimedia\.org|alasky\.cds\.unistra\.fr|archive\.stsci\.edu)$/;
 
 self.addEventListener('install', ev => {
   ev.waitUntil(caches.open(CACHE).then(c => c.addAll(CORE)).then(() => self.skipWaiting()));
@@ -33,7 +33,7 @@ self.addEventListener('fetch', ev => {
     return;
   }
   const fonts = url.hostname === 'fonts.googleapis.com' || url.hostname === 'fonts.gstatic.com' || /\/fonts\//.test(url.pathname);
-  if (!fonts && (req.mode === 'navigate' || (url.origin === location.origin && !/\/(icons|iau)\//.test(url.pathname)))) {
+  if (!fonts && (req.mode === 'navigate' || (url.origin === location.origin && !/\/icons\//.test(url.pathname)))) {
     ev.respondWith(fetch(req, {cache: 'no-store'}).then(res => {
       if (res.ok) { const copy = res.clone(); caches.open(CACHE).then(c => c.put(req.mode === 'navigate' ? './' : req, copy)); }
       return res;
