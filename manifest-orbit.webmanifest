@@ -1,0 +1,33 @@
+{
+  "name": "Sky Guide: One Sky, Many Stories",
+  "short_name": "Sky Guide",
+  "description": "Star stories from seven cultures, the science of the constellations, and a sky calendar for what to see tonight.",
+  "id": "./",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#121a33",
+  "theme_color": "#121a33",
+  "lang": "en",
+  "dir": "ltr",
+  "icons": [
+    {
+      "src": "icons/choice/orbit-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/choice/orbit-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/choice/orbit-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
