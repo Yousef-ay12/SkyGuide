@@ -2597,9 +2597,34 @@ const DSO_IMG = (() => {
       return (cache[title] = {src: t, file, page: j.content_urls && j.content_urls.desktop && j.content_urls.desktop.page});
     } catch (e) { return null; }
   }
+  // Some Hubble photos have missing pieces, filled with flat black blocks in a corner (the "staircase" of
+  // Hubble's older camera). Spot them: a big, square-edged, perfectly black patch from a corner whose edge
+  // meets bright picture. Such photos are skipped in favour of the sky-survey picture.
+  function gappy(img) {
+    try {
+      const W = 96, H = 72, C = 4, gw = W / C, gh = H / C, cv = document.createElement('canvas'); cv.width = W; cv.height = H;
+      const cx = cv.getContext('2d', {willReadFrequently: true}); cx.drawImage(img, 0, 0, W, H); const px = cx.getImageData(0, 0, W, H).data;
+      const voidc = new Uint8Array(gw * gh), lum = new Float32Array(gw * gh);
+      for (let gy = 0; gy < gh; gy++) for (let gx = 0; gx < gw; gx++) { let mx = 0, sum = 0;
+        for (let y = 0; y < C; y++) for (let x = 0; x < C; x++) { const i = ((gy * C + y) * W + gx * C + x) * 4, m = Math.max(px[i], px[i + 1], px[i + 2]); if (m > mx) mx = m; sum += (px[i] + px[i + 1] + px[i + 2]) / 3; }
+        voidc[gy * gw + gx] = mx <= 6 ? 1 : 0; lum[gy * gw + gx] = sum / (C * C); }
+      const seen = new Uint8Array(gw * gh);
+      for (const [sx, sy] of [[0, 0], [gw - 1, 0], [0, gh - 1], [gw - 1, gh - 1]]) {
+        const s0 = sy * gw + sx; if (!voidc[s0] || seen[s0]) continue;
+        const st = [s0], comp = []; seen[s0] = 1; let x0 = sx, x1 = sx, y0 = sy, y1 = sy, nb = 0, nl = 0;
+        while (st.length) { const c = st.pop(), x = c % gw, y = (c / gw) | 0; comp.push(c); x0 = Math.min(x0, x); x1 = Math.max(x1, x); y0 = Math.min(y0, y); y1 = Math.max(y1, y);
+          for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) { const nx = x + dx, ny = y + dy; if (nx < 0 || ny < 0 || nx >= gw || ny >= gh) continue; const n = ny * gw + nx;
+            if (voidc[n]) { if (!seen[n]) { seen[n] = 1; st.push(n); } } else { const fx = nx + dx, fy = ny + dy; if (fx >= 0 && fy >= 0 && fx < gw && fy < gh && !voidc[fy * gw + fx]) { nb++; nl += lum[fy * gw + fx]; } } } }
+        const fill = comp.length / ((x1 - x0 + 1) * (y1 - y0 + 1));
+        if (comp.length >= gw * gh * 0.05 && fill >= 0.5 && x1 - x0 + 1 <= gw * 0.8 && y1 - y0 + 1 <= gh * 0.8 && nb && nl / nb > 40) return true;   // a block in one corner, not a black sky all round
+      }
+    } catch (e) {}
+    return false;
+  }
   function show(box, src, credit, alt) {
     const img = new Image(); img.alt = alt; img.decoding = 'async'; if (/upload\.wikimedia\.org/.test(src)) img.crossOrigin = 'anonymous';
-    img.onload = () => { box.querySelector('.dph') && box.querySelector('.dph').remove(); box.prepend(img); box.classList.add('ok'); box.insertAdjacentHTML('beforeend', credit); };
+    img.onload = () => {
+      if (!box.dataset.tried && box.dataset.sky && /upload\.wikimedia\.org/.test(src) && gappy(img)) { img.onerror(); return; } box.querySelector('.dph') && box.querySelector('.dph').remove(); box.prepend(img); box.classList.add('ok'); box.insertAdjacentHTML('beforeend', credit); };
     img.onerror = () => {
       if (!box.dataset.tried && box.dataset.sky) { box.dataset.tried = 'sky'; show(box, box.dataset.sky, skyCredit(), alt); }
       else if (box.dataset.tried === 'sky' && box.dataset.sky2) { box.dataset.tried = 'sky2'; show(box, box.dataset.sky2, `<span class="dcr">${state.lang === 'ar' ? 'مسح DSS، STScI' : 'DSS sky survey, STScI'}</span>`, alt); }
