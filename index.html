@@ -1359,7 +1359,14 @@ const APP = (() => {
   }
   // iPhone and iPad: show the Install button too; it leads to the icon picker, then these steps
   // Android, inside the installed app: a Change icon button
-  if (android && standalone()) addEventListener('DOMContentLoaded', () => { const b = document.getElementById('iconbtn'); if (b) b.hidden = false; });
+  // Android: a Change icon button once Sky Guide is installed. Inside the app it shows straight away; in Chrome it shows
+  // when Chrome does not offer to install (which means it is already installed); it hides again if Chrome offers to install.
+  const showIconBtn = on => { const b = document.getElementById('iconbtn'); if (b) b.hidden = !on; };
+  if (android) {
+    if (standalone()) addEventListener('DOMContentLoaded', () => showIconBtn(true));
+    else addEventListener('load', () => setTimeout(() => { if (!deferred) showIconBtn(true); }, 3500));
+    addEventListener('beforeinstallprompt', () => { if (!standalone()) showIconBtn(false); });
+  }
   if (ios && !standalone()) addEventListener('DOMContentLoaded', () => { const b = document.getElementById('installbtn'); if (b) b.hidden = false; });
   function changed(sel) {
     const ar = state.lang === 'ar', ic = (APP_ICONS.find(x => x[0] === sel) || APP_ICONS[0]);
