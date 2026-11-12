@@ -8,7 +8,7 @@ const SKY = 'skyguide-sky-v1';         // sky-survey photos (sealed copies take 
 const MAX_PICS = 150, MAX_SKY = 40;
 const CORE = ['./', 'manifest.webmanifest', 'icons/icon-192.png', 'icons/icon-512.png', 'icons/apple-touch-icon.png',
   'fonts/marcellus.woff', 'fonts/crimsonpro.woff', 'fonts/crimsonpro-italic.woff', 'fonts/plexmono-400.woff', 'fonts/plexmono-500.woff', 'fonts/amiri-400.woff', 'fonts/amiri-700.woff'];
-const PIC_HOSTS = /(^|\.)(wikipedia\.org|wikimedia\.org|alasky\.cds\.unistra\.fr|archive\.stsci\.edu)$/;
+const PIC_HOSTS = /(^|\.)(esawebb\.org|wikipedia\.org|wikimedia\.org|alasky\.cds\.unistra\.fr|archive\.stsci\.edu)$/;
 
 self.addEventListener('install', ev => {
   ev.waitUntil(caches.open(CACHE).then(c => c.addAll(CORE)).then(() => self.skipWaiting()));
