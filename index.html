@@ -777,7 +777,8 @@ html.ask-open { overflow: hidden; }
         </select>
       </label>
       <div class="hbrow"><button type="button" class="tourbtn" id="tourbtn" aria-label="How to use this page: a step-by-step tour"><span aria-hidden="true">?</span> How to use</button>
-      <button type="button" class="tourbtn" id="installbtn" hidden aria-label="Install Sky Guide as an app on this device"><span aria-hidden="true">↓</span> Install app</button></div>
+      <button type="button" class="tourbtn" id="installbtn" hidden aria-label="Install Sky Guide as an app on this device"><span aria-hidden="true">↓</span> Install app</button>
+      <button type="button" class="tourbtn" id="iconbtn" hidden aria-label="Change the Sky Guide app icon"><span aria-hidden="true">◐</span> Change icon</button></div>
       <div class="count" id="count"></div>
     </div>
   </header>
@@ -1294,6 +1295,7 @@ const APP_ICONS = [["classic", "Crescent and Orion", "الهلال والجبا�
 const APP = (() => {
   const standalone = () => (window.matchMedia && matchMedia('(display-mode: standalone)').matches) || navigator.standalone === true;
   const ios = /iP(hone|ad|od)/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  const android = /Android/i.test(navigator.userAgent);
   const safari = /Safari/.test(navigator.userAgent) && !/CriOS|FxiOS|EdgiOS|OPiOS|GSA\//.test(navigator.userAgent);
   let deferred = null;
   function toast(msg) {
@@ -1309,6 +1311,7 @@ const APP = (() => {
   addEventListener('beforeinstallprompt', ev => { ev.preventDefault(); deferred = ev; const b = document.getElementById('installbtn'); if (b) b.hidden = false; });
   addEventListener('appinstalled', () => { deferred = null; const b = document.getElementById('installbtn'); if (b) b.hidden = true; });
   document.addEventListener('click', ev => {
+    if (ev.target.closest && ev.target.closest('#iconbtn')) { pick('change'); return; }
     if (ev.target.closest && ev.target.closest('#installbtn')) { if (deferred) pick('android'); else if (ios) pick('ios'); return; }
     if (ev.target.closest && ev.target.closest('[data-iconpick]')) pick(ios && safari ? 'ios' : deferred ? 'android' : 'info');
   });
@@ -1318,9 +1321,9 @@ const APP = (() => {
     const ar = state.lang === 'ar'; let sel = getIcon(); document.getElementById('iconpick') && document.getElementById('iconpick').remove();
     const box = document.createElement('div'); box.id = 'iconpick'; box.className = 'ipick'; box.setAttribute('dir', ar ? 'rtl' : 'ltr'); box.setAttribute('lang', ar ? 'ar' : 'en');
     const installed = standalone();
-    const go = {android: ar ? 'ثبّت بهذه الأيقونة' : 'Install with this icon', ios: ar ? 'استخدم هذه الأيقونة' : 'Use this icon', info: ar ? 'احفظ اختياري' : 'Save my choice'}[mode];
+    const go = {android: ar ? 'ثبّت بهذه الأيقونة' : 'Install with this icon', ios: ar ? 'استخدم هذه الأيقونة' : 'Use this icon', info: ar ? 'احفظ اختياري' : 'Save my choice', change: ar ? 'استخدم هذه الأيقونة' : 'Use this icon'}[mode];
     box.innerHTML = `<div class="ip-in" role="dialog" aria-modal="true" aria-labelledby="ip-h"><div class="ip-top"><h3 id="ip-h">${ar ? 'اختر أيقونة التطبيق' : 'Choose your app icon'}</h3><button type="button" class="ip-x" aria-label="${ar ? 'إغلاق' : 'Close'}">✕</button></div>
-      <p class="ip-sub">${installed ? (ar ? 'Sky Guide مثبّت بالفعل. لتغيير أيقونته: اختر أيقونة، ثم احذف التطبيق من الشاشة الرئيسية وأضفه مرة أخرى.' : 'Sky Guide is already installed. To change its icon: choose one, then remove the app from your home screen and add it again.') : (ar ? 'هذه الأيقونة ستظهر على شاشتك الرئيسية.' : 'This is how Sky Guide will look on your home screen.')}</p>
+      <p class="ip-sub">${mode === 'change' ? (ar ? 'اختر أيقونة جديدة لـ Sky Guide على شاشتك الرئيسية.' : 'Choose a new icon for Sky Guide on your home screen.') : installed ? (ar ? 'Sky Guide مثبّت بالفعل. لتغيير أيقونته: اختر أيقونة، ثم احذف التطبيق من الشاشة الرئيسية وأضفه مرة أخرى.' : 'Sky Guide is already installed. To change its icon: choose one, then remove the app from your home screen and add it again.') : (ar ? 'هذه الأيقونة ستظهر على شاشتك الرئيسية.' : 'This is how Sky Guide will look on your home screen.')}</p>
       <div class="ip-grid" role="radiogroup" aria-label="${ar ? 'الأيقونات' : 'Icons'}">${APP_ICONS.map(([id, en, a, src]) => `<button type="button" role="radio" class="ip-i" data-ic="${id}" aria-checked="${id === sel}"><img src="${src}" alt=""><span>${ar ? a : en}</span></button>`).join('')}</div>
       <div class="ip-go"><button type="button" class="pbtn main ip-ok">${go}</button></div></div>`;
     document.body.appendChild(box); document.documentElement.classList.add('ask-open');
@@ -1336,13 +1339,33 @@ const APP = (() => {
       if (mode === 'android') {
         if (sel === at && deferred) { const d = deferred; deferred = null; document.getElementById('installbtn').hidden = true; try { await d.prompt(); } catch (e) {} }
         else { try { sessionStorage.setItem('osms-iconready', '1'); } catch (e) {} location.reload(); }
+      } else if (mode === 'change') {
+        // point the page at the matching app description, so Chrome sees the new icon when it next checks
+        const mf = document.querySelector('link[rel=manifest]'); if (mf) mf.href = sel === 'classic' ? 'manifest.webmanifest' : `manifest-${sel}.webmanifest`;
+        changed(sel);
       } else if (mode === 'ios') howto(sel);
       else toast(installed ? (ar ? 'تم الحفظ. احذف التطبيق من الشاشة الرئيسية وأضفه مرة أخرى لترى الأيقونة الجديدة.' : 'Saved. Remove the app from your home screen and add it again to see the new icon.') : (ar ? 'تم الحفظ. ستُستخدم هذه الأيقونة عندما تثبّت Sky Guide.' : 'Saved. This icon will be used when you install Sky Guide.'));
     };
     setTimeout(() => { const c = box.querySelector('.ip-i[aria-checked=true]') || box.querySelector('.ip-i'); c.focus(); c.scrollIntoView({block: 'nearest'}); }, 30);
   }
   // iPhone and iPad: show the Install button too; it leads to the icon picker, then these steps
+  // Android, inside the installed app: a Change icon button
+  if (android && standalone()) addEventListener('DOMContentLoaded', () => { const b = document.getElementById('iconbtn'); if (b) b.hidden = false; });
   if (ios && !standalone()) addEventListener('DOMContentLoaded', () => { const b = document.getElementById('installbtn'); if (b) b.hidden = false; });
+  function changed(sel) {
+    const ar = state.lang === 'ar', ic = (APP_ICONS.find(x => x[0] === sel) || APP_ICONS[0]);
+    const box = document.createElement('div'); box.id = 'iconpick'; box.className = 'ipick'; box.setAttribute('dir', ar ? 'rtl' : 'ltr'); box.setAttribute('lang', ar ? 'ar' : 'en');
+    box.innerHTML = `<div class="ip-in" role="dialog" aria-modal="true" aria-labelledby="ip-h"><div class="ip-top"><h3 id="ip-h">${ar ? 'تم حفظ أيقونتك الجديدة' : 'Your new icon is saved'}</h3><button type="button" class="ip-x" aria-label="${ar ? 'إغلاق' : 'Close'}">✕</button></div>
+      <div class="ip-how"><img src="${ic[3]}" alt=""><ol>
+        <li>${ar ? 'سيعرض Chrome تحديث الأيقونة في المرة القادمة التي تفتح فيها Sky Guide، وغالبًا خلال يوم تقريبًا. اضغط «تحديث» عندما يسألك.' : 'Chrome will offer to update the icon the next time you open Sky Guide, usually within about a day. Tap “Update” when it asks.'}</li>
+        <li>${ar ? 'تريدها الآن؟ احذف Sky Guide من شاشتك الرئيسية، ثم افتح الموقع في Chrome واضغط «ثبّت التطبيق». ستظهر أيقونتك الجديدة فورًا.' : 'Want it right now? Remove Sky Guide from your home screen, then open the site in Chrome and tap “Install app”. Your new icon appears straight away.'}</li></ol></div>
+      <div class="ip-go"><button type="button" class="pbtn main ip-done">${ar ? 'حسنًا' : 'Got it'}</button></div></div>`;
+    document.body.appendChild(box); document.documentElement.classList.add('ask-open');
+    const close = () => { box.remove(); document.documentElement.classList.remove('ask-open'); };
+    box.addEventListener('click', ev => { if (ev.target === box) close(); });
+    box.querySelector('.ip-x').onclick = close; box.querySelector('.ip-done').onclick = close;
+    setTimeout(() => box.querySelector('.ip-done').focus(), 30);
+  }
   function howto(sel) {
     const ar = state.lang === 'ar', ic = (APP_ICONS.find(x => x[0] === sel) || APP_ICONS[0]), chrome = /CriOS/.test(navigator.userAgent), ipad = /iPad/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
     const where = chrome ? (ar ? 'في أعلى الشاشة بجانب شريط العنوان' : 'at the top, next to the address bar') : ipad ? (ar ? 'في أعلى الشاشة' : 'at the top of the screen') : (ar ? 'في أسفل الشاشة' : 'at the bottom of the screen');
@@ -1405,8 +1428,8 @@ function qzPromo() {
 }
 // the page's frame (header, tabs, list) follows the chosen language too
 const CHROME = {
-  en: {h1: 'One Sky, Many Stories', lede: 'Choose a culture and a group of stars, and read what that culture saw there: the story, the poem, and where it was recorded. Or open Science for the facts, and the Sky calendar for what to see tonight.', screen: 'Screen', skins: ['Automatic', 'Light', 'Dark', 'Black', 'Sepia', 'Night red (for stargazing)'], tour: 'How to use', install: 'Install app', culture: 'Culture', cons: 'Constellations', search: 'Search'},
-  ar: {h1: 'سماء واحدة، حكايات كثيرة', lede: 'اختر ثقافة ومجموعة من النجوم، واقرأ ما رآه أهلها فيها: القصة والشعر وأين دُوّنت. أو افتح «العلم» للحقائق، و«تقويم السماء» لما تستطيع رؤيته الليلة.', screen: 'الشاشة', skins: ['تلقائي', 'فاتح', 'داكن', 'أسود', 'بنّي فاتح', 'أحمر ليلي (للرصد)'], tour: 'طريقة الاستخدام', install: 'ثبّت التطبيق', culture: 'الثقافة', cons: 'الكوكبات', search: 'البحث'}};
+  en: {h1: 'One Sky, Many Stories', lede: 'Choose a culture and a group of stars, and read what that culture saw there: the story, the poem, and where it was recorded. Or open Science for the facts, and the Sky calendar for what to see tonight.', screen: 'Screen', skins: ['Automatic', 'Light', 'Dark', 'Black', 'Sepia', 'Night red (for stargazing)'], tour: 'How to use', install: 'Install app', icon: 'Change icon', culture: 'Culture', cons: 'Constellations', search: 'Search'},
+  ar: {h1: 'سماء واحدة، حكايات كثيرة', lede: 'اختر ثقافة ومجموعة من النجوم، واقرأ ما رآه أهلها فيها: القصة والشعر وأين دُوّنت. أو افتح «العلم» للحقائق، و«تقويم السماء» لما تستطيع رؤيته الليلة.', screen: 'الشاشة', skins: ['تلقائي', 'فاتح', 'داكن', 'أسود', 'بنّي فاتح', 'أحمر ليلي (للرصد)'], tour: 'طريقة الاستخدام', install: 'ثبّت التطبيق', icon: 'غيّر الأيقونة', culture: 'الثقافة', cons: 'الكوكبات', search: 'البحث'}};
 let chromeLang = null;
 function applyChrome() {
   const L = state.lang === 'ar' ? 'ar' : 'en'; if (L === chromeLang) return; chromeLang = L; const t = CHROME[L], ar = L === 'ar';
@@ -1418,6 +1441,7 @@ function applyChrome() {
   document.querySelectorAll('#skin option').forEach((o, i) => { if (t.skins[i]) o.textContent = t.skins[i]; });
   const tb = document.getElementById('tourbtn'); if (tb) { tb.lastChild.textContent = ' ' + t.tour; }
   const ib = document.getElementById('installbtn'); if (ib) { ib.lastChild.textContent = ' ' + t.install; }
+  const cb = document.getElementById('iconbtn'); if (cb) { cb.lastChild.textContent = ' ' + t.icon; }
   document.querySelectorAll('.ntab').forEach(b => { const n = NAVTABS.find(x => x[0] === b.dataset.tab); if (n && b.firstChild && b.firstChild.nodeType === 3) b.firstChild.textContent = ar ? n[2] : n[1]; });
   set('#nsub label', t.culture); set('#index > summary > span:first-child', t.cons); set('.search .sect-lbl', t.search);
   const cnt = document.getElementById('count'); if (cnt && cnt.dataset[L]) cnt.textContent = cnt.dataset[L];
