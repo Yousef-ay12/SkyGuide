@@ -135,6 +135,8 @@ h1 { font-family: var(--f-display); font-weight: 400; font-size: clamp(30px, 5vw
 .item .dots i { width: 6px; height: 6px; border-radius: 50%; background: var(--line); }
 .item .dots i.on { background: var(--cc); }
 .item.dim .nm { color: var(--muted); }
+.item .ns { grid-column: 1; font-size: 12.5px; color: var(--muted); font-style: italic; line-height: 1.2; }
+.item .ns:empty { display: none; }
 .list-note { font-family: var(--f-mono); font-size: 11.5px; color: var(--muted); padding: 2px 8px 0; margin: 0; }
 .empty-search { padding: 10px 8px; color: var(--muted); font-size: 15px; }
 
@@ -1472,7 +1474,7 @@ function syncNav() {
   sub.hidden = tab !== 'stories';
   if (tab === 'stories') {
     sel.value = state.cul;
-    [...sel.options].forEach(o => { const c = CULTURES.find(x => x.id === o.value), has = byKey[state.con] && hasLore(state.con, o.value); o.disabled = !has; o.textContent = `${c.name} · ${c.nat}${has ? '' : ' (no story for ' + (byKey[state.con] ? byKey[state.con].latin : '') + ')'}`; });
+    [...sel.options].forEach(o => { const c = CULTURES.find(x => x.id === o.value), has = byKey[state.con] && hasLore(state.con, o.value); o.disabled = false; o.textContent = `${c.name} · ${c.nat}${has ? '' : ' (no story)'}`; });
     sub.style.setProperty('--cc', `var(--c-${state.cul})`);
   }
 }
@@ -1514,7 +1516,7 @@ function buildList(filter = '') {
   const f = filter.trim().toLowerCase();
   let shown = 0;
   Object.keys(REGIONS).forEach(r => {
-    const items = DATA.constellations.filter(c => c.region === r && hasLore(c.key, state.cul) && (!f || (c.latin + ' ' + c.gloss + ' ' + c.ar + ' ' + c.key).toLowerCase().includes(f) || searchLore(c.key, f)));
+    const items = DATA.constellations.filter(c => c.region === r && inList(c.key, state.cul) && (!f || (c.latin + ' ' + c.gloss + ' ' + c.ar + ' ' + c.key).toLowerCase().includes(f) || searchLore(c.key, f)));
     if (!items.length) return;
     const g = document.createElement('div'); g.className = 'grp'; g.textContent = REGIONS[r]; list.appendChild(g);
     items.forEach(c => {
@@ -1523,12 +1525,12 @@ function buildList(filter = '') {
       const lo = DATA.lore[c.key] || {};
       const anyLore = CULTURES.some(cu => lo[cu.id]);
       const dots = !anyLore ? '' : CULTURES.map(cu => `<i class="${lo[cu.id] ? 'on' : ''}" style="--cc:var(--c-${cu.id})" title="${cu.name}${lo[cu.id] ? '' : ': no story'}"></i>`).join('');
-      b.innerHTML = `<span class="nm">${esc(c.latin)}</span><span class="ar" lang="ar">${esc(c.ar)}</span><span class="gl">${esc(c.gloss)}</span><span class="dots" aria-hidden="true">${dots}</span>`;
+      b.innerHTML = `<span class="nm">${esc(c.latin)}</span><span class="ar" lang="ar">${esc(c.ar)}</span><span class="gl">${esc(c.gloss)}</span><span class="ns"></span><span class="dots" aria-hidden="true">${dots}</span>`;
       b.addEventListener('click', () => { state.con = c.key; render(); if (matchMedia('(max-width: 860px)').matches) { document.getElementById('index').open = false; document.getElementById('card').scrollIntoView({behavior: 'smooth', block: 'start'}); } });
       list.appendChild(b);
     });
   });
-  const note = document.createElement('p'); note.className = 'list-note'; const n = list.querySelectorAll('.item:not([data-key="QUR"])').length; note.textContent = state.cul === 'science' ? (f ? `${n} matches` : 'All 88 constellations, plus the Milky Way, the Magellanic Clouds and the Solar System') : `${n} star groups with ${cname(state.cul)} stories`; list.prepend(note);
+  const note = document.createElement('p'); note.className = 'list-note'; const n = list.querySelectorAll('.item:not([data-key="QUR"])').length; note.textContent = state.cul === 'science' ? (f ? `${n} matches` : (state.lang === 'ar' ? 'كل الكوكبات الـ88، ومعها درب التبانة وسحابتا ماجلان والمجموعة الشمسية' : 'All 88 constellations, plus the Milky Way, the Magellanic Clouds and the Solar System')) : (state.lang === 'ar' ? `كل الكوكبات الـ88؛ لـ${[...list.querySelectorAll('.item')].filter(x => x.dataset.key !== 'QUR' && hasLore(x.dataset.key, state.cul)).length} منها قصص في ${CUL_AR_SKY[state.cul] || ''}، والباقي باهت` : `All 88 constellations; ${[...list.querySelectorAll('.item')].filter(x => x.dataset.key !== 'QUR' && hasLore(x.dataset.key, state.cul)).length} have ${cname(state.cul)} stories, the others are dimmed`); list.prepend(note);
   if (!shown) list.innerHTML = state.cul === 'science' ? `<p class="empty-search">Nothing matches that search. Try a star name such as Sirius or Betelgeuse, or an object such as Orion Nebula.</p>` : `<p class="empty-search">No ${cname(state.cul)} story matches that search. Try a star name such as Sirius, or an Arabic name such as سهيل.</p>`;
   markList();
 }
@@ -1540,20 +1542,23 @@ function searchLore(key, f) {
   return Object.values(lo).some(e => (e.seen + ' ' + e.stories.map(s => s.title + ' ' + s.text).join(' ')).toLowerCase().includes(f));
 }
 function hasLore(con, cul) { if (cul === 'calendar' || cul === 'guide' || cul === 'plan' || cul === 'quiz') return true; return cul === 'science' ? !!DATA.sci[con] : !!(DATA.lore[con] || {})[cul]; }
+// which entries a culture's list shows: everything, except sections that belong to one place
+function inList(con, cul) { if (cul === 'science') return !!DATA.sci[con]; if (con === 'SOL' || con === 'DSO') return false; if (con === 'QUR') return cul === 'arab'; return !!byKey[con]; }
 function firstFor(cul) { const c = DATA.constellations.find(x => x.key !== 'QUR' && hasLore(x.key, cul)); return c ? c.key : 'Ori'; }
 function setCulture(id) {
   const wasCal = state.cul === 'calendar' || state.cul === 'guide' || state.cul === 'plan' || state.cul === 'quiz';
   state.cul = id;
   if (id === 'calendar' || id === 'guide' || id === 'plan' || id === 'quiz') { render(); return; }
   if (wasCal && !byKey[state.con]) state.con = 'Ori';
-  if (!hasLore(state.con, id)) state.con = firstFor(id);
+  if (!inList(state.con, id)) state.con = firstFor(id);
   buildList(document.getElementById('q').value);
   render();
 }
 function markList() {
   document.querySelectorAll('.item').forEach(b => {
     b.setAttribute('aria-current', b.dataset.key === state.con ? 'true' : 'false');
-    b.classList.toggle('dim', !hasLore(b.dataset.key, state.cul));
+    const no = !hasLore(b.dataset.key, state.cul); b.classList.toggle('dim', no);
+    const ns = b.querySelector('.ns'); if (ns) ns.textContent = no ? (state.lang === 'ar' ? `لا قصة في ${CUL_AR_SKY[state.cul] || ''}` : `No ${cname(state.cul)} story`) : '';
   });
 }
 
@@ -3506,8 +3511,9 @@ function render() {
   } else {
     const others = CULTURES.filter(cu => (DATA.lore[state.con] || {})[cu.id]);
     const withCul = DATA.constellations.filter(x => (DATA.lore[x.key] || {})[state.cul]);
+    const sciBtn = DATA.sci[state.con] ? `<button type="button" data-cul="science" style="--cc:var(--c-science)"><span class="dot"></span>${state.lang === 'ar' ? 'علم هذه النجوم' : 'The science of these stars'}</button>` : '';
     h += `<div class="none-box"><p>${state.lang === 'ar' ? `لم تصلنا في المصادر المستعملة هنا قصة من ${CUL_AR_SKY[state.cul] || 'هذه الثقافة'} عن هذه النجوم. فقد جمعت ثقافات كثيرة النجوم في صور مختلفة تمامًا، فربما كانت هذه الرقعة من السماء جزءًا من صورة أخرى، أو لم تكن لها حكاية.` : `No ${cname(state.cul)} story for these stars has come down to us in the sources used here. Many cultures grouped the stars into completely different shapes, so the same patch of sky may have been part of another figure, or simply had no tale.`}</p>`;
-    if (others.length) h += `<span class="sect-lbl" style="margin-top:16px">${state.lang === 'ar' ? `قصص ${esc(c.ar)} عند` : `Stories for ${esc(c.latin)} from`}</span><div class="links">${others.map(cu => `<button type="button" data-cul="${cu.id}" style="--cc:var(--c-${cu.id})"><span class="dot"></span>${culLbl(cu)}</button>`).join('')}</div>`;
+    if (others.length || sciBtn) h += `<span class="sect-lbl" style="margin-top:16px">${others.length ? (state.lang === 'ar' ? `قصص ${esc(c.ar)} عند` : `Stories for ${esc(c.latin)} from`) : (state.lang === 'ar' ? 'لا توجد لهذه الكوكبة قصة في أي ثقافة هنا، لكن يمكنك قراءة علمها' : 'No culture here has a story for this constellation, but you can read its science')}</span><div class="links">${others.map(cu => `<button type="button" data-cul="${cu.id}" style="--cc:var(--c-${cu.id})"><span class="dot"></span>${culLbl(cu)}</button>`).join('')}${sciBtn}</div>`;
     h += `<span class="sect-lbl" style="margin-top:18px">${state.lang === 'ar' ? `كوكبات لها قصص في ${CUL_AR_SKY[state.cul] || ''}` : `${cname(state.cul)} stories exist for`}</span><div class="links">${withCul.map(x => `<button type="button" data-con="${x.key}" style="--cc:var(--c-${state.cul})"><span class="dot"></span>${esc(state.lang === 'ar' ? x.ar : x.latin)}</button>`).join('')}</div></div>`;
   }
   card.innerHTML = h;
