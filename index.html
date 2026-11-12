@@ -256,6 +256,11 @@ h2 { font-family: var(--f-display); font-weight: 400; font-size: clamp(28px, 4vw
 .dgroup .dn-n { color: var(--muted); font-size: 15px; font-weight: 400; }
 .dg-what { max-width: 72ch; margin: 0 0 12px; color: var(--muted); line-height: 1.5; }
 .dg-what .dkid { display: block; margin-top: 6px; color: var(--ink); background: var(--accent-soft); border-radius: 8px; padding: 6px 10px; }
+.dsearch { margin: 0 0 16px; }
+.dsearch input { width: 100%; font: inherit; font-size: 17px; padding: 10px 14px; border-radius: 10px; border: 1px solid var(--line); background: var(--panel); color: var(--ink); }
+.dsearch input:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+.dsq-n { margin: 6px 2px 0; color: var(--muted); font-size: 15px; min-height: 1em; }
+.dcard[hidden], .dgroup[hidden] { display: none; }
 .dgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; }
 .dcard { border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: var(--panel); display: flex; flex-direction: column; min-width: 0; }
 .dimg { position: relative; aspect-ratio: 4 / 3; background: #05070f; display: grid; place-items: center; overflow: hidden; }
@@ -2553,13 +2558,17 @@ const RET = (() => {
     const c = a.closest('.dcard'), n = c.querySelector('.dnm bdi'); put({id: c.dataset.dso, name: n ? n.textContent : c.dataset.dso, from: location.hash, to: a.getAttribute('href'), pushed: true}); });
   return {sync};
 })();
+// objects whose Wikipedia photo has black missing pieces: use the sky-survey picture straight away
+const DSO_NOWIKI = new Set(['NGC3623']);   // M65
 function dsoCardHTML(o, lang) {
   const d = o.d, ar = lang === 'ar', sc = dsoScope(d), ex = DSO_SEE[d.id] ? DSO_SEE[d.id][ar ? 2 : 1] : '';
   const bits = [esc(DTYPE[lang][d.type] || d.type), `${ar ? 'في' : 'in'} <a href="#${o.key}-science">${esc(ar ? byKey[o.key].ar : byKey[o.key].latin)}</a>`];
   if (d.dist) bits.push(esc(distTxt(d.dist, lang)));
   if (sc) bits.push(esc(`${ar ? 'لرؤيته' : 'To see it'}: ${sc[lang]}${ex ? (ar ? '، ' : ', ') + ex : ''}`));
   const p = DSO_POS[d.id], f = DSO_FACTS[d.id], nm = d.name || d.cat;
-  return `<article class="dcard" data-dso="${esc(d.id)}"><div class="dimg"${p ? ` data-sky="${esc(DSO_SKY(d.id))}" data-sky2="${esc(DSO_SKY2(d.id))}" data-wiki="${esc(p[3] || '')}"` : ''}><span class="dph">${ar ? 'جارٍ تحميل الصورة…' : 'Loading picture…'}</span></div>`
+  const codes = [d.id, d.cat].map(x => String(x || '').toLowerCase().replace(/\s+/g, '').replace(/^caldwell/, 'c').replace(/^([a-z]+)0+(\d)/, '$1$2'));
+  const q = [d.id, d.cat, ...codes, d.name, byKey[o.key].latin, byKey[o.key].ar, DTYPE.en[d.type], DTYPE.ar[d.type], d.type].filter(Boolean).join(' ');
+  return `<article class="dcard" data-dso="${esc(d.id)}" data-q="${esc(DSOS.norm(q))}"><div class="dimg"${p ? ` data-sky="${esc(DSO_SKY(d.id))}" data-sky2="${esc(DSO_SKY2(d.id))}" data-wiki="${esc(DSO_NOWIKI.has(d.id) ? '' : p[3] || '')}"` : ''}><span class="dph">${ar ? 'جارٍ تحميل الصورة…' : 'Loading picture…'}</span></div>`
     + `<div class="dbody"><h4><span class="dnm"><bdi dir="ltr">${esc(nm)}</bdi>${d.name && d.cat ? ` <span class="dcat">${esc(d.cat)}</span>` : ''}</span><span class="hbtns">${AG.btn({t: 'dso', key: o.key, ref: d.id}, lang, true)}${swBtn(swDsoName(d), 6, lang)}</span></h4>`
     + `<p class="dm">${bits.join(' · ')}</p>${f ? `<p class="dfact"><span aria-hidden="true">✦ </span>${esc(f[ar ? 1 : 0])}</p>` : ''}${(() => { const ti = DSO_TYPE_INFO[d.type]; return ti ? `<details class="dsod"><summary>${esc(ti[ar ? 2 : 0])}</summary><p>${esc(ti[ar ? 3 : 1])}</p>${KIDS ? `<p class="dkid">🧒 ${esc(ti[ar ? 5 : 4])}</p>` : ''}</details>` : ''; })()}</div></article>`;
 }
@@ -2574,6 +2583,7 @@ function dsoNum(d) { const m = /(\d+)/.exec(/^M\d+$/.test(d.cat || '') || /^Cald
 function dsoSectionHTML(lang) {
   const ar = lang === 'ar', all = allDsos();
   let h = `<p class="dsec-in">${ar ? `${all.length} جرمًا من أجمل ما في السماء خارج المجموعة الشمسية، مقسّمة حسب الفهرس الذي تنتمي إليه، ومنها كل أجرام فهرس مسييه الـ110. اضغط على أي فهرس لفتحه. الصورة لكل جرم صورة مشهورة من ويكيميديا كومنز (أغلبها من ناسا ووكالة الفضاء الأوروبية والمرصد الأوروبي الجنوبي) إن وُجدت، وإلا فصورة حقيقية للسماء من مسح DSS.` : `${all.length} of the finest sights beyond the Solar System, sorted by the catalogue they belong to, including all 110 Messier objects. Tap a catalogue to open it. Each picture is a famous photo from Wikimedia Commons (mostly NASA, ESA and ESO) where there is one, otherwise a real photo of that patch of sky from the DSS sky survey.`}</p>`;
+  h += `<div class="dsearch" role="search"><label for="dsq" class="sect-lbl">${ar ? 'ابحث في الأجرام' : 'Search deep-sky objects'}</label><input id="dsq" type="search" autocomplete="off" spellcheck="false" placeholder="${ar ? 'مثل: M42، سديم الجبار، NGC 7000، مجرة، الجبار' : 'e.g. M42, Orion Nebula, NGC 7000, galaxy, Orion'}" dir="auto"><p class="dsq-n" aria-live="polite"></p></div>`;
   DSO_CATS.forEach(([id, en, a, sub, subAr]) => {
     const l = all.filter(o => dsoCatOf(o.d) === id).sort((x, y) => dsoNum(x.d) - dsoNum(y.d) || String(x.d.name || x.d.cat).localeCompare(String(y.d.name || y.d.cat)));
     if (!l.length) return;
@@ -2583,6 +2593,22 @@ function dsoSectionHTML(lang) {
   h += `<p class="vref" style="white-space:normal">${ar ? 'الصور: ويكيميديا كومنز (لكل صورة صاحبها ورخصتها، اضغط على «المصدر» تحت الصورة)؛ مسح السماء DSS الملوّن (معهد علوم تلسكوب الفضاء STScI ومرصد بالومار/معهد كاليفورنيا للتقنية) عبر خدمة hips2fits من مركز CDS في ستراسبورغ.' : 'Pictures: Wikimedia Commons (each photo has its own author and licence: tap "Source" under it); DSS colour sky survey (STScI, Palomar Observatory/Caltech, UK Schmidt), via the CDS hips2fits service, Strasbourg.'}</p>`;
   return h;
 }
+// search inside the deep-sky section: names, catalogue numbers (M42, NGC 1976, C14, IC 434), constellation and type, in English or Arabic
+const DSOS = (() => {
+  const norm = t => String(t || '').toLowerCase().normalize('NFD').replace(/[̀-ًͯ-ٰٟ]/g, '').replace(/[أإآ]/g, 'ا').replace(/ة/g, 'ه').replace(/ى/g, 'ي').replace(/[’'‘`]/g, '').replace(/[^a-z0-9؀-ۿ]+/g, ' ').trim();
+  let saved = null;
+  function run(inp) {
+    const card = document.getElementById('card'), raw = norm(inp.value), groups = [...card.querySelectorAll('details.dgroup')], out = card.querySelector('.dsq-n'), ar = state.lang === 'ar';
+    if (!raw) { groups.forEach(g => { g.hidden = false; g.querySelectorAll('.dcard').forEach(c => c.hidden = false); }); if (saved) { groups.forEach((g, i) => g.open = saved[i]); saved = null; } out.textContent = ''; return; }
+    if (!saved) saved = groups.map(g => g.open);
+    const toks = raw.split(' '), compact = raw.replace(/ /g, ''), code = /^(m|ngc|ic|c|caldwell)\s?\d+$/.test(raw) ? compact.replace(/^caldwell/, 'c').replace(/^([a-z]+)0+(\d)/, '$1$2') : null; let n = 0;
+    groups.forEach(g => { let k = 0; g.querySelectorAll('.dcard').forEach(c => { const hay = c.dataset.q, hc = hay.replace(/ /g, ''); const ok = code ? hay.split(' ').includes(code) : hc.includes(compact) || toks.every(t => hay.includes(t)); c.hidden = !ok; if (ok) k++; }); g.hidden = !k; g.open = !!k; n += k; });
+    out.textContent = n ? (ar ? `${n} ${n === 1 ? 'نتيجة' : n === 2 ? 'نتيجتان' : n <= 10 ? 'نتائج' : 'نتيجة'}` : `${n} found`) : (ar ? 'لا توجد نتائج. جرّب اسمًا آخر أو رقمًا مثل M31.' : 'Nothing found. Try another name or a number like M31.');
+  }
+  document.addEventListener('input', ev => { if (ev.target && ev.target.id === 'dsq') run(ev.target); });
+  document.addEventListener('keydown', ev => { if (ev.target && ev.target.id === 'dsq' && ev.key === 'Enter') { ev.preventDefault(); ev.target.blur(); } });
+  return {norm};
+})();
 // pictures load only when a card scrolls into view: a Wikipedia photo first, the sky-survey photo if there is none
 const DSO_IMG = (() => {
   document.addEventListener('click', ev => { const a = ev.target.closest && ev.target.closest('.dchips a'); if (!a) return; ev.preventDefault(); const g = document.getElementById('dg-' + a.dataset.dg); if (g) g.scrollIntoView({behavior: 'smooth', block: 'start'}); });
@@ -2616,7 +2642,7 @@ const DSO_IMG = (() => {
           for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) { const nx = x + dx, ny = y + dy; if (nx < 0 || ny < 0 || nx >= gw || ny >= gh) continue; const n = ny * gw + nx;
             if (voidc[n]) { if (!seen[n]) { seen[n] = 1; st.push(n); } } else { const fx = nx + dx, fy = ny + dy; if (fx >= 0 && fy >= 0 && fx < gw && fy < gh && !voidc[fy * gw + fx]) { nb++; nl += lum[fy * gw + fx]; } } } }
         const fill = comp.length / ((x1 - x0 + 1) * (y1 - y0 + 1));
-        if (comp.length >= gw * gh * 0.05 && fill >= 0.5 && x1 - x0 + 1 <= gw * 0.8 && y1 - y0 + 1 <= gh * 0.8 && nb && nl / nb > 40) return true;   // a block in one corner, not a black sky all round
+        if (comp.length >= gw * gh * 0.05 && fill >= 0.5 && x1 - x0 + 1 <= gw * 0.8 && y1 - y0 + 1 <= gh * 0.8 && nb && nl / nb > 15) return true;   // a block in one corner, not a black sky all round
       }
     } catch (e) {}
     return false;
