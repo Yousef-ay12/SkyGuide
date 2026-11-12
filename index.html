@@ -336,12 +336,12 @@ h2 { font-family: var(--f-display); font-weight: 400; font-size: clamp(28px, 4vw
 .plfold > summary .swl { display: none; }
 .plfold > summary .df-h { grid-column: 2 / -1; grid-row: 2; }
 .planet.infold { padding-top: 4px; }
-.plimg { position: relative; margin: 2px 14px 10px; height: 240px; border-radius: 8px; background: #000; display: grid; place-items: center; overflow: hidden; border: 1px solid var(--line); }
-.plimg img { width: 100%; height: 100%; object-fit: contain; display: block; }
+.plimg { position: relative; margin: 2px 14px 10px; height: 270px; border-radius: 8px; background: #000; display: grid; place-items: center; overflow: hidden; border: 1px solid var(--line); }
+.plimg img { position: absolute; top: 10px; left: 10px; width: calc(100% - 20px); height: calc(100% - 44px); object-fit: contain; display: block; }
 .plimg .dph { color: #aab; font-size: 14px; padding: 12px; text-align: center; }
 .plimg .dcr.wcr { left: 8px; max-width: calc(100% - 16px); font-size: 11px; line-height: 1.3; }
 .plimg .dcr.wcr b { font-weight: 600; color: #ffd28a; }
-.plimg .dcr { position: absolute; right: 8px; bottom: 8px; font-size: 13px; color: #fff; background: rgba(0,0,0,.6); padding: 3px 8px; border-radius: 6px; text-decoration: none; }
+.plimg .dcr { position: absolute; right: 8px; bottom: 6px; font-size: 12.5px; color: #c9d0e0; background: none; padding: 3px 8px; border-radius: 6px; text-decoration: none; }
 [dir="rtl"] .plimg .dcr, .rtl .plimg .dcr { right: auto; left: 8px; }
 .rtl .planet h3, .rtl .sci-part > h3 { font-family: var(--f-ar); }
 .layout.cal-mode { grid-template-columns: minmax(0, 1fr); }
@@ -2641,25 +2641,31 @@ const DSOS = (() => {
   return {norm};
 })();
 // planet pictures (the photo at the top of each planet's Wikipedia article), loaded when its box is opened
-const PL_WEBB = {
-  jupiter: ['jupiter-auroras1', 'NASA, ESA, Jupiter ERS Team; image processing by Judy Schmidt'],
-  saturn: ['saturn1', 'NASA, ESA, CSA, STScI, M. Tiscareno (SETI Institute), M. Hedman (University of Idaho), M. El Moutamid (Cornell University), M. Showalter (SETI Institute), L. Fletcher (University of Leicester), H. Hammel (AURA), J. DePasquale (STScI)'],
-  uranus: ['weic2332a', 'NASA, ESA, CSA, STScI'],
-  neptune: ['weic2214a', 'NASA, ESA, CSA, and STScI'],
+// one chosen full-disc colour photo per body (Wikimedia Commons); if one cannot load, the photo from the body's Wikipedia article is used
+const PL_FILE = {
+  sun: "The Sun by the Atmospheric Imaging Assembly of NASA's Solar Dynamics Observatory - 20100819.jpg",
+  mercury: 'Mercury in true color.jpg',
+  venus: 'Venus-real color.jpg',
+  earth: 'The Earth seen from Apollo 17.jpg',
+  mars: 'OSIRIS Mars true color.jpg',
+  jupiter: 'Jupiter and its shrunken Great Red Spot.jpg',
+  saturn: 'Saturn during Equinox.jpg',
+  uranus: 'Uranus2.jpg',
+  neptune: 'Neptune Full.jpg',
+  pluto: 'Pluto in True Color - High-Res.jpg',
 };
 const PL_WIKI = {sun: 'Sun', mercury: 'Mercury_(planet)', venus: 'Venus', earth: 'Earth', mars: 'Mars', jupiter: 'Jupiter', saturn: 'Saturn', uranus: 'Uranus', neptune: 'Neptune', pluto: 'Pluto'};
 (() => {
   async function load(box) {
     if (box.dataset.done) return; box.dataset.done = '1';
     const ar = state.lang === 'ar', ph = box.querySelector('.dph');
-    // James Webb pictures for the planets Webb has photographed (it cannot look at the Sun, Mercury, Venus or Earth)
-    const wb = PL_WEBB[box.dataset.pid];
-    if (wb && !box.dataset.webb) {
-      box.dataset.webb = '1'; const img = new Image(); img.alt = (ar ? 'صورة من تلسكوب جيمس ويب' : 'James Webb Space Telescope picture');
+    const file = PL_FILE[box.dataset.pid];
+    if (file && !box.dataset.tried) {
+      box.dataset.tried = '1'; const img = new Image(); img.alt = (ar ? 'صورة ' : 'Picture of ') + box.dataset.wiki.replace(/_.*$/, '');
       img.onload = () => { if (ph) ph.remove(); box.classList.add('ok'); box.prepend(img);
-        box.insertAdjacentHTML('beforeend', `<a class="dcr wcr" href="https://esawebb.org/images/${wb[0]}/" target="_blank" rel="noopener"><b>${ar ? 'تلسكوب جيمس ويب' : 'James Webb'}</b> · ${esc(wb[1])} · CC BY 4.0</a>`); };
+        box.insertAdjacentHTML('beforeend', `<a class="dcr" href="https://commons.wikimedia.org/wiki/File:${encodeURIComponent(file.replace(/ /g, '_'))}" target="_blank" rel="noopener">${ar ? 'المصدر: ويكيميديا كومنز' : 'Source: Wikimedia Commons'}</a>`); };
       img.onerror = () => { delete box.dataset.done; load(box); };
-      img.src = `https://cdn.esawebb.org/archives/images/screen/${wb[0]}.jpg`; return;
+      img.src = `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(file)}?width=500`; return;
     }
     const fail = () => { delete box.dataset.done; if (ph) ph.textContent = navigator.onLine === false ? (ar ? 'الصورة تحتاج إلى اتصال بالإنترنت' : 'The picture needs an internet connection') : (ar ? 'تعذّر تحميل الصورة' : 'The picture could not load'); };
     try {
