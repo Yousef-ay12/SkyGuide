@@ -288,6 +288,11 @@ h2 { font-family: var(--f-display); font-weight: 400; font-size: clamp(28px, 4vw
 .dsofold[open] .df-h::after { content: attr(data-c); }
 .dsofold > .dsos { padding: 0 14px 6px; }
 .starfold { max-width: none; }
+.retpill { position: fixed; z-index: 60; left: 50%; transform: translateX(-50%); bottom: calc(16px + env(safe-area-inset-bottom)); max-width: calc(100vw - 32px); display: inline-flex; align-items: center; gap: 8px; padding: 10px 18px; border-radius: 999px; border: 1px solid var(--accent); background: var(--panel, var(--bg)); color: var(--ink); font: inherit; font-size: 16px; cursor: pointer; box-shadow: 0 6px 24px rgba(0,0,0,.35); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.retpill span { overflow: hidden; text-overflow: ellipsis; }
+.retpill b { color: var(--accent); font-weight: 400; }
+.dcard.flash { animation: dflash 1.6s ease-out; }
+@keyframes dflash { 0%, 40% { box-shadow: 0 0 0 3px var(--accent); } 100% { box-shadow: 0 0 0 0 transparent; } }
 .starfold > .sf-in { padding: 0 14px 14px; }
 .sf-intro { max-width: 70ch; margin: 0 0 10px; font-size: 16px; }
 .sf-more { display: inline; }
@@ -2514,6 +2519,40 @@ function allDsos() {
 }
 const DSO_SKY2 = id => { const p = DSO_POS[id]; if (!p) return ''; const am = Math.max(8, Math.min(60, Math.round(p[2] * 60))); return `https://archive.stsci.edu/cgi-bin/dss_search?v=poss2ukstu_red&r=${p[0]}&d=${p[1]}&e=J2000&h=${Math.round(am * 0.75)}&w=${am}&f=gif&c=none&fov=NONE&v3=`; };
 const DSO_SKY = id => { const p = DSO_POS[id]; return p ? `https://alasky.cds.unistra.fr/hips-image-services/hips2fits?hips=CDS%2FP%2FDSS2%2Fcolor&width=480&height=360&fov=${p[2]}&projection=TAN&coordsys=icrs&ra=${p[0]}&dec=${p[1]}&format=jpg` : ''; };
+// "Back to the deep-sky object": tapping a constellation on a deep-sky card remembers the card,
+// and the constellation page offers a button that returns straight to it (the phone's back button does the same)
+const RET = (() => {
+  const K = 'osms-ret';
+  const get = () => { try { return JSON.parse(sessionStorage.getItem(K) || 'null'); } catch (e) { return null; } };
+  const put = v => { try { v ? sessionStorage.setItem(K, JSON.stringify(v)) : sessionStorage.removeItem(K); } catch (e) {} };
+  let pill = null;
+  const hide = () => { if (pill) { pill.remove(); pill = null; } };
+  function restore(r) {
+    const go = (n) => { const a = document.querySelector(`#card .dcard[data-dso="${CSS.escape(r.id)}"]`);
+      if (!a) { if (n < 20) setTimeout(() => go(n + 1), 50); return; }
+      let d = a.closest('details'); while (d) { d.open = true; d = d.parentElement && d.parentElement.closest('details'); }
+      requestAnimationFrame(() => { a.scrollIntoView({block: 'center', behavior: 'instant'}); a.classList.remove('flash'); void a.offsetWidth; a.classList.add('flash'); });
+    };
+    go(0);
+  }
+  function sync() {
+    const r = get(); if (!r) { hide(); return; }
+    const h = location.hash;
+    if (h === r.from) { put(null); hide(); restore(r); return; }       // came back (button or the phone's back)
+    if (h.split('-')[0] !== r.to.split('-')[0]) { put(null); hide(); return; }   // went somewhere else
+    if (pill) { pill.dir = state.lang === 'ar' ? 'rtl' : 'ltr'; pill.querySelector('b').textContent = state.lang === 'ar' ? '→' : '←'; pill.querySelector('span').textContent = label(r); return; }
+    pill = document.createElement('button'); pill.type = 'button'; pill.className = 'retpill'; pill.dir = state.lang === 'ar' ? 'rtl' : 'ltr';
+    pill.innerHTML = `<b aria-hidden="true"></b><span></span>`; pill.querySelector('span').textContent = label(r);
+    pill.querySelector('b').textContent = state.lang === 'ar' ? '→' : '←';
+    pill.addEventListener('click', () => { location.hash = r.from; });
+    document.body.appendChild(pill);
+    if (h === r.to && !r.arrived) { r.arrived = true; put(r); const c = document.getElementById('card'); if (c) window.scrollTo({top: Math.max(0, c.getBoundingClientRect().top + scrollY - 10), behavior: 'instant'}); }
+  }
+  const label = r => state.lang === 'ar' ? `العودة إلى ${r.name}` : `Back to ${r.name}`;
+  document.addEventListener('click', ev => { const a = ev.target.closest && ev.target.closest('.dcard .dm a[href^="#"]'); if (!a) return;
+    const c = a.closest('.dcard'), n = c.querySelector('.dnm bdi'); put({id: c.dataset.dso, name: n ? n.textContent : c.dataset.dso, from: location.hash, to: a.getAttribute('href'), pushed: true}); });
+  return {sync};
+})();
 function dsoCardHTML(o, lang) {
   const d = o.d, ar = lang === 'ar', sc = dsoScope(d), ex = DSO_SEE[d.id] ? DSO_SEE[d.id][ar ? 2 : 1] : '';
   const bits = [esc(DTYPE[lang][d.type] || d.type), `${ar ? 'في' : 'in'} <a href="#${o.key}-science">${esc(ar ? byKey[o.key].ar : byKey[o.key].latin)}</a>`];
@@ -3238,6 +3277,7 @@ async function fbSend(ev) {
 
 function render() {
   writeHash();
+  setTimeout(() => RET.sync(), 0);
   { const fp = document.getElementById('feedback'); if (fp && !fp.hidden) fbRender(); }
   document.querySelector('.layout').classList.toggle('cal-mode', state.cul === 'calendar' || state.cul === 'guide' || state.cul === 'plan' || state.cul === 'quiz');
   if (state.cul === 'plan') { PLAN.render(); return; }
