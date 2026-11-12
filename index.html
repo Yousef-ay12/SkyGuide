@@ -339,6 +339,8 @@ h2 { font-family: var(--f-display); font-weight: 400; font-size: clamp(28px, 4vw
 .plimg { position: relative; margin: 2px 14px 10px; height: 240px; border-radius: 8px; background: #000; display: grid; place-items: center; overflow: hidden; border: 1px solid var(--line); }
 .plimg img { width: 100%; height: 100%; object-fit: contain; display: block; }
 .plimg .dph { color: #aab; font-size: 14px; padding: 12px; text-align: center; }
+.plimg .dcr.wcr { left: 8px; max-width: calc(100% - 16px); font-size: 11px; line-height: 1.3; }
+.plimg .dcr.wcr b { font-weight: 600; color: #ffd28a; }
 .plimg .dcr { position: absolute; right: 8px; bottom: 8px; font-size: 13px; color: #fff; background: rgba(0,0,0,.6); padding: 3px 8px; border-radius: 6px; text-decoration: none; }
 [dir="rtl"] .plimg .dcr, .rtl .plimg .dcr { right: auto; left: 8px; }
 .rtl .planet h3, .rtl .sci-part > h3 { font-family: var(--f-ar); }
@@ -2534,7 +2536,7 @@ function solarHTML(bodies, lang) {
     <circle cx="540" cy="125" r="${Math.max(er, 1).toFixed(2)}" fill="#4f8fd6"/><text x="540" y="146" text-anchor="middle">${ar ? 'الأرض' : 'Earth'}</text>
     <text x="565" y="110" class="st2">${ar ? 'قطر الشمس = 109 أضعاف قطر الأرض' : 'Sun = 109 × Earth\'s width'}</text><text x="565" y="132" class="st2">${ar ? 'يتسع جوفها لنحو 1.3 مليون أرض' : 'about 1.3 million Earths fit inside'}</text><text x="565" y="154" class="st2">${ar ? 'وقطرها = 10 أضعاف المشتري' : 'and 10 × Jupiter\'s width'}</text></svg>`;
   h += `<p class="vref" style="white-space:normal;margin:0 0 10px">${ar ? 'الرسمان بمقياسين مختلفين: الأول يكبّر الكواكب، والثاني يُظهر الشمس كاملة. لو كانت الأرض بحجم حبة بازلاء، لكانت الشمس كرة قطرها نحو متر.' : 'The two drawings use different scales: the first enlarges the planets, the second shows the whole Sun. If Earth were the size of a pea, the Sun would be a ball about a metre across.'}</p>`;
-  bodies.forEach(b => { h += `<details class="dsofold plfold" style="--pc:${b.color}"><summary><span class="pd-ar" aria-hidden="true">▸</span><span class="df-t"><span class="pd" aria-hidden="true"></span>${esc(ar ? b.ar : b.en)}${ar ? '' : ` <span class="arn2" lang="ar">${esc(b.ar)}</span>`}</span><span class="hbtns">${AG.btn({t: 'planet', key: 'SOL', ref: b.id}, lang, true)}${b.id === 'earth' ? '' : swBtn(b.id[0].toUpperCase() + b.id.slice(1), b.id === 'sun' ? 8 : 4, lang)}</span><span class="df-h" data-o="${ar ? 'اضغط لعرضه' : 'Tap to show'}" data-c="${ar ? 'اضغط لطيّه' : 'Tap to fold'}"></span></summary><div class="plimg" data-wiki="${PL_WIKI[b.id] || ''}"><span class="dph">${ar ? 'جارٍ تحميل الصورة…' : 'Loading picture…'}</span></div>${planetHTML(b, lang, true)}</details>`; });
+  bodies.forEach(b => { h += `<details class="dsofold plfold" style="--pc:${b.color}"><summary><span class="pd-ar" aria-hidden="true">▸</span><span class="df-t"><span class="pd" aria-hidden="true"></span>${esc(ar ? b.ar : b.en)}${ar ? '' : ` <span class="arn2" lang="ar">${esc(b.ar)}</span>`}</span><span class="hbtns">${AG.btn({t: 'planet', key: 'SOL', ref: b.id}, lang, true)}${b.id === 'earth' ? '' : swBtn(b.id[0].toUpperCase() + b.id.slice(1), b.id === 'sun' ? 8 : 4, lang)}</span><span class="df-h" data-o="${ar ? 'اضغط لعرضه' : 'Tap to show'}" data-c="${ar ? 'اضغط لطيّه' : 'Tap to fold'}"></span></summary><div class="plimg" data-pid="${b.id}" data-wiki="${PL_WIKI[b.id] || ''}"><span class="dph">${ar ? 'جارٍ تحميل الصورة…' : 'Loading picture…'}</span></div>${planetHTML(b, lang, true)}</details>`; });
   h += `<p class="vref" style="white-space:normal;margin-top:14px">${linkText(ar ? 'المصادر: صحائف بيانات الكواكب من ناسا؛ أعداد الأقمار من مركز الكواكب الصغيرة التابع للاتحاد الفلكي الدولي (مارس 2026).' : 'Sources: NASA planetary fact sheets; moon counts from the IAU Minor Planet Center (March 2026).')}</p>`;
   return h;
 }
@@ -2639,11 +2641,26 @@ const DSOS = (() => {
   return {norm};
 })();
 // planet pictures (the photo at the top of each planet's Wikipedia article), loaded when its box is opened
+const PL_WEBB = {
+  jupiter: ['jupiter-auroras1', 'NASA, ESA, Jupiter ERS Team; image processing by Judy Schmidt'],
+  saturn: ['saturn1', 'NASA, ESA, CSA, STScI, M. Tiscareno (SETI Institute), M. Hedman (University of Idaho), M. El Moutamid (Cornell University), M. Showalter (SETI Institute), L. Fletcher (University of Leicester), H. Hammel (AURA), J. DePasquale (STScI)'],
+  uranus: ['weic2332a', 'NASA, ESA, CSA, STScI'],
+  neptune: ['weic2214a', 'NASA, ESA, CSA, and STScI'],
+};
 const PL_WIKI = {sun: 'Sun', mercury: 'Mercury_(planet)', venus: 'Venus', earth: 'Earth', mars: 'Mars', jupiter: 'Jupiter', saturn: 'Saturn', uranus: 'Uranus', neptune: 'Neptune', pluto: 'Pluto'};
 (() => {
   async function load(box) {
     if (box.dataset.done) return; box.dataset.done = '1';
     const ar = state.lang === 'ar', ph = box.querySelector('.dph');
+    // James Webb pictures for the planets Webb has photographed (it cannot look at the Sun, Mercury, Venus or Earth)
+    const wb = PL_WEBB[box.dataset.pid];
+    if (wb && !box.dataset.webb) {
+      box.dataset.webb = '1'; const img = new Image(); img.alt = (ar ? 'صورة من تلسكوب جيمس ويب' : 'James Webb Space Telescope picture');
+      img.onload = () => { if (ph) ph.remove(); box.classList.add('ok'); box.prepend(img);
+        box.insertAdjacentHTML('beforeend', `<a class="dcr wcr" href="https://esawebb.org/images/${wb[0]}/" target="_blank" rel="noopener"><b>${ar ? 'تلسكوب جيمس ويب' : 'James Webb'}</b> · ${esc(wb[1])} · CC BY 4.0</a>`); };
+      img.onerror = () => { delete box.dataset.done; load(box); };
+      img.src = `https://cdn.esawebb.org/archives/images/screen/${wb[0]}.jpg`; return;
+    }
     const fail = () => { delete box.dataset.done; if (ph) ph.textContent = navigator.onLine === false ? (ar ? 'الصورة تحتاج إلى اتصال بالإنترنت' : 'The picture needs an internet connection') : (ar ? 'تعذّر تحميل الصورة' : 'The picture could not load'); };
     try {
       const r = await fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(box.dataset.wiki)}`); if (!r.ok) return fail();
