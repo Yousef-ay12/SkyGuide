@@ -296,6 +296,22 @@ h2 { font-family: var(--f-display); font-weight: 400; font-size: clamp(28px, 4vw
 .dsofold .df-h::after { content: attr(data-o); }
 .dsofold[open] .df-h::after { content: attr(data-c); }
 .dsofold > .dsos { padding: 0 14px 6px; }
+.shfold { max-width: none; }
+.shfold > .sh-in { padding: 0 16px 12px; }
+.shfold > .sh-in > p { max-width: 70ch; }
+.sh-note { color: var(--muted); font-size: 15px; }
+.sh-scroll { overflow-x: auto; margin: 10px 0; }
+table.agt.shtab { min-width: 0; width: 100%; font-size: 15px; }
+table.agt.shtab thead th { font-family: var(--f-body); font-size: 14px; color: var(--muted); font-weight: 400; vertical-align: bottom; }
+table.agt.shtab tbody th { font-family: var(--f-body); font-size: 15px; text-transform: none; letter-spacing: 0; color: var(--ink); white-space: normal; }
+.shtab td { white-space: nowrap; }
+table.agt.shtab th, table.agt.shtab td { padding: 6px 5px; }
+.shtab small { font-size: 12px; }
+body.chrome-ar .shtab thead th, body.chrome-ar .shtab tbody th { font-family: var(--f-ar); letter-spacing: 0; text-transform: none; }
+.sh-strip { list-style: none; padding: 0; margin: 10px 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 150px), 1fr)); gap: 8px; }
+.sh-strip li { display: grid; grid-template-columns: auto 1fr; column-gap: 10px; align-items: center; padding: 8px 10px; border: 1px solid var(--line); border-radius: 10px; background: var(--sky); color: #e8ebf4; }
+.sh-strip .sh-dot { grid-row: span 2; width: 22px; height: 22px; border-radius: 50%; background: var(--sc); box-shadow: 0 0 12px var(--sc); }
+.sh-strip span:last-child { font-size: 14px; color: #b9c0d4; }
 .starfold { max-width: none; }
 .retpill { position: fixed; z-index: 60; left: 50%; transform: translateX(-50%); bottom: calc(16px + env(safe-area-inset-bottom)); max-width: calc(100vw - 32px); display: inline-flex; align-items: center; gap: 8px; padding: 10px 18px; border-radius: 999px; border: 1px solid var(--accent); background: var(--panel, var(--bg)); color: var(--ink); font: inherit; font-size: 16px; cursor: pointer; box-shadow: 0 6px 24px rgba(0,0,0,.35); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .retpill span { overflow: hidden; text-overflow: ellipsis; }
@@ -901,7 +917,9 @@ DSO_EXTRA.forEach(d => { const sc = DATA.sci[d.key]; if (!sc || !sc.parts) retur
   pt.dsos = pt.dsos || []; if (!pt.dsos.some(x => x.id === d.id)) pt.dsos.push({id: d.id, cat: d.cat, name: d.name, type: d.type, mag: d.mag, dist: d.dist}); });
 (() => { const i = DATA.constellations.findIndex(c => c.key === 'SOL');
   DATA.constellations.splice(i + 1, 0, {key: 'DSO', latin: 'Deep-sky objects', gloss: 'nebulae, star clusters and galaxies', ar: 'الأجرام السماوية العميقة', region: 'solar', sciOnly: true});
-  DATA.sci.DSO = {special: 'dso'}; })();
+  DATA.sci.DSO = {special: 'dso'};
+  DATA.constellations.splice(i + 2, 0, {key: 'STAR', latin: 'Why stars shine', gloss: 'brightness, colour and twinkling', ar: 'لماذا تضيء النجوم؟', region: 'solar', sciOnly: true});
+  DATA.sci.STAR = {special: 'shine'}; })();
 const byKey = Object.fromEntries(DATA.constellations.map(c => [c.key, c]));
 const cname = id => id === 'quiz' ? 'Quiz' : id === 'plan' ? 'Plan a night' : id === 'guide' ? 'Saved lists' : id === 'calendar' ? 'Sky calendar' : id === 'science' ? 'Science' : CULTURES.find(c => c.id === id).name;
 let state = { con: 'Ori', cul: 'arab', lang: 'en' };
@@ -1093,7 +1111,7 @@ const QUIZ = (() => {
     const seen = new Set(), stars = [], homes = {};
     Object.keys(DATA.sci).forEach(k => { if (k === 'SOL') return; (DATA.sci[k].parts || []).forEach(sc =>
       (sc.stars || []).forEach(s => { if (s.name) (homes[s.name] = homes[s.name] || new Set()).add(k); if (!s.name || GREEK.test(s.name) || /\d|^(HD|HR|HIP|Gliese|GJ)\b/.test(s.name) || seen.has(s.name)) return; seen.add(s.name); stars.push(Object.assign({con: k, R: starRadius(s)}, s)); })); });
-    const cons = DATA.constellations.filter(c => DATA.sci[c.key] && c.key !== 'SOL' && c.key !== 'DSO').map(c => c.key);
+    const cons = DATA.constellations.filter(c => DATA.sci[c.key] && c.key !== 'SOL' && c.key !== 'DSO' && c.key !== 'STAR').map(c => c.key);
     const charts = Object.keys(DATA.charts).filter(k => DATA.sci[k] && /class="ln"/.test(DATA.charts[k]));
     const stories = [];
     Object.keys(DATA.lore).forEach(k => Object.keys(DATA.lore[k]).forEach(cul => { const e = DATA.lore[k][cul]; if (!CULTURES.find(c => c.id === cul)) return;
@@ -1543,7 +1561,7 @@ function searchLore(key, f) {
 }
 function hasLore(con, cul) { if (cul === 'calendar' || cul === 'guide' || cul === 'plan' || cul === 'quiz') return true; return cul === 'science' ? !!DATA.sci[con] : !!(DATA.lore[con] || {})[cul]; }
 // which entries a culture's list shows: everything, except sections that belong to one place
-function inList(con, cul) { if (cul === 'science') return !!DATA.sci[con]; if (con === 'SOL' || con === 'DSO') return false; if (con === 'QUR') return cul === 'arab'; return !!byKey[con]; }
+function inList(con, cul) { if (cul === 'science') return !!DATA.sci[con]; if (con === 'SOL' || con === 'DSO' || con === 'STAR') return false; if (con === 'QUR') return cul === 'arab'; return !!byKey[con]; }
 function firstFor(cul) { const c = DATA.constellations.find(x => x.key !== 'QUR' && hasLore(x.key, cul)); return c ? c.key : 'Ori'; }
 function setCulture(id) {
   const wasCal = state.cul === 'calendar' || state.cul === 'guide' || state.cul === 'plan' || state.cul === 'quiz';
@@ -2624,6 +2642,53 @@ const DSO_CATS = [
   ['o', 'Other catalogues', 'فهارس أخرى', 'Melotte, Collinder, Barnard and ESO lists', 'قوائم ميلوت وكولندر وبارنارد والمرصد الأوروبي الجنوبي']];
 function dsoCatOf(d) { if (/^M\d+$/.test(d.cat || '')) return 'm'; if (/^Caldwell/.test(d.cat || '')) return 'c'; if (/^NGC/.test(d.id)) return 'ngc'; if (/^IC/.test(d.id)) return 'ic'; return 'o'; }
 function dsoNum(d) { const m = /(\d+)/.exec(/^M\d+$/.test(d.cat || '') || /^Caldwell/.test(d.cat || '') ? d.cat : d.id); return m ? +m[1] : 1e9; }
+// "Why stars shine": the questions people ask most when they look up, with this site's own star data in the examples
+function shineHTML(lang) {
+  const ar = lang === 'ar';
+  const star = n => { for (const k in DATA.sci) for (const p of (DATA.sci[k].parts || [])) for (const x of p.stars.concat(p.extraHosts || [])) if (x.name === n) return x; return null; };
+  const fmt = (v, d = 0) => Number(v).toLocaleString('en-US', {maximumFractionDigits: d, minimumFractionDigits: d});
+  const sname = n => ar && DATA.starAr[n] ? `${DATA.starAr[n]} <span class="muted" dir="ltr">(${n})</span>` : n;
+  const box = (t, body, open) => `<details class="dsofold shfold"${open ? ' open' : ''}><summary><span class="pd-ar" aria-hidden="true">▸</span><span class="df-t">${t}</span><span class="df-h" data-o="${ar ? 'اضغط لعرضه' : 'Tap to show'}" data-c="${ar ? 'اضغط لطيّه' : 'Tap to fold'}"></span></summary><div class="sh-in">${body}</div></details>`;
+  let h = `<p class="dsec-in">${ar ? 'كل نجم تراه في السماء شمسٌ مثل شمسنا أو أكبر منها بكثير، لكنه بعيد جدًّا. هذه إجابات أكثر الأسئلة التي يسألها الناس حين ينظرون إلى السماء ليلًا.' : 'Every star you see is a sun like ours, or far bigger, only very far away. Here are the answers to the questions people ask most when they look up at night.'}</p>`;
+  // 1. why they shine
+  h += box(ar ? 'لماذا تضيء النجوم؟' : 'Why do stars shine?', ar
+    ? `<p>النجم كرة ضخمة من الغاز الحار، معظمها هيدروجين. يضغط وزنُه مركزَه حتى يصبح حارًّا وكثيفًا بما يكفي <b>للاندماج النووي</b>: تتحد أنوية الهيدروجين لتكوّن الهيليوم، ويتحول جزء صغير جدًّا من الكتلة إلى طاقة هائلة (معادلة أينشتاين E = mc²).</p><ul class="facts"><li>تبلغ الحرارة في قلب الشمس نحو 15 مليون درجة مئوية.</li><li>في كل ثانية تحوّل الشمس نحو 600 مليون طن من الهيدروجين إلى هيليوم، ويصير نحو 4 ملايين طن من هذه الكتلة ضوءًا وحرارة.</li><li>تحتاج هذه الطاقة إلى آلاف كثيرة من السنين لتشق طريقها من قلب الشمس إلى سطحها، ثم 8 دقائق و20 ثانية فقط لتعبر الفضاء إلينا.</li><li>كلما كان النجم أثقل كان قلبه أحرّ، فأضاء أكثر بكثير، لكنه يستهلك وقوده أسرع ويعيش عمرًا أقصر.</li></ul>`
+    : `<p>A star is a huge ball of hot gas, mostly hydrogen. Its own weight squeezes its centre until it is hot and dense enough for <b>nuclear fusion</b>: hydrogen nuclei join to make helium, and a tiny bit of mass turns into a great deal of energy (Einstein's E = mc²).</p><ul class="facts"><li>The Sun's core is about 15 million °C.</li><li>Every second the Sun turns about 600 million tonnes of hydrogen into helium, and about 4 million tonnes of that mass becomes light and heat.</li><li>That energy takes many thousands of years to work its way from the core to the surface, then just 8 minutes and 20 seconds to cross space to us.</li><li>The heavier a star, the hotter its core, so it shines far more brightly, but it uses up its fuel faster and lives a shorter life.</li></ul>`);
+  // 2. why some look brighter: the site's own data
+  const rows = ['Sirius', 'Rigil Kentaurus', 'Rigel', 'Deneb'].map(star).filter(Boolean);
+  const si = star('Sirius'), ri = star('Rigel');
+  const tab = `<div class="sh-scroll"><table class="agt shtab"><thead><tr><th>${ar ? 'النجم' : 'Star'}</th><th>${ar ? 'ضوؤه الحقيقي<br><small>الشمس = 1</small>' : 'Real light<br><small>Sun = 1</small>'}</th><th>${ar ? 'بعده<br><small>سنة ضوئية</small>' : 'Distance<br><small>light years</small>'}</th><th>${ar ? 'يبدو لنا<br><small>القدر</small>' : 'Looks<br><small>magnitude</small>'}</th></tr></thead><tbody>${rows.map(x => `<tr><th>${ar && DATA.starAr[x.name] ? DATA.starAr[x.name] : x.name}</th><td>${fmt(x.lum, x.lum < 10 ? 1 : 0)}</td><td>${fmt(x.dist, x.dist < 10 ? 1 : 0)}</td><td dir="ltr">${(x.mag < 0 ? '−' : '') + Math.abs(x.mag).toFixed(2)}</td></tr>`).join('')}</tbody></table></div>`;
+  const ratioL = si && ri ? Math.round(ri.lum / si.lum / 100) * 100 : 2300, ratioD = si && ri ? Math.round(ri.dist / si.dist) : 100;
+  h += box(ar ? 'لماذا تبدو بعض النجوم أسطع من غيرها؟' : 'Why do some stars look brighter than others?', (ar
+    ? `<p>أمران يحددان سطوع النجم في أعيننا: <b>كم يعطي من الضوء حقًّا</b>، و<b>كم يبعد عنا</b>. ينتشر الضوء كلما ابتعد، فالنجم الذي يبعد ضعف المسافة يبدو أخفت بأربع مرات، والذي يبعد عشرة أضعافها يبدو أخفت بمئة مرة.</p><p>قارن الشعرى اليمانية برجل الجبار: يعطي رجل الجبار ضوءًا أكثر من الشعرى بنحو ${fmt(ratioL)} مرة، لكنه أبعد منها بنحو ${fmt(ratioD)} مرة، فيصلنا ضوؤه أضعف بنحو ${fmt(ratioD * ratioD)} مرة. ولهذا كانت الشعرى ألمع نجم في سماء الليل مع أن رجل الجبار أقوى منها بكثير.</p>`
+    : `<p>Two things decide how bright a star looks: <b>how much light it really gives out</b>, and <b>how far away it is</b>. Light spreads out as it travels, so a star twice as far away looks four times fainter, and one ten times as far looks a hundred times fainter.</p><p>Compare Sirius and Rigel: Rigel gives out about ${fmt(ratioL)} times more light than Sirius, but it is about ${fmt(ratioD)} times farther away, so its light reaches us about ${fmt(ratioD * ratioD)} times weaker. That is why Sirius is the brightest star in the night sky, even though Rigel is by far the more powerful star.</p>`)
+    + tab + (ar
+    ? `<p class="sh-note">يقيس الفلكيون السطوع المرئي بالقدر: كلما صغر الرقم كان النجم أسطع، وكل درجة واحدة تعني نحو 2.5 مرة، وكل خمس درجات تعني 100 مرة بالضبط. ترى العين من مكان مظلم نجومًا حتى القدر 6، وفي المدينة غالبًا حتى القدر 3 أو 4 فقط.</p>`
+    : `<p class="sh-note">Astronomers measure how bright a star looks in magnitudes: the smaller the number, the brighter the star. One step is about 2.5 times, and five steps are exactly 100 times. From a dark site your eyes reach magnitude 6; in a city often only 3 or 4.</p>`));
+  // 3. colours: temperatures from the site's data
+  const sunT = 5778, cols = [['Betelgeuse', '#ff8f5e'], ['Arcturus', '#ffb36b'], ['Sun', '#ffe7b8'], ['Sirius', '#f2f5ff'], ['Rigel', '#d4e0ff'], ['Spica', '#aac4ff']];
+  const strip = cols.map(([n, c]) => { const t = n === 'Sun' ? sunT : (star(n) || {}).temp; if (!t) return ''; const C = Math.round((t - 273) / 100) * 100;
+    return `<li style="--sc:${c}"><span class="sh-dot" aria-hidden="true"></span><b>${n === 'Sun' ? (ar ? 'الشمس' : 'The Sun') : sname(n)}</b><span>${ar ? 'نحو ' : 'about '}${fmt(C)} °C</span></li>`; }).join('');
+  h += box(ar ? 'لماذا تختلف ألوان النجوم؟' : 'Why are stars different colours?', (ar
+    ? `<p>لون النجم يدل على <b>حرارة سطحه</b>، كما يتوهج الحديد في النار أحمر ثم أصفر ثم أبيض كلما ازداد حرارة. النجوم الأبرد حمراء أو برتقالية، والمتوسطة مثل الشمس صفراء مائلة إلى البياض، والأشد حرارة بيضاء زرقاء.</p>`
+    : `<p>A star's colour shows <b>how hot its surface is</b>, just as iron in a fire glows red, then yellow, then white as it gets hotter. Cooler stars are red or orange, middling ones like the Sun yellow-white, and the hottest blue-white.</p>`)
+    + `<ol class="sh-strip">${strip}</ol>` + (ar
+    ? `<p class="sh-note">ألوان النجوم هادئة، فمعظمها يبدو أبيض للعين المجردة، ويظهر اللون أوضح في النجوم اللامعة وبالمنظار.</p>`
+    : `<p class="sh-note">Star colours are gentle: to the naked eye most stars look white. Colour shows best in the bright stars, and through binoculars.</p>`));
+  // 4. twinkling
+  h += box(ar ? 'لماذا تتلألأ النجوم؟' : 'Why do stars twinkle?', ar
+    ? `<p>التلألؤ يحدث في هوائنا لا في النجم. يمر ضوء النجم عبر طبقات متحركة من الهواء الدافئ والبارد تحرفه قليلًا هنا وهناك مرات كثيرة في الثانية. والنجم بعيد جدًّا حتى إنه يصلنا نقطة ضوء واحدة، فتجعله هذه الاهتزازات يرتعش، بل يومض بألوان مختلفة أحيانًا.</p><ul class="facts"><li>يكون التلألؤ أقوى قرب الأفق، لأن الضوء يقطع هناك طبقة أسمك بكثير من الهواء.</li><li>الكواكب تضيء غالبًا بثبات: فهي قريبة بما يكفي لتبدو أقراصًا صغيرة، وتلغي اهتزازات أجزاء القرص بعضها بعضًا.</li><li>نصيحة: إذا رأيت «نجمًا» لامعًا لا يتلألأ فهو على الأرجح كوكب.</li><li>في الفضاء، فوق الهواء، لا تتلألأ النجوم أبدًا.</li></ul>`
+    : `<p>Twinkling happens in our air, not in the star. Starlight passes through moving layers of warm and cool air that bend it a tiny bit, this way and that, many times a second. A star is so far away that it reaches us as a single point of light, so these wobbles make it flicker, and sometimes flash different colours.</p><ul class="facts"><li>Twinkling is strongest near the horizon, where the light crosses much more air.</li><li>Planets usually shine steadily: they are close enough to look like tiny discs, and the wobbles from different parts of the disc cancel out.</li><li>A tip: if a bright "star" does not twinkle, it is probably a planet.</li><li>In space, above the air, stars do not twinkle at all.</li></ul>`);
+  // 5. daytime
+  h += box(ar ? 'لماذا لا نرى النجوم في النهار؟' : 'Why can\'t we see stars in the daytime?', ar
+    ? `<p>النجوم موجودة دائمًا. لكن الهواء في النهار يبعثر ضوء الشمس في كل اتجاه (وهذا ما يجعل السماء زرقاء)، فتطغى السماء المضيئة على ضوء النجوم الخافت. وحين تغرب الشمس وتظلم السماء تظهر النجوم الأسطع أولًا ثم الأخفت. و«أول نجم» في المساء كثيرًا ما يكون كوكبًا مثل الزهرة أو المشتري.</p>`
+    : `<p>The stars are always there. In the day, the air scatters sunlight in every direction (that is what makes the sky blue), and the bright sky drowns out the faint starlight. As the Sun sets and the sky darkens, the brightest stars appear first, then the fainter ones. The "first star" of the evening is often a planet such as Venus or Jupiter.</p>`);
+  // 6. more stars in some places
+  h += box(ar ? 'لماذا أرى نجومًا أكثر في بعض الأماكن؟' : 'Why do I see more stars in some places?', ar
+    ? `<p>لسببين: التلوث الضوئي، وعيناك. أضواء المدن تنير السماء كما يفعل ضوء النهار، فلا يظهر إلا ألمع النجوم، أما في صحراء مظلمة فيمكنك أن ترى بضعة آلاف من النجوم في وقت واحد.</p><ul class="facts"><li>تحتاج عيناك إلى نحو 20 إلى 30 دقيقة في الظلام لتصبح أشد حساسية بكثير.</li><li>الضوء الأحمر لا يفسد تكيّف عينيك مع الظلام، ولهذا وُضعت شاشة «أحمر ليلي» في هذا الموقع.</li><li>يساعدك قسم «خطّط لليلة» على اختيار وقت ومكان مناسبين للرصد.</li></ul>`
+    : `<p>Two reasons: light pollution, and your eyes. City lights brighten the sky the way daylight does, so only the brightest stars show; in a dark desert you can see a few thousand stars at once.</p><ul class="facts"><li>Your eyes need about 20 to 30 minutes in the dark to become far more sensitive.</li><li>Red light does not spoil your dark-adapted eyes, which is why this site has a Night red screen.</li><li>The Plan a night section helps you choose a good time and place to look.</li></ul>`);
+  return h;
+}
 function dsoSectionHTML(lang) {
   const ar = lang === 'ar', all = allDsos();
   let h = `<p class="dsec-in">${ar ? `${all.length} جرمًا من أجمل ما في السماء خارج المجموعة الشمسية، مقسّمة حسب الفهرس الذي تنتمي إليه، ومنها كل أجرام فهرس مسييه الـ110. اضغط على أي فهرس لفتحه. الصورة لكل جرم صورة مشهورة من ويكيميديا كومنز (أغلبها من ناسا ووكالة الفضاء الأوروبية والمرصد الأوروبي الجنوبي) إن وُجدت، وإلا فصورة حقيقية للسماء من مسح DSS.` : `${all.length} of the finest sights beyond the Solar System, sorted by the catalogue they belong to, including all 110 Messier objects. Tap a catalogue to open it. Each picture is a famous photo from Wikimedia Commons (mostly NASA, ESA and ESO) where there is one, otherwise a real photo of that patch of sky from the DSS sky survey.`}</p>`;
@@ -2777,6 +2842,7 @@ function sciHTML(key, lang) {
   if (KIDS) h += kidWordsHTML(lang);
   if (sc.special === 'sol') h += solarHTML(sc.bodies, lang);
   else if (sc.special === 'dso') h += dsoSectionHTML(lang);
+  else if (sc.special === 'shine') h += shineHTML(lang);
   else if (sc.special) {
     h += factTable(sc.facts, ar) + `<ul class="facts">${(ar ? sc.ar : sc.en).map(f => `<li>${esc(f)}</li>`).join('')}</ul>`;
     if (sc.dsos) h += dsoFold(T[lang].dso.split(' في ')[0].replace(' in this constellation', ''), sc.dsos, lang);
