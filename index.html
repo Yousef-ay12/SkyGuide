@@ -72,7 +72,7 @@ if (!/^(yousef-ay12\.github\.io|localhost|127\.0\.0\.1)$/.test(location.hostname
 :root[data-skin="sepia"] { --bg: #efe6d4; --panel: #f8f1e3; --ink: #3a2c1a; --muted: #73604a; --line: #dccdb2; --accent: #8a4b17; --accent-soft: #ead9b8; --sel: #e8dcc4; --sky: #2b2116; color-scheme: light; }
 :root[data-skin="red"] { --bg: #0a0000; --panel: #140202; --ink: #ff5a4a; --muted: #b33a30; --line: #3a0a08; --accent: #ff6a55; --accent-soft: #240504; --sel: #2a0605; --sky: #050000;
   --sky-star: #ff6a55; --sky-line: #b32a20; --sky-label: #d0453a;
-  --c-arab: #ff6a55; --c-greek: #ff6a55; --c-egypt: #ff6a55; --c-china: #ff6a55; --c-japan: #ff6a55; --c-india: #ff6a55; --c-safrica: #ff6a55; --c-science: #ff6a55; --c-cal: #ff6a55; color-scheme: dark; }
+  --c-arab: #ff6a55; --c-greek: #ff6a55; --c-egypt: #ff6a55; --c-china: #ff6a55; --c-japan: #ff6a55; --c-india: #ff6a55; --c-safrica: #ff6a55; --c-science: #ff6a55; --c-cal: #ff6a55; --c-guides: #ff6a55; color-scheme: dark; }
 .skins { display: flex; align-items: center; gap: 8px; font-family: var(--f-mono); font-size: 12px; color: var(--muted); letter-spacing: .06em; text-transform: uppercase; }
 .skins select { font: inherit; font-size: 14px; letter-spacing: 0; text-transform: none; padding: 5px 8px; border: 1px solid var(--line); border-radius: 4px; background: var(--panel); color: var(--ink); }
 .skins select:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
@@ -308,7 +308,7 @@ table.agt.shtab tbody th { font-family: var(--f-body); font-size: 15px; text-tra
 table.agt.shtab th, table.agt.shtab td { padding: 6px 5px; }
 .shtab small { font-size: 12px; }
 body.chrome-ar .shtab thead th, body.chrome-ar .shtab tbody th { font-family: var(--f-ar); letter-spacing: 0; text-transform: none; }
-.sh-strip { list-style: none; padding: 0; margin: 10px 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 150px), 1fr)); gap: 8px; }
+.sh-strip { list-style: none; padding: 0; margin: 10px 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 130px), 1fr)); gap: 8px; }
 .sh-strip li { display: grid; grid-template-columns: auto 1fr; column-gap: 10px; align-items: center; padding: 8px 10px; border: 1px solid var(--line); border-radius: 10px; background: var(--sky); color: #e8ebf4; }
 .sh-strip .sh-dot { grid-row: span 2; width: 22px; height: 22px; border-radius: 50%; background: var(--sc); box-shadow: 0 0 12px var(--sc); }
 .sh-strip span:last-child { font-size: 14px; color: #b9c0d4; }
@@ -324,6 +324,68 @@ body.chrome-ar .shtab thead th, body.chrome-ar .shtab tbody th { font-family: va
 .sf-more > summary { display: inline; cursor: pointer; color: var(--accent); text-decoration: underline; text-underline-offset: 3px; list-style: none; }
 .sf-more > summary::-webkit-details-marker { display: none; }
 .sf-more[open] > summary { display: block; margin: 4px 0; }
+.gd .gpages { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 16px; }
+.gd .gpages button { font: inherit; font-size: 15px; padding: 7px 13px; border-radius: 999px; border: 1px solid var(--line); background: var(--panel); color: var(--ink); cursor: pointer; }
+.gd .gpages button[aria-selected="true"] { background: var(--cc); border-color: var(--cc); color: var(--panel); font-weight: 600; }
+.gd .gstop { color: var(--cc); font-weight: 400; font-size: 14px; text-transform: uppercase; letter-spacing: .06em; }
+.gd.rtl .gstop { text-transform: none; letter-spacing: 0; font-size: 15px; }
+.gd .gstops { display: flex; flex-wrap: wrap; gap: 6px 8px; padding: 0; margin: 0 0 14px; list-style: none; counter-reset: gs; }
+.gd .gstops li { counter-increment: gs; padding: 4px 12px; border: 1px solid var(--line); border-radius: 999px; font-size: 15px; }
+.gd .gstops li::before { content: counter(gs) " · "; color: var(--cc); font-weight: 600; }
+.gd .gask, .gd .grule, .gd .gtry { max-width: 70ch; padding: 8px 12px; border-inline-start: 3px solid var(--cc); background: color-mix(in srgb, var(--cc) 8%, transparent); border-radius: 0 8px 8px 0; }
+.gd.rtl .gask, .gd.rtl .grule, .gd.rtl .gtry { border-radius: 8px 0 0 8px; }
+.gd .gask { border-inline-start-style: dashed; }
+.gd .gproof { margin: 10px 0 4px; max-width: 70ch; }
+.gd .gproof > summary { cursor: pointer; color: var(--accent); font-size: 15px; }
+.gd .gproof > div { padding: 6px 0 0; font-size: 15.5px; }
+.gd .gcols { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); gap: 10px 18px; margin: 8px 0; }
+.gd .gcols h4 { margin: 4px 0 6px; font-size: 16px; color: var(--cc); }
+.gd .gscript { border: 1px solid var(--line); border-radius: 12px; padding: 10px 14px; }
+.gd .gscript p { margin: 0; }
+.gd h4 { margin: 12px 0 6px; }
+.gd .gcheck { list-style: none; padding: 0; margin: 6px 0; columns: 2 260px; column-gap: 24px; }
+.gd .gcheck li { padding-inline-start: 1.4em; position: relative; margin: 0 0 7px; break-inside: avoid; }
+.gd .gcheck li::before { content: "✦"; color: var(--cc); position: absolute; inset-inline-start: 0; }
+.gd .gquote { margin: 22px 0; padding: 14px 18px; font-size: 20px; line-height: 1.45; border-inline-start: 4px solid var(--cc); font-style: italic; max-width: 60ch; }
+.gd.rtl .gquote { font-style: normal; }
+.gd .gwarn { padding: 10px 12px; border: 1px solid #d9534f; border-radius: 10px; background: color-mix(in srgb, #d9534f 10%, transparent); max-width: 70ch; }
+.gd .gcalc { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); gap: 10px 14px; padding: 12px 14px; margin: 10px 0; border: 1px solid var(--line); border-radius: 12px; background: color-mix(in srgb, var(--cc) 5%, var(--panel)); }
+.gd .gcalc label { display: flex; flex-direction: column; gap: 4px; font-size: 14.5px; color: var(--muted); }
+.gd .gcalc input, .gd .gcalc select { font: inherit; font-size: 16px; padding: 7px 9px; border: 1px solid var(--line); border-radius: 8px; background: var(--bg); color: var(--ink); }
+.gd .gcalc .gout { grid-column: 1 / -1; }
+.gd .gcalc label[hidden] { display: none; }
+.gd .gcalc .gout .facts { margin: 0; }
+.gd .gcalc .gout .sh-note { margin: 4px 0 0; font-size: 13.5px; }
+.gd .gbad { color: #d9534f; }
+.gd .gtab td { white-space: normal; }
+.gd .gtab s { color: var(--muted); text-decoration-color: #d9534f; }
+.gd .gsrc li { font-size: 14.5px; margin-bottom: 3px; }
+.gd.rtl .gsrc { padding: 0 1.1em 0 0; }
+.gd .gfigs { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 130px), 1fr)); gap: 10px; margin: 10px 0 12px; }
+.gd .gfig { margin: 0; border: 1px solid var(--line); border-radius: 12px; background: var(--sky, #0d1424); padding: 6px 6px 8px; }
+.gd .gfig svg { display: block; width: 100%; height: auto; }
+.gd .gfig figcaption { font-size: 13.5px; line-height: 1.3; text-align: center; color: #d9deea; padding: 2px 4px 0; }
+.gd .gfig .gs-t { fill: #3d5a8a; fill-opacity: .8; stroke: #c9d3e8; stroke-width: 1.6; }
+.gd .gfig .gs-m { fill: #6b7385; stroke: #c9d3e8; stroke-width: 1.4; }
+.gd .gfig .gs-w { fill: #8a6a45; stroke: #e0cbb0; stroke-width: 1.4; }
+.gd .gfig .gs-l { fill: none; stroke: #c9d3e8; stroke-width: 3; stroke-linecap: round; }
+.gd .gfig .gs-g { fill: none; stroke: #9fd3ff; stroke-width: 2; }
+.gd .gfig .gs-p { fill: none; stroke: #f2c14e; stroke-width: 1.4; stroke-dasharray: 4 3; opacity: .9; }
+.gd .gfig .gs-pa { fill: none; stroke: #f2c14e; stroke-width: 1.2; stroke-dasharray: 2 4; }
+.gd .gfig .gs-a { fill: none; stroke: #5fd3a8; stroke-width: 2.4; }
+.gd .gfig .gs-af { fill: #5fd3a8; }
+.gd .gfig .gs-s { fill: #f2c14e; font-size: 18px; }
+:root[data-skin="red"] .gd .gfig .gs-t, :root[data-skin="red"] .gd .gfig .gs-m, :root[data-skin="red"] .gd .gfig .gs-w { fill: #2a0605; stroke: #ff5a4a; }
+:root[data-skin="red"] .gd .gfig .gs-l, :root[data-skin="red"] .gd .gfig .gs-g { stroke: #ff5a4a; }
+:root[data-skin="red"] .gd .gfig .gs-p, :root[data-skin="red"] .gd .gfig .gs-pa, :root[data-skin="red"] .gd .gfig .gs-a { stroke: #b32a20; }
+:root[data-skin="red"] .gd .gfig .gs-af, :root[data-skin="red"] .gd .gfig .gs-s { fill: #ff6a55; }
+:root[data-skin="red"] .gd .gfig figcaption { color: #ff5a4a; }
+.gd .gfig.ph img { display: block; width: 100%; height: 1px; opacity: 0; object-fit: contain; background: #0b0f1a; border-radius: 8px; }
+.gd .gfig.ph.ok img { height: auto; aspect-ratio: 260 / 182; opacity: 1; }
+.gd .gfig.ph.ok svg { display: none; }
+.gd .gfig .gcr { display: none; font-size: 11.5px; color: #9aa6c0; text-align: center; margin-top: 3px; }
+.gd .gfig.ph.ok .gcr { display: block; }
+:root[data-skin="red"] .gd .gfig.ph.ok img { filter: grayscale(1) sepia(1) saturate(6) hue-rotate(-50deg) brightness(.6); }
 .dsos .dfact { margin: 6px 0 0; font-size: 15.5px; line-height: 1.5; }
 .dsos .dfact span { color: var(--accent); }
 .dsod { margin-top: 4px; font-size: 15px; }
@@ -912,16 +974,16 @@ const DSO_POS = {"NGC3031":[148.8882,69.0653,0.793,"Messier_81"],"NGC5457":[210.
 const DSO_NAMEFIX = {NGC6705: 'Wild Duck Cluster', IC2391: 'Omicron Velorum Cluster', IC4715: 'Small Sagittarius Star Cloud', NGC6087: 'S Normae Cluster', NGC4486: 'Virgo A', 'ESO356-004': 'Fornax Dwarf Galaxy', NGC3115: 'Spindle Galaxy (Sextans)', NGC5866: 'Spindle Galaxy (Draco)'};
 Object.values(DATA.sci).forEach(sc => (sc.parts || []).forEach(p => (p.dsos || []).forEach(d => { if (DSO_NAMEFIX[d.id]) d.name = DSO_NAMEFIX[d.id]; })));
 DSO_EXTRA.forEach(d => { if (DSO_NAMEFIX[d.id]) d.name = DSO_NAMEFIX[d.id]; });
-// put the added Messier objects into their constellations' lists, and add the Deep-sky objects section after The Solar System
+// put the added Messier objects into their constellations' lists, add Why stars shine after The Solar System, and Deep-sky objects at the end, beyond the constellations
 DSO_EXTRA.forEach(d => { const sc = DATA.sci[d.key]; if (!sc || !sc.parts) return; const pt = sc.parts.find(p => p.abbr === d.abbr) || sc.parts[0];
   pt.dsos = pt.dsos || []; if (!pt.dsos.some(x => x.id === d.id)) pt.dsos.push({id: d.id, cat: d.cat, name: d.name, type: d.type, mag: d.mag, dist: d.dist}); });
 (() => { const i = DATA.constellations.findIndex(c => c.key === 'SOL');
-  DATA.constellations.splice(i + 1, 0, {key: 'DSO', latin: 'Deep-sky objects', gloss: 'nebulae, star clusters and galaxies', ar: 'الأجرام السماوية العميقة', region: 'solar', sciOnly: true});
+  DATA.constellations.push({key: 'DSO', latin: 'Deep-sky objects', gloss: 'nebulae, star clusters and galaxies', ar: 'الأجرام السماوية العميقة', region: 'beyond', sciOnly: true});
   DATA.sci.DSO = {special: 'dso'};
-  DATA.constellations.splice(i + 2, 0, {key: 'STAR', latin: 'Why stars shine', gloss: 'brightness, colour and twinkling', ar: 'لماذا تضيء النجوم؟', region: 'solar', sciOnly: true});
+  DATA.constellations.splice(i + 1, 0, {key: 'STAR', latin: 'Why stars shine', gloss: 'brightness, colour and twinkling', ar: 'لماذا تضيء النجوم؟', region: 'solar', sciOnly: true});
   DATA.sci.STAR = {special: 'shine'}; })();
 const byKey = Object.fromEntries(DATA.constellations.map(c => [c.key, c]));
-const cname = id => id === 'quiz' ? 'Quiz' : id === 'plan' ? 'Plan a night' : id === 'guide' ? 'Saved lists' : id === 'calendar' ? 'Sky calendar' : id === 'science' ? 'Science' : CULTURES.find(c => c.id === id).name;
+const cname = id => id === 'learn' ? 'For guides' : id === 'quiz' ? 'Quiz' : id === 'plan' ? 'Plan a night' : id === 'guide' ? 'Saved lists' : id === 'calendar' ? 'Sky calendar' : id === 'science' ? 'Science' : CULTURES.find(c => c.id === id).name;
 let state = { con: 'Ori', cul: 'arab', lang: 'en' };
 try { const l = localStorage.getItem('osms-lang'); if (l === 'af' || l === 'en' || l === 'ar') state.lang = l; } catch (e) {}
 
@@ -934,12 +996,13 @@ function readHash() {
   if (h === 'guide') { state.cul = 'guide'; return true; }
   if (h === 'plan') { state.cul = 'plan'; return true; }
   if (h === 'quiz') { state.cul = 'quiz'; return true; }
+  if (h === 'guides' || h === 'guides-comm' || h === 'guides-equip') { state.cul = 'learn'; if (h !== 'guides') GUIDES.page = h.slice(7); return true; }
   const m = h.match(/^([A-Za-z]+)-([a-z]+)$/);
   if (m && byKey[m[1]] && (m[2] === 'science' || CULTURES.some(c => c.id === m[2]))) { state.con = m[1]; state.cul = m[2]; return true; }
   return false;
 }
 function writeHash() { try { syncNav(); } catch (e) {}
- const h = state.cul === 'quiz' ? '#quiz' : state.cul === 'plan' ? '#plan' : state.cul === 'guide' ? '#guide' : state.cul === 'calendar' ? '#calendar' : '#' + state.con + '-' + state.cul; try { if (location.hash !== h) history.replaceState(null, '', h); } catch (e) { /* some previews block address changes */ } }
+ const h = state.cul === 'learn' ? '#guides-' + GUIDES.page : state.cul === 'quiz' ? '#quiz' : state.cul === 'plan' ? '#plan' : state.cul === 'guide' ? '#guide' : state.cul === 'calendar' ? '#calendar' : '#' + state.con + '-' + state.cul; try { if (location.hash !== h) history.replaceState(null, '', h); } catch (e) { /* some previews block address changes */ } }
 const SRCS = [["Abha al-Mawakib|Urjuza|Ibn al-Sufi", "https://kutaibaa-akraa.github.io/urjuzah/"], ["Ibn Qutayba|anwa' books", "https://github.com/OpenITI/0300AH/tree/master/data/0276IbnQutaybaDinawari/0276IbnQutaybaDinawari.AnwaFiMawasim"], ["Marzuqi", "https://github.com/OpenITI/0425AH/tree/master/data/0421IbnMuhammadMarzuqi/0421IbnMuhammadMarzuqi.AzminaWaAmkina"], ["Maydani", "https://github.com/OpenITI/0525AH/tree/master/data/0518IbnMuhammadMaydaniNaysaburi/0518IbnMuhammadMaydaniNaysaburi.MajmacAmthal"], ["Book of the Fixed Stars|Book of Fixed Stars", "https://en.wikipedia.org/wiki/The_Book_of_Fixed_Stars"], ["Tabarani", "https://en.wikipedia.org/wiki/Al-Mu%27jam_al-Kabir_(Al-Tabarani)"], ["Jazeera", "https://doc.aljazeera.net/science-and-tech/2024/1/4/%D8%A3%D8%B3%D8%A7%D8%B7%D9%8A%D8%B1-%D8%A7%D9%84%D8%B3%D9%85%D8%A7%D8%A1-%D8%AB%D8%A3%D8%B1-%D9%88%D8%B9%D8%B4%D9%82-%D9%88%D8%A7%D8%BA%D8%AA%D9%8A%D8%A7%D9%84%D8%A7%D8%AA"], ["Tanzil", "https://tanzil.net/"], ["Quran JSON", "https://github.com/risan/quran-json"], ["Eratosthenes", "https://en.wikipedia.org/wiki/Catasterismi"], ["Hyginus", "https://en.wikipedia.org/wiki/De_astronomia"], ["Metamorphoses", "https://ovid.lib.virginia.edu/trans/Ovhome.htm"], ["Fasti", "https://poetryintranslation.com/klineasfasti.php"], ["Aratus", "https://catalog.perseus.org/catalog/urn:cts:greekLit:tlg0653.tlg001.opp-eng1"], ["Homer|Iliad", "https://catalog.perseus.org/catalog/urn:cts:greekLit:tlg0012.tlg001"], ["Hesiod", "https://catalog.perseus.org/catalog/urn:cts:greekLit:tlg0020.tlg002"], ["Sappho", "https://en.wikipedia.org/wiki/Midnight_poem"], ["Almagest|Ptolemy", "https://en.wikipedia.org/wiki/Almagest"], ["Manilius", "https://en.wikipedia.org/wiki/Astronomica_(Manilius)"], ["Shiji\\b", "https://ctext.org/shiji/tian-guan-shu/zh"], ["Analects|Confucius", "https://ctext.org/analects/wei-zheng"], ["Zuo zhuan", "https://ctext.org/chun-qiu-zuo-zhuan/zhao-gong"], ["Shijing|Book of Songs|Choumou", "https://ctext.org/book-of-poetry/chou-mou"], ["Soushen|Gan Bao", "https://en.wikipedia.org/wiki/Soushen_Ji"], ["Nineteen Old Poems", "https://en.wikipedia.org/wiki/Nineteen_Old_Poems"], ["Du Fu", "https://www.cn-poetry.com/dufu-poetry/friend-wei.html"], ["Su Shi", "https://en.wikipedia.org/wiki/Su_Shi"], ["Cowherd", "https://en.wikipedia.org/wiki/The_Cowherd_and_the_Weaver_Girl"], ["Old Man of the South Pole", "https://en.wikipedia.org/wiki/Old_Man_of_the_South_Pole"], ["four symbols", "https://en.wikipedia.org/wiki/Four_Symbols"], ["Egyptian Streets", "https://egyptianstreets.com/2024/01/19/ancient-egyptian-constellations-and-the-myths-behind-them/"], ["Dendera", "https://en.wikipedia.org/wiki/Dendera_zodiac"], ["Pyramid Texts", "https://en.wikipedia.org/wiki/Pyramid_Texts"], ["Rig Veda", "https://sacred-texts.com/hin/rigveda/rv01024.htm"], ["Aitareya", "https://en.wikipedia.org/wiki/Aitareya_Brahmana"], ["Mahabharata", "https://sacred-texts.com/hin/maha/"], ["Ramayana", "https://sacred-texts.com/hin/rama/"], ["Vishnu Purana", "https://sacred-texts.com/hin/vp/"], ["^Puranas", "https://en.wikipedia.org/wiki/Puranas"], ["Bhagavata", "https://en.wikipedia.org/wiki/Bhagavata_Purana"], ["Skanda", "https://en.wikipedia.org/wiki/Skanda_Purana"], ["Agastya", "https://en.wikipedia.org/wiki/Agastya"], ["Saptarishi", "https://en.wikipedia.org/wiki/Saptarshi"], ["Mrigashira", "https://en.wikipedia.org/wiki/Mrigash%C4%ABra"], ["Jyeshtha", "https://en.wikipedia.org/wiki/Jyeshtha_(nakshatra)"], ["Chitra", "https://en.wikipedia.org/wiki/Nakshatra"], ["'Crux'", "https://en.wikipedia.org/wiki/Crux"], ["Nojiri", "https://en.wikipedia.org/wiki/H%C5%8Dei_Nojiri"], ["Pillow Book", "https://en.wikipedia.org/wiki/The_Pillow_Book"], ["'Pleiades'", "https://en.wikipedia.org/wiki/Pleiades"], ["Astronomical Society of Southern Africa", "https://assa.saao.ac.za/astronomy-in-south-africa/ethnoastronomy/"], ["Venus Rising", "https://assa.saao.ac.za/wp-content/uploads/sites/23/2014/08/Venus-Rising-2014-P-G-Alcock.pdf"], ["Royal Museums Greenwich", "https://www.rmg.co.uk/stories/space-astronomy/south-african-star-myths"], ["Bleek", "https://lloydbleekcollection.cs.uct.ac.za/"], ["d3-celestial", "https://github.com/ofrohn/d3-celestial"], ["HYG", "https://github.com/astronexus/HYG-Database"], ["Yale|Bright Star Catalogue", "https://github.com/brettonw/YaleBrightStarCatalog"], ["OpenNGC", "https://github.com/mattiaverga/OpenNGC"], ["Exoplanet Archive|أرشيف ناسا للكواكب الخارجية", "https://exoplanetarchive.ipac.caltech.edu/"], ["Open Exoplanet", "https://github.com/OpenExoplanetCatalogue/oec_gzip"], ["planetary fact sheets|صحائف بيانات الكواكب", "https://nssdc.gsfc.nasa.gov/planetary/planetfact.html"], ["NASA Moons", "https://solarsystem.nasa.gov/moons/overview/"], ["Minor Planet Center|مركز الكواكب الصغيرة", "https://minorplanetcenter.org/iau/NatSats/NaturalSatellites.html"], ["NASA Solar System", "https://solarsystem.nasa.gov/"], ["Torres", "https://arxiv.org/abs/1008.3913"], ["IAU designated", "https://en.wikipedia.org/wiki/IAU_designated_constellations"], ["JPL", "https://ssd.jpl.nasa.gov/planets/approx_pos.html"], ["Krisciunas|كريسيونس", "https://scilit.com/publications/51fd7a0c8a0349e0fc83a6c83259052f"], ["Unihedron", "https://unihedron.com/forum/index.php?topic=40.0"], ["DarkSky", "https://darksky.org/"], ["AlUla", "https://darksky.org/news/alula-manara-and-algharameel-nature-reserves-officially-named-as-saudi-arabias-and-gccs-first-ever-dark-sky-park-in-boost-to-astronomy-and-astrotourism-ambitions/"]].map(([m, u]) => [new RegExp(m, 'i'), u]);
 function srcA(u, t) { return `<a href="${esc(u)}" target="_blank" rel="noopener">${t}</a>`; }
 // a story's source line: link each part ("A; B; C") that matches a known source
@@ -955,7 +1018,7 @@ function esc(s) { return s.replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':
 /* ---------- Guide: a step-by-step tour of the interface ---------- */
 const TOUR = (() => {
   const STEPS = [
-    {sel: '.ntabs', en: ['The sections', 'Stories, Science, Sky calendar, Plan a night, Saved lists and Quiz. Tap a tab to switch between them. On a phone, swipe the tabs to see them all.'], ar: ['الأقسام', 'القصص، والعلم، وتقويم السماء، وخطّط لليلتك، والقوائم المحفوظة. اضغط على أي قسم للانتقال إليه.']},
+    {sel: '.ntabs', en: ['The sections', 'Stories, Science, Sky calendar, Plan a night, Quiz, Saved lists and For guides. Tap a tab to switch between them. On a phone, swipe the tabs to see them all.'], ar: ['الأقسام', 'القصص، والعلم، وتقويم السماء، وخطّط لليلتك، واختبر معلوماتك، والقوائم المحفوظة، وللمرشدين. اضغط على أي قسم للانتقال إليه، وفي الهاتف اسحب الأقسام لترى جميعها.']},
     {sel: '#nsub', prep: 'story', en: ['Choose a culture', 'Pick whose stories to read: Arab, Greek, Chinese and the others. Cultures without a story for this constellation are greyed out.'], ar: ['اختر ثقافة', 'اختر قصص مَن تريد أن تقرأ: العرب أو الإغريق أو الصين وغيرهم. الثقافات التي ليس لها قصة لهذه الكوكبة تظهر باهتة.']},
     {sel: '#index', prep: 'story', en: ['The constellations', 'Every constellation, grouped by part of the sky. The coloured dots show which cultures have a story for it.'], ar: ['الكوكبات', 'كل الكوكبات مرتبة بحسب مناطق السماء، وتدل النقاط الملونة على الثقافات التي لها قصة عنها.']},
     {sel: '.search', prep: 'story', en: ['Search', 'Type an English or Arabic name, or a star such as Sirius or سهيل.'], ar: ['البحث', 'اكتب اسمًا بالعربية أو الإنجليزية، أو اسم نجم مثل سهيل أو Sirius.']},
@@ -964,11 +1027,12 @@ const TOUR = (() => {
     {sel: '#card .story', prep: 'story', en: ['The stories', 'Each story, with its source underneath. Tap a source to open it.'], ar: ['القصص', 'كل قصة ومصدرها تحتها، واضغط على المصدر لفتحه.']},
     {sel: '#card .card-head .agsave', prep: 'story', en: ['Save', 'Save this constellation, or any star, object or planet, to your Saved lists to come back to later.'], ar: ['احفظ', 'احفظ هذه الكوكبة، أو أي نجم أو جرم أو كوكب، في قوائمك المحفوظة للرجوع إليها لاحقًا.']},
     {sel: '#card .card-head .swbtn', prep: 'story', en: ['View in Stellarium Web', 'See the real sky at this constellation, from the place and night you chose.'], ar: ['اعرضه في Stellarium Web', 'شاهد السماء الحقيقية عند هذه الكوكبة، من المكان والليلة اللذين اخترتهما.']},
-    {sel: '.ntab[data-tab=science]', en: ['Science', 'Facts for all 88 constellations and the Solar System: stars, distances and planets. After The Solar System, Deep-sky objects has 232 nebulae, star clusters and galaxies with pictures, sorted by catalogue.'], ar: ['العلم', 'حقائق عن الكوكبات الثماني والثمانين والمجموعة الشمسية: النجوم والمسافات والكواكب. وبعد «المجموعة الشمسية» قسم «الأجرام السماوية العميقة»، وفيه 232 سديمًا وعنقودًا ومجرة مع صورها، مرتبة حسب الفهارس.']},
+    {sel: '.ntab[data-tab=science]', en: ['Science', 'Facts for all 88 constellations and the Solar System: stars, distances and planets. After The Solar System comes Why stars shine, and at the end of the list Deep-sky objects has 232 nebulae, star clusters and galaxies with pictures, sorted by catalogue.'], ar: ['العلم', 'حقائق عن الكوكبات الثماني والثمانين والمجموعة الشمسية: النجوم والمسافات والكواكب. وبعد «المجموعة الشمسية» صفحة «لماذا تضيء النجوم؟»، وفي آخر القائمة قسم «الأجرام السماوية العميقة»، وفيه 232 سديمًا وعنقودًا ومجرة مع صورها، مرتبة حسب الفهارس.']},
     {sel: '.ntab[data-tab=calendar]', en: ['Sky calendar', 'What you can see from your place this month, the planets, the Moon, and a tour planner for guides.'], ar: ['تقويم السماء', 'ما تستطيع رؤيته من مكانك هذا الشهر، والكواكب، والقمر، ومخطط الجولات للمرشدين.']},
     {sel: '.ntab[data-tab=plan]', en: ['Plan a night', 'A step-by-step planner: choose a place and night, pick what is up, then read the science and the stories.'], ar: ['خطّط لليلتك', 'مخطط خطوة بخطوة: اختر المكان والليلة، ثم ما يظهر في السماء، ثم اقرأ العلم والقصص.']},
-    {sel: '.ntab[data-tab=guide]', en: ['Saved lists', 'Everything you saved, in your own lists with notes. Compare stars and present a list one item at a time.'], ar: ['القوائم المحفوظة', 'كل ما حفظته في قوائمك مع ملاحظاتك، وقارن بين النجوم واعرض القائمة عنصرًا بعد عنصر.']},
     {sel: '.ntab[data-tab=quiz]', en: ['Quiz', 'Test your knowledge: which constellation is this, how far and how big are the stars, the stories and the planets. Pick 5 to 20 questions.'], ar: ['اختبر معلوماتك', 'اختبر معلوماتك: ما هذه الكوكبة، وكم تبعد النجوم وما حجمها، والقصص والكواكب. اختر من 5 إلى 20 سؤالًا.']},
+    {sel: '.ntab[data-tab=guide]', en: ['Saved lists', 'Everything you saved, in your own lists with notes. Compare stars and present a list one item at a time.'], ar: ['القوائم المحفوظة', 'كل ما حفظته في قوائمك مع ملاحظاتك، وقارن بين النجوم واعرض القائمة عنصرًا بعد عنصر.']},
+    {sel: '.ntab[data-tab=learn]', en: ['For guides', 'Training for sky guides: Communication 101 (how to talk about the sky so people listen and remember) and Astronomy equipment (every kind of telescope, cameras and smart telescopes).'], ar: ['للمرشدين', 'تدريب لمرشدي السماء: «أساسيات التواصل» (كيف تتحدث عن السماء فيُصغي الناس ويتذكرون)، و«معدات الرصد الفلكي» (كل أنواع التلسكوبات والكاميرات والتلسكوبات الذكية).']},
     {sel: '#installbtn', en: ['Install app', 'Add Sky Guide to your home screen. You choose its icon first, then it opens like an app and works offline. On a computer this button appears when your browser can install it.'], ar: ['ثبّت التطبيق', 'أضف Sky Guide إلى شاشتك الرئيسية. تختار أيقونته أولًا، ثم يفتح مثل التطبيق ويعمل دون إنترنت. وعلى الحاسوب يظهر هذا الزر عندما يستطيع متصفحك تثبيته.']},
     {sel: '.skins', en: ['Screen colour', 'Light, dark and more. Use Night red outside: it keeps your eyes used to the dark.'], ar: ['لون الشاشة', 'فاتح أو داكن وغيرهما. استخدم «الأحمر الليلي» في الخارج، فهو يحافظ على تكيّف عينيك مع الظلام.']},
     {sel: '.srcrow', en: ['Sources, Credits, Feedback and Privacy', 'Where everything comes from, who made the site, a form to send your comments, and what the site does with your data.'], ar: ['المصادر والإعداد والملاحظات والخصوصية', 'مصادر كل ما في الموقع، ومن أعدّه، ونموذج لإرسال ملاحظاتك، وما يفعله الموقع ببياناتك.']},
@@ -1438,8 +1502,8 @@ const APP = (() => {
 
 /* ---------- main navigation: five section tabs, and a culture menu under Stories ---------- */
 let lastCul = 'arab';
-const NAVTABS = [['stories', 'Stories', 'القصص'], ['science', 'Science', 'العلم'], ['calendar', 'Sky calendar', 'تقويم السماء'], ['plan', 'Plan a night', 'خطّط لليلتك'], ['guide', 'Saved lists', 'القوائم المحفوظة'], ['quiz', 'Quiz', 'اختبر معلوماتك']];
-function tabOf(cul) { return cul === 'science' || cul === 'calendar' || cul === 'plan' || cul === 'guide' || cul === 'quiz' ? cul : 'stories'; }
+const NAVTABS = [['stories', 'Stories', 'القصص'], ['science', 'Science', 'العلم'], ['calendar', 'Sky calendar', 'تقويم السماء'], ['plan', 'Plan a night', 'خطّط لليلتك'], ['quiz', 'Quiz', 'اختبر معلوماتك'], ['guide', 'Saved lists', 'القوائم المحفوظة'], ['learn', 'For guides', 'للمرشدين']];
+function tabOf(cul) { return cul === 'science' || cul === 'calendar' || cul === 'plan' || cul === 'guide' || cul === 'quiz' || cul === 'learn' ? cul : 'stories'; }
 function buildNav() {
   const nav = document.getElementById('mainnav'); if (!nav) return;
   nav.innerHTML = `<div class="ntabs" role="tablist">${NAVTABS.map(([id, en]) => `<button type="button" role="tab" class="ntab" data-tab="${id}" aria-selected="false">${en}${id === 'guide' ? ' <span class="agbadge" id="agcount"></span>' : ''}</button>`).join('')}</div>
@@ -1529,7 +1593,7 @@ function buildCultures() {
 }
 
 function buildList(filter = '') {
-  if (state.cul === 'calendar' || state.cul === 'guide' || state.cul === 'plan' || state.cul === 'quiz') return;
+  if (state.cul === 'calendar' || state.cul === 'guide' || state.cul === 'plan' || state.cul === 'quiz' || state.cul === 'learn') return;
   const list = document.getElementById('list'); list.innerHTML = '';
   const f = filter.trim().toLowerCase();
   let shown = 0;
@@ -1559,14 +1623,14 @@ function searchLore(key, f) {
   if (state.cul === 'science') return false;
   return Object.values(lo).some(e => (e.seen + ' ' + e.stories.map(s => s.title + ' ' + s.text).join(' ')).toLowerCase().includes(f));
 }
-function hasLore(con, cul) { if (cul === 'calendar' || cul === 'guide' || cul === 'plan' || cul === 'quiz') return true; return cul === 'science' ? !!DATA.sci[con] : !!(DATA.lore[con] || {})[cul]; }
+function hasLore(con, cul) { if (cul === 'calendar' || cul === 'guide' || cul === 'plan' || cul === 'quiz' || cul === 'learn') return true; return cul === 'science' ? !!DATA.sci[con] : !!(DATA.lore[con] || {})[cul]; }
 // which entries a culture's list shows: everything, except sections that belong to one place
 function inList(con, cul) { if (cul === 'science') return !!DATA.sci[con]; if (con === 'SOL' || con === 'DSO' || con === 'STAR') return false; if (con === 'QUR') return cul === 'arab'; return !!byKey[con]; }
 function firstFor(cul) { const c = DATA.constellations.find(x => x.key !== 'QUR' && hasLore(x.key, cul)); return c ? c.key : 'Ori'; }
 function setCulture(id) {
-  const wasCal = state.cul === 'calendar' || state.cul === 'guide' || state.cul === 'plan' || state.cul === 'quiz';
+  const wasCal = state.cul === 'calendar' || state.cul === 'guide' || state.cul === 'plan' || state.cul === 'quiz' || state.cul === 'learn';
   state.cul = id;
-  if (id === 'calendar' || id === 'guide' || id === 'plan' || id === 'quiz') { render(); return; }
+  if (id === 'calendar' || id === 'guide' || id === 'plan' || id === 'quiz' || id === 'learn') { render(); return; }
   if (wasCal && !byKey[state.con]) state.con = 'Ori';
   if (!inList(state.con, id)) state.con = firstFor(id);
   buildList(document.getElementById('q').value);
@@ -3442,7 +3506,7 @@ const FBT = {
 };
 let fbLast = 0, fbDone = false;
 function fbPlace() {
-  if (state.cul === 'guide') return 'Saved lists'; if (state.cul === 'calendar') return 'Sky calendar'; if (state.cul === 'plan') return 'Plan a night'; if (state.cul === 'quiz') return 'Quiz';
+  if (state.cul === 'guide') return 'Saved lists'; if (state.cul === 'calendar') return 'Sky calendar'; if (state.cul === 'plan') return 'Plan a night'; if (state.cul === 'quiz') return 'Quiz'; if (state.cul === 'learn') return 'For guides · ' + GUIDES.page;
   const c = byKey[state.con]; return (c ? c.latin : state.con) + ' · ' + cname(state.cul);
 }
 function fbRender() {
@@ -3481,12 +3545,397 @@ async function fbSend(ev) {
   } catch (e) { btn.disabled = false; btn.textContent = t.send; line.textContent = t.fail; }
 }
 
+/* ---------- For guides: Communication 101 and Astronomy equipment ---------- */
+const GUIDES = (() => {
+  const PAGES = [['comm', 'Communication 101', 'أساسيات التواصل'], ['equip', 'Astronomy equipment', 'معدات الرصد الفلكي']];
+  let page = 'comm';
+  try { const p = localStorage.getItem('osms-gpage'); if (p === 'comm' || p === 'equip') page = p; } catch (e) {}
+  const nf = (v, d = 0) => Number(v).toLocaleString('en-US', {maximumFractionDigits: d, minimumFractionDigits: d});
+  function box(ar, t, body, open) {
+    return `<details class="dsofold shfold gfold"${open ? ' open' : ''}><summary><span class="pd-ar" aria-hidden="true">▸</span><span class="df-t">${t}</span><span class="df-h" data-o="${ar ? 'اضغط لعرضه' : 'Tap to show'}" data-c="${ar ? 'اضغط لطيّه' : 'Tap to fold'}"></span></summary><div class="sh-in">${body}</div></details>`;
+  }
+  const stop = (ar, n, t) => `<span class="gstop">${ar ? `المحطة ${n}` : `Stop ${n}`} · </span>${t}`;
+  const tab = (head, rows) => `<div class="sh-scroll"><table class="agt shtab gtab"><thead><tr>${head.map(x => `<th>${x}</th>`).join('')}</tr></thead><tbody>${rows.map(r => `<tr><th>${r[0]}</th>${r.slice(1).map(x => `<td>${x}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+  const ask = (ar, t) => `<p class="gask"><b>${ar ? 'اسأل المجموعة:' : 'Ask the group:'}</b> ${t}</p>`;
+  const proof = (ar, t) => `<details class="gproof"><summary>${ar ? 'هل ينجح هذا فعلًا؟ ما تقوله الأبحاث' : 'Does it really work? What the research says'}</summary><div>${t}</div></details>`;
+  const rule = (ar, t) => `<p class="grule"><b>${ar ? 'القاعدة:' : 'Rule:'}</b> ${t}</p>`;
+
+  /* ---------------- Communication 101 ---------------- */
+  function commHTML(ar) {
+    let h = `<p class="dsec-in">${ar
+      ? 'كيف تتحدث عن السماء فيُصغي إليك الناس ويتذكرون ما قلت، سواء كنت في قاعة أو مدرسة أو مركز زوار أو في جولة ليلية تحت النجوم. هذا القسم مبني على الدورة التدريبية «أنزِل السماء إلى الأرض» لمرشدي السياحة الفلكية، ويسير في أربع محطات:'
+      : 'How to talk about the sky so people listen and remember it, whether you are in a hall, a classroom, a visitor centre or out under the stars. This is based on the training "Bring the Sky Down to Earth" for astrotourism guides, and it follows four stops:'}</p>`;
+    h += `<ol class="gstops">${(ar ? ['ابدأ بهم لا بنفسك', 'ترجِم السماء', 'أمسِك بانتباه المجموعة', 'اختم بكلماتك أنت'] : ['Open about them', 'Translate the sky', 'Hold the group', 'Close on your words']).map(x => `<li>${x}</li>`).join('')}</ol>`;
+
+    // Stop 1
+    h += box(ar, stop(ar, 1, ar ? 'لديك 30 ثانية' : 'You have 30 seconds'), ar
+      ? `<p><b>لا تبدأ بعبارة «مرحبًا، يسعدني أن أكون هنا».</b> الجمهور يقرر في ثوانٍ: هل سيكون هذا ممتعًا أم محاضرة؟ ابدأ بواحدة من ثلاث بدايات:</p>
+<ol class="facts"><li><b>اطلب رفع الأيدي:</b> «ارفع يدك إن كنت قد رأيت درب التبانة بعينيك». يشارك الناس بأجسادهم من اللحظة الأولى.</li>
+<li><b>ابدأ برقم مدهش:</b> «الضوء الذي تراه الآن من مجرة المرأة المسلسلة غادرها قبل 2.5 مليون سنة، قبل أن يوجد البشر». وفي الخارج ليلًا أشِر إلى المجرة نفسها ثم قل الرقم.</li>
+<li><b>ابدأ من منتصف القصة:</b> «الرابع من يوليو عام 1054. يظهر نجم جديد، ساطع لدرجة أنه رُئي في النهار 23 يومًا». ثم دعهم يلحقون بك: هكذا وُلد سديم السرطان.</li></ol>
+${rule(ar, 'اجعل جملتك الأولى عنهم وعمّا سيحصلون عليه: «في نهاية هذه الليلة ستعرف كيف تجد طريقك بالنجوم وحدها».')}
+<p>اكتب هذه البداية كلمة كلمة واحفظها، فهي الجزء الوحيد الذي يستحق ذلك.</p>
+${ask(ar, '«ما أول شيء تقوله حين تصل المجموعة؟» ثم حوّل إحدى الإجابات إلى بداية جديدة أمامهم.')}`
+      : `<p><b>Don't open with "Hi, I'm so glad to be here."</b> An audience decides in seconds whether this will be fascinating or a lecture. Open with one of three cold opens:</p>
+<ol class="facts"><li><b>Ask for hands:</b> "Hands up if you've ever seen the Milky Way with your own eyes." People join in with their bodies straight away.</li>
+<li><b>Drop a surprising number:</b> "The light from the Andromeda Galaxy left it 2.5 million years ago, before humans existed." Outdoors at night, point at the galaxy itself, then give the number.</li>
+<li><b>Start mid-story:</b> "4 July 1054. A new star appears, bright enough to see in daylight for 23 days." Then let them catch up: that explosion made the Crab Nebula.</li></ol>
+${rule(ar, 'make your first sentence about them and what they will get. "By the end of tonight, you\'ll be able to find your way using only the stars."')}
+<p>Write this opening word for word and learn it. It is the one part worth scripting completely.</p>
+${ask(ar, '"What\'s the very first thing you say when a group arrives?" Then turn one answer into a cold open, live.')}`);
+
+    // Stop 2a: jargon
+    const jr = ar
+      ? [['طريق الشمس في السماء', 'دائرة البروج'], ['سحابة متوهجة تولد فيها النجوم', 'سديم انبعاث'], ['يستغرق ضوؤه 4 سنوات ليصل إلينا', '4.2 سنة ضوئية'], ['من ألمع نجوم السماء', 'القدر 0.1'], ['نجم عجوز انتفخ قرب نهاية عمره', 'عملاق أحمر']]
+      : [['the Sun\'s path across the sky', 'the ecliptic'], ['a glowing cloud where stars are born', 'an emission nebula'], ['its light takes 4 years to reach us', '4.2 light years'], ['one of the brightest stars in the sky', 'magnitude 0.1'], ['an old star, swollen up near its end', 'a red giant']];
+    h += box(ar, stop(ar, 2, ar ? 'المصطلحات تُشعر الناس أنهم غرباء' : 'Jargon tells people they don\'t belong'), (ar
+      ? `<p>معظمنا درس العلوم، ولهذا فهذه النصيحة موجّهة إلينا. المصطلحات مناسبة بين العلماء، لكنها جدار أمام السياح وأهل المجتمع.</p>`
+      : `<p>This one is aimed at us, because most of us studied science. Jargon is fine among scientists. With tourists and community groups it is a wall.</p>`)
+      + tab(ar ? ['قل هذا', 'بدلًا من'] : ['Say this', 'Instead of'], jr.map(([a, b]) => [a, `<s>${b}</s>`]))
+      + (ar
+      ? `<p>انتبه خاصة إلى «القدر»: مقياسه معكوس (الرقم الأصغر أسطع)، وهذا يربك الجميع. قل ببساطة «أسطع».</p><p class="gtry"><b>جرّبها:</b> اشرح جرمًا واحدًا لمن بجانبك، بلا مصطلحات، في 30 ثانية. مثلًا: سديم الجبار.</p>
+${proof(ar, '<p>في دراسة شولمان وزملائه (2020) قرأ نحو 650 شخصًا نصوصًا علمية بعضها فيه مصطلحات وبعضها بدونها. من قرؤوا المصطلحات صاروا أقل اهتمامًا بالعلم، وشعروا أنهم فهموا أقل. <b>وتعريف المصطلحات لم يحل المشكلة.</b> يرى الباحثون أن المصطلح المتخصص إشارة اجتماعية تقول للقارئ: أنت لست منا.</p>')}`
+      : `<p>Watch out for "magnitude" above all: the scale runs backwards (a smaller number is brighter), which confuses everyone. Just say "brighter".</p><p class="gtry"><b>Try it:</b> explain one object to the person next to you, with no jargon, in 30 seconds. The Orion Nebula is a good one.</p>
+${proof(ar, '<p>Shulman and colleagues (2020) gave about 650 people science texts with and without jargon. The jargon readers felt less interested in science and less sure they understood it. <b>Defining the terms did not fix it.</b> The researchers describe jargon as a social signal: specialised words tell people they don\'t belong.</p>')}`));
+
+    // Stop 2b: relate, story, provoke, local knowledge
+    h += box(ar, stop(ar, 2, ar ? 'اربطه بحياتهم، واحكِ قصة، وأثِر فضولهم' : 'Relate it, tell a story, spark curiosity'), ar
+      ? `<p>هذا قلب الإرشاد. كتب فريمان تيلدن مبادئ «التفسير» لمرشدي المتنزهات عام 1957، واثنان منها يناسباننا تمامًا:</p>
+<ul class="facts"><li>كل ما لا يرتبط بتجربة الزائر نفسه يبقى بلا حياة.</li><li>الهدف الأول ليس التعليم بل <b>إثارة الفضول</b>.</li></ul>
+<p>ومعظم الناس يتلقّون العلم أصلًا على شكل قصص، والقصص تزيد الفهم والاهتمام عند غير المتخصصين.</p>
+<p><b>احترم معرفة أهل المكان.</b> قصص النجوم المحلية تربط السماء بمواسم الزراعة والملاحة والطقس، مثل الأنواء عند العرب. والمواقع السياحية الفلكية الناجحة (في منطقة الكارو بجنوب أفريقيا، وفي أوراكي ماكنزي بنيوزيلندا) تبني جولاتها على العلم والتراث معًا. اعرضهما جنبًا إلى جنب باحترام.</p>
+<p class="gtry"><b>مثال:</b> «كان طلوع الثريا قبل الفجر يخبر المزارعين أن وقت الزرع قد حان. واليوم نعرف أنها عائلة من نجوم شابة، عمرها نحو 100 مليون سنة، وُلدت معًا». كلا الأمرين صحيح، وكلاهما ممتع.</p>
+${ask(ar, '«من يعرف اسمًا محليًّا أو قصة لنجم أو كوكبة؟» ودعهم يحكونها.')}
+${proof(ar, '<p>تيلدن، «تفسير تراثنا» (1957). داهلستروم (2014، مجلة PNAS): القصص تحسّن الفهم والاهتمام والتفاعل عند الجمهور غير المتخصص.</p>')}`
+      : `<p>This is the heart of guiding. Freeman Tilden wrote the founding principles of "interpretation" for park guides in 1957, and two of them fit us perfectly:</p>
+<ul class="facts"><li>Anything that doesn't relate to the visitor's own experience will be sterile.</li><li>The chief aim is not instruction but <b>provocation</b>: sparking curiosity, not upsetting people.</li></ul>
+<p>Most people already get their science as stories, and stories improve understanding and interest for non-experts.</p>
+<p><b>Honour local knowledge.</b> Local sky stories tie the stars to farming seasons, navigation and weather, like the Arab anwa'. Astrotourism sites that work well (in South Africa's Karoo, and Aoraki Mackenzie in New Zealand) build their tours on both science and local tradition. Present the two side by side, with respect.</p>
+<p class="gtry"><b>Example:</b> "The Pleiades rising before dawn told farmers it was time to plant. Today we know it's a family of young stars, about 100 million years old, born together." Both are true, and both are interesting.</p>
+${ask(ar, '"Who knows a local name or story for a star or constellation?" Let them tell it.')}
+${proof(ar, '<p>Tilden, <i>Interpreting Our Heritage</i> (1957). Dahlstrom (2014, PNAS): narratives improve comprehension, interest and engagement for non-expert audiences.</p>')}`);
+
+    // Stop 2c: scale model with calculator
+    h += box(ar, stop(ar, 2, ar ? 'صغّر الكون إلى شيء يمشونه' : 'Shrink the universe to something they can walk'), (ar
+      ? `<p>الأرقام الكبيرة لا تعني شيئًا للناس: «150 مليون كيلومتر» و«40 تريليون كيلومتر» يبدوان متشابهين. صغّر الكون إلى أشياء يمسكونها ومسافات يمشونها. اختر مقياسًا واحدًا، وسمِّه بوضوح، ودع الناس يمشونه.</p>`
+      : `<p>Big numbers mean nothing: "150 million kilometres" and "40 trillion kilometres" feel the same. Shrink the universe into things people can hold and distances they can walk. Pick one scale, label it clearly, and let people walk it.</p>`)
+      + `<div class="gcalc" id="gscale"><label><span>${ar ? 'إذا كانت الشمس بحجم' : 'If the Sun were'}</span><select data-g="obj">${(ar ? [['22', 'كرة قدم (22 سم)'], ['8', 'برتقالة (8 سم)'], ['1.5', 'حبة عنب (1.5 سم)'], ['100', 'كرة قطرها متر']] : [['22', 'a football (22 cm)'], ['8', 'an orange (8 cm)'], ['1.5', 'a grape (1.5 cm)'], ['100', 'a ball 1 m across']]).map(([v, l]) => `<option value="${v}">${l}</option>`).join('')}<option value="c">${ar ? 'حجم آخر…' : 'another size…'}</option></select></label><label class="gcust" hidden><span>${ar ? 'قطرها بالسنتيمتر' : 'Its width in cm'}</span><input type="number" data-g="cm" min="0.1" max="10000" step="any" value="22" inputmode="decimal" dir="ltr"></label><div class="gout" aria-live="polite"></div></div>`
+      + (ar
+      ? `<p><b>استعمل المكان الذي أنت فيه:</b> ضع «الشمس» في المقدمة، وامشِ مع المجموعة إلى موضع الأرض بالخطوات، ثم اذكر مدينة يعرفونها تبعد عنكم مثل بُعد أقرب نجم.</p>`
+      : `<p><b>Use the place you are in:</b> put the "Sun" at the front, pace out Earth with the group, then name a city they know that is as far away as the nearest star.</p>`));
+
+    // Stop 3a: posture
+    h += box(ar, stop(ar, 3, ar ? 'قف منتصبًا' : 'Stand tall'), ar
+      ? `<p>طريقة وقوفك تغيّر نظرة المجموعة إليك، وتدفع شعورك أنت في الاتجاه نفسه. الخلاصة: <b>لا تجعل نفسك صغيرًا.</b> قف منتصبًا، وثبّت قدميك، وانظر إلى المجموعة.</p>
+<p class="gtry"><b>تمرين (دقيقة واحدة، الجميع واقفون):</b> 1) انحنِ، وأكتافك إلى الأمام وعيناك إلى الأرض، وقل: «أهلًا بكم في المرصد». 2) ثبّت قدميك وقف منتصبًا وذقنك مستوٍ، وقلها مرة أخرى. ما الذي تغيّر في الصوت وفي الشعور؟</p>
+${proof(ar, '<ul class="facts"><li><b>عليك:</b> في دراسة ناير وزملائه (2015) جلس 74 شخصًا منتصبين أو منحنين ثم ألقوا خطابًا تحت الضغط. شعر المنتصبون بثقة أعلى ومزاج أفضل، واستخدموا كلمات أكثر وكلمات سلبية أقل. وتتفق مراجعات 2022 على أن الأثر حقيقي لكنه متواضع، ومعظمه من تجنّب الانحناء والانغلاق، لا من الوقفات الاستعراضية.</li><li><b>عليهم:</b> في دراسة «نصف دقيقة» (أمبادي وروزنثال، 1993) شاهد غرباء مقاطع صامتة قصيرة لمعلمين، أقل من 30 ثانية وأحيانًا 6 ثوانٍ فقط، فتنبأت أحكامهم السريعة بتقييم طلاب هؤلاء المعلمين في نهاية الفصل. جمهورك يقرأ جسدك قبل أن تقول الكثير.</li><li><b>وإن سُئلت عن «وقفات القوة»:</b> لم يصمد الادعاء بأن دقيقتين من وقفة القوة تغيّران الهرمونات في التجارب الأكبر (رانهيل وزملاؤه، 2015). يبقى أثر الشعور بالثقة، بقدر متواضع، ولا يبقى أثر الهرمونات.</li></ul>')}`
+      : `<p>How you stand changes how the group sees you, and it nudges how you feel. The bottom line: <b>don't make yourself small.</b> Stand tall, plant your feet, look at the group.</p>
+<p class="gtry"><b>Exercise (1 minute, everyone standing):</b> 1) Slump, shoulders forward, eyes down, and say "Welcome to the observatory." 2) Plant your feet, stand tall, chin level, and say it again. What changed, in how it sounded and how it felt?</p>
+${proof(ar, '<ul class="facts"><li><b>For you:</b> Nair and colleagues (2015) had 74 people sit upright or slumped, then give a stressful speech. The upright group reported higher self-esteem and better mood, and used more words and fewer negative ones. Reviews in 2022 agree the effect is real but modest, and most of it comes from avoiding a slumped, closed posture rather than from dramatic poses.</li><li><b>For them:</b> in the "Half a Minute" study (Ambady and Rosenthal, 1993), strangers watched silent clips of teachers under 30 seconds long, in a follow-up as short as 6 seconds, and their snap ratings predicted the teachers\' end-of-term ratings from their own students. Your audience reads your body before you have said much at all.</li><li><b>If someone asks about "power poses":</b> the claim that two minutes in a power pose changes your hormones did not hold up in larger studies (Ranehill and colleagues, 2015). Feeling a little more confident survives; the hormone part does not.</li></ul>')}`);
+
+    // Stop 3b: dress
+    h += box(ar, stop(ar, 3, ar ? 'البس ما يجعلهم يتذكرون الرسالة لا الملابس' : 'Dress so they remember the message, not the outfit'), ar
+      ? `<div class="gcols"><div><h4>ما تقوله الأبحاث</h4><ul class="facts"><li>الملابس الرسمية تجعلك تبدو أكفأ، لكن أقل ودًّا وقربًا.</li><li>الملابس الأنيقة غير الرسمية تجمع الأمرين: كفء وقريب من الناس.</li><li>يخفّ الأثر حين يعرفك الناس، لكن المجموعة الزائرة تقابلك مرة واحدة.</li><li>المجوهرات والعبارات المطبوعة: نصائح مدربين فقط، لا أبحاث.</li></ul></div>
+<div><h4>اتركها في البيت</h4><ul class="facts"><li>العبارات المطبوعة والشعارات الكبيرة.</li><li>المجوهرات التي ترنّ أو تلمع.</li><li>النقوش المزدحمة والألوان الفاقعة.</li><li>ما يُعبث به: المفاتيح والأقلام وحبال البطاقات.</li></ul></div>
+<div><h4>البس بدلًا منها</h4><ul class="facts"><li>ملابس أنيقة بسيطة بألوان سادة.</li><li>شارة أو سترة تبيّن أنك المرشد.</li><li>ملابس تتحرك وتشير وتنحني فيها بسهولة.</li><li>في الجلسات الليلية: طبقات داكنة ومصباح أحمر.</li></ul></div></div>
+${rule(ar, 'لا ينبغي أن يكون شيء مما تلبسه أكثر إثارة مما تريهم إياه.')}
+<p><b>إن كنت ترشد ليلًا:</b> تحتاج العين 20 إلى 30 دقيقة لتتكيف مع الظلام، ولحظة واحدة من الضوء الأبيض تفسد ذلك. ضوء الساعة الذكية أو الهاتف في يدك يُحسب ضوءًا. البس طبقات داكنة، وضع ساعتك على الوضع الليلي، واحمل مصباحًا أحمر.</p>
+<p>وإن زرت مجتمعًا محليًّا فاسأل عن اللباس المناسب هناك. أن تنسجم معهم جزء من كسب ثقتهم.</p>
+${ask(ar, '«ما أكثر شيء مشتت رأيت متحدثًا يلبسه؟»')}`
+      : `<div class="gcols"><div><h4>What research says</h4><ul class="facts"><li>Formal clothes: more competent, but less friendly and approachable.</li><li>Smart-casual: both competent and approachable.</li><li>The effect fades once people know you, but a visiting group meets you once.</li><li>Jewellery and slogans: coaching advice only, not research.</li></ul></div>
+<div><h4>Leave at home</h4><ul class="facts"><li>Slogans and big logos.</li><li>Jangly or sparkly jewellery.</li><li>Busy patterns and neon colours.</li><li>Things to fiddle with: keys, pens, lanyards.</li></ul></div>
+<div><h4>Wear instead</h4><ul class="facts"><li>Plain smart-casual clothes in solid colours.</li><li>A badge or fleece that marks you as the guide.</li><li>Clothes you can move, point and crouch in.</li><li>Night sessions: dark layers and a red torch.</li></ul></div></div>
+${rule(ar, 'nothing you wear should be more interesting than what you are showing them.')}
+<p><b>If you guide at night:</b> eyes need 20 to 30 minutes to adapt to the dark, and a moment of white light undoes it. A smartwatch lighting up, or a phone in your hand, counts as a light. Wear dark layers, put your watch on night mode, and carry a red torch.</p>
+<p>Visiting a community? Ask what is respectful to wear there. Fitting in is part of being trusted.</p>
+${ask(ar, '"What\'s the most distracting thing you\'ve seen a speaker wear?"')}`);
+
+    // Stop 3c: nerves
+    h += box(ar, stop(ar, 3, ar ? 'متوتر؟ ثلاث طرق سريعة لتهدأ' : 'Nervous? Three quick resets'), ar
+      ? `<ol class="facts"><li><b>سمِّه حماسًا.</b> قلب يدق بسرعة؟ قل «أنا متحمس» لا «يجب أن أهدأ». التوتر والحماس يتشابهان في الجسد، ومحاولة التهدئة تعاند جسدك أما تغيير الاسم فيعمل معه.</li>
+<li><b>أطِل الزفير.</b> شهيقان قصيران من الأنف (الثاني يكمّل الأول)، ثم زفير طويل بطيء من الفم. بضع مرات قبل أن تبدأ تكفي، ولا يلاحظها أحد، فتستطيع فعلها والناس يصلون.</li>
+<li><b>هم لا يرونه.</b> المتحدثون يظنون أن توترهم واضح، لكن الجمهور يراهم أهدأ بكثير مما يشعرون. ومجرد معرفة هذا جعلت خطابات الناس أفضل.</li></ol>
+<p class="gtry"><b>جرّبها الآن:</b> ثبّت قدميك، وقف منتصبًا، خذ شهيقين وزفيرًا طويلًا، ثم قل: «أنا متحمس».</p>
+${ask(ar, '«ماذا تفعل الآن قبل محاضرة أو جولة لتهدأ؟»')}
+${proof(ar, '<ul class="facts"><li>بروكس (هارفارد، 2014): من قالوا «أنا متحمس» قبل خطاب مصوَّر ألقوا خطابات أطول، وقُيّموا أكثر إقناعًا وكفاءة وثقة. لم يقل قلقهم، لكن أداءهم تحسّن.</li><li>بالبان وزملاؤه (ستانفورد، 2023): خمس دقائق يوميًّا من هذا التنفس حسّنت المزاج وأبطأت التنفس أكثر من التأمل الذهني.</li><li>سافيتسكي وغيلوفيتش (2003): «وهم الشفافية». من قيل لهم هذا فقط ألقوا خطابات أفضل.</li></ul>')}`
+      : `<ol class="facts"><li><b>Call it excitement.</b> Racing heart? Say "I'm excited", not "I need to calm down". Nerves and excitement feel the same in the body; trying to calm down fights your body, while relabelling works with it.</li>
+<li><b>Breathe out longer.</b> Two short breaths in through the nose (the second tops up the first), then one long, slow breath out through the mouth. A few rounds before you start is enough, and nobody can see it, so you can do it while people arrive.</li>
+<li><b>They can't see it.</b> Speakers think their nerves are obvious, but audiences rate them as much calmer than they feel. Just knowing this made people's speeches better.</li></ol>
+<p class="gtry"><b>Try it now:</b> plant your feet, stand tall, two breaths in, one long breath out. Then say "I'm excited."</p>
+${ask(ar, '"What do you do right now before a talk or tour to settle yourself?"')}
+${proof(ar, '<ul class="facts"><li>Brooks (Harvard, 2014): people who said "I am excited" before a judged, videotaped speech gave longer speeches and were rated more persuasive, competent and confident. They did not feel less anxious; they just performed better.</li><li>Balban and colleagues (Stanford, 2023): five minutes a day of this "cyclic sigh" improved mood and slowed breathing more than mindfulness meditation.</li><li>Savitsky and Gilovich (2003): the "illusion of transparency". People who were simply told about it gave better speeches.</li></ul>')}`);
+
+    // Stop 3d: voice
+    h += box(ar, stop(ar, 3, ar ? 'صوتك: أوصِله ولا تصرخ' : 'Your voice: project, don\'t shout'), ar
+      ? `<p><b>1. أوصِل صوتك من النَّفَس لا من الحلق.</b> الصراخ يُتعب الصوت ويبدو عدوانيًّا، أما الإيصال فيبدو هادئًا ويصل بعيدًا.</p>
+<ul class="facts"><li>تنفّس من أسفل: ضع يدك على بطنك وأحسّ به يتحرك للخارج مع الشهيق. إن ارتفع كتفاك فنفَسك عالٍ جدًّا.</li><li>قف منتصبًا ووزنك متوازن وكتفاك مرتخيان.</li><li>وجّه صوتك إلى أبعد شخص كأنك تكلمه هو. الصف الأول سيسمعك على أي حال.</li></ul>
+<p><b>في الخارج</b> لا جدران ترد الصوت: واجِه المجموعة دائمًا (لا تتكلم وظهرك إليهم وأنت تشير إلى شيء)، وقف بحيث تحمل الريح صوتك إليهم، واجعل الصف الأول على بعد متر منك، واسأل مبكرًا: «هل يسمعني الجميع؟»</p>
+<p><b>2. انطق أواخر الكلمات بوضوح.</b> يسمعك الناس مرة واحدة فقط. إن ضاعت كلمة انشغلوا بفهمها ففاتتهم الجملة التالية. أبطئ بقدر يكفي لتكمل كلماتك، وهذا أهم في الخارج، وفي القاعات التي يتردد فيها الصدى، وبلا ميكروفون، وفي الظلام حيث لا يرى أحد شفتيك.</p>
+<p><b>اعتنِ بصوتك:</b> دندن بهدوء دقيقة قبل أن تبدأ، واشرب الماء، وأرِح صوتك بين المجموعات. وإن استمرت بحة الصوت أكثر من أسبوع تقريبًا فراجع الطبيب.</p>
+<p class="gtry"><b>جرّبها:</b> قل «الصليب الجنوبي يشير إلى الجنوب» مرة بتمتمة من الحلق، ثم مرة من النَّفَس بأواخر كلمات واضحة، موجّهًا صوتك إلى آخر القاعة.</p>`
+      : `<p><b>1. Project from the breath, not the throat.</b> Shouting strains the voice and sounds aggressive; projection sounds calm and carries.</p>
+<ul class="facts"><li>Breathe low: put a hand on your belly and feel it move out as you breathe in. If your shoulders rise, the breath is too high.</li><li>Stand tall, weight even, shoulders loose.</li><li>Aim your voice at the person furthest away, as if talking to them. The front row will hear you anyway.</li></ul>
+<p><b>Outdoors</b> there are no walls to bounce sound back: always face the group (never talk with your back to them while pointing at something), stand where the breeze carries your voice to them, keep the front row about a metre away, and check early: "Can everyone hear me?"</p>
+<p><b>2. Hit your final consonants.</b> People hear you once, in real time. Blur a word and they get stuck working it out, so they miss the next sentence too. Slow down just enough to finish your words. This matters double outdoors, in an echoey hall, with no microphone, or in the dark where nobody can see your lips.</p>
+<p><b>Look after your voice:</b> hum gently for a minute before you start, sip water, and rest your voice between groups. If hoarseness lasts more than about a week, see a doctor.</p>
+<p class="gtry"><b>Try it:</b> say "The Southern Cross points to the south" first mumbled from the throat, then projected from the breath with crisp endings, to the back of the room.</p>`);
+
+    // Stop 3e: take the group, get quieter
+    h += box(ar, stop(ar, 3, ar ? 'امسك زمام المجموعة، واخفض صوتك حين تفقدهم' : 'Take the group, and go quieter to win them back'), ar
+      ? `<p><b>للبداية: لا تنتظر الصمت.</b> أعطِ إشارة واضحة (تقدّم إلى الوسط، أو ارفع شيئًا في يدك، أو شغّل الشاشة، أو مصباحك ليلًا) ثم أعطِ أول تعليمة تجعلهم ينظرون. كل دقيقة تقف فيها منتظرًا تُفقدك شيئًا من مكانتك.</p>
+<p><b>حين تبدأ تفقدهم:</b> الهواتف خارجة، أحاديث جانبية، ناس يبتعدون نحو القهوة أو السيارات. غريزتك أن ترفع صوتك وتسرع، وهذا يزيد الأمر سوءًا. <b>اخفض صوتك وأبطئ.</b> يلاحظ الناس تغيّر الصوت حتى وهم لا ينظرون إليك، ويريدون أن يعرفوا ما فاتهم. ثم أشِر إلى شيء محدد (صورة أو قطعة أو نجم) ليجد الشاردون سببًا للنظر.</p>
+<p class="sh-note">الصوت الأهدأ ما زال يحتاج إلى نَفَس وأواخر كلمات واضحة: إنه صوت أنعم، لا تمتمة.</p>`
+      : `<p><b>To start: don't wait for silence.</b> Give a clear physical signal (step into the middle, hold up an object, switch on the screen, or your torch at night), then a first instruction that makes them look. Every minute you stand there waiting, you lose credibility.</p>
+<p><b>When you start to lose them</b> (phones out, side chats, people drifting towards the coffee or the vehicles), the instinct is to get louder and faster. That makes it worse. <b>Get quieter and slow down.</b> People notice the change in volume even when they aren't looking at you, and they want to know what they missed. Then point at something specific (a picture, an object, a star) to give drifting people a reason to look.</p>
+<p class="sh-note">Quieter still needs breath and crisp endings: it is a softer voice, not a mumble.</p>`);
+
+    // Stop 3f: freeze and hard questions
+    h += box(ar, stop(ar, 3, ar ? 'إن نسيت ما ستقول' : 'If you freeze'), ar
+      ? `<ol class="facts"><li><b>الجمهور لا يعرف ما كنت ستقوله.</b> لا تخبرهم.</li><li><b>ابحث عن إشارة:</b> الشريحة التالية، ملاحظاتك، رشفة ماء. وفي الجولة الميدانية أو الليلية مسارك هو ملاحظاتك: انتقل إلى المحطة أو الجرم التالي.</li><li><b>وفي أسوأ الأحوال اعترف.</b> سيصفّق الناس، فكلهم مرّوا بذلك.</li></ol>
+<p><b>الأسئلة التي لا جواب لها:</b> سيسألك الناس ما لا يعرفه أحد (ماذا داخل الثقب الأسود؟ هل توجد حياة هناك؟) أو ما لا تعرفه أنت. «لا أحد يعرف بعد» تريهم أن العلم حي ولم يكتمل. أما اختلاق جواب فهو الشيء الوحيد الذي يُفقدك ثقتهم.</p>
+${ask(ar, '«ما أصعب سؤال سألك إياه أحد؟» وتدرّبوا معًا على الجواب الصادق.')}`
+      : `<ol class="facts"><li><b>The audience doesn't know what you were going to say.</b> Don't clue them in.</li><li><b>Look for a cue:</b> the next slide, your notes, a sip of water. On a site walk or sky tour your route is your notes: move to the next stop or object.</li><li><b>Worst case, admit it.</b> People applaud, because everyone has been there.</li></ol>
+<p><b>Questions nobody can answer:</b> people will ask things nobody knows (What's inside a black hole? Is there life out there?) or things you just don't know. "Nobody knows yet" shows them science is alive and unfinished. Making something up is the one thing that costs you their trust.</p>
+${ask(ar, '"What\'s the hardest question anyone has asked you?" Practise the honest answer together.')}`);
+
+    // Stop 4: peak-end and last word
+    h += box(ar, stop(ar, 4, ar ? 'اختم بكلماتك أنت' : 'Close on your words'), ar
+      ? `<p><b>قاعدة الذروة والنهاية:</b> يتذكر الناس اللحظة الأقوى في التجربة ونهايتها أكثر بكثير من كل ما بينهما (من أبحاث عالم النفس دانيال كانمان). فخطّط للاثنتين.</p>
+<ul class="facts"><li><b>الذروة:</b> الفلك يهدينا لحظات الذروة: حلقات زحل في العدسة، بقع الشمس من خلال تلسكوب شمسي، نيزك يمسكونه بأيديهم، صورة مذهلة. رتّب الحديث لتصل هذه اللحظة في وقتها، ولا تتكلم فوقها.</li>
+<li><b>النهاية:</b> معظم المحاضرات تنتهي بـ«هل من أسئلة؟» فتنتهي بسؤال عشوائي أو بصمت. <b>تقنية الكلمة الأخيرة:</b> خذ الأسئلة قبل النهاية («لدينا وقت لبعض الأسئلة، ثم أختم»)، أجب عنها، ثم اختم بجملتين كتبتهما مسبقًا. أنت من يقرر كيف تنتهي.</li></ul>
+<p>وحين ينتهي الوقت: «سؤال أخير، ثم أختم». ثم قل جملتيك ببطء، بأواخر كلمات واضحة، وتوقف. لا تضف «شكرًا، هذا كل شيء». دعها تستقر، ثم ابتسم وتراجع خطوة.</p>`
+      : `<p><b>The peak-end rule:</b> people remember the emotional high point and the ending far more than everything in between (from psychologist Daniel Kahneman's research). So plan both.</p>
+<ul class="facts"><li><b>The peak:</b> astronomy hands us peaks: Saturn's rings in an eyepiece, sunspots through a solar telescope, a meteorite they can hold, a stunning picture. Build the talk so that moment lands, and don't talk over it.</li>
+<li><b>The end:</b> most talks end with "Any questions?" and finish on a random question, or on silence. <b>The last-word technique:</b> take questions second to last ("We have time for a few questions, then I'll wrap up"), answer them, then finish with two sentences you wrote in advance. You decide how it ends.</li></ul>
+<p>When time is up: "Let's take one more, and then I'll wrap up." Then say your two sentences slowly, with crisp endings, and stop. Don't add "thanks, that's it". Let it land, smile, and step back.</p>`);
+
+    // homework + checklist
+    const ck = ar
+      ? ['ابدأ برفع الأيدي أو برقم أو بقصة', 'استبدل كل مصطلح', 'اربطه بحياتهم وبقصص سمائهم المحلية', 'صغّر المقاييس إلى أشياء يمشونها', 'قف منتصبًا، وأطِل الزفير، وسمِّه حماسًا', 'البس ما يجعلهم يتذكرون الرسالة', 'أوصِل صوتك من النَّفَس، وانطق أواخر الكلمات', 'تفقدهم؟ اخفض صوتك', 'نسيت؟ انتقل إلى نقطتك التالية', 'الأسئلة قبل النهاية، ثم كلمتك الأخيرة']
+      : ['Open with hands, a number, or a story', 'Swap every jargon word', 'Relate it to their lives and local sky stories', 'Shrink scale into things they can walk', 'Stand tall, breathe out long, call it excitement', 'Dress so they remember the message', 'Project from the breath, finish your consonants', 'Losing them? Go quieter', 'Froze? Move to your next point', 'Questions second to last, then your last word'];
+    h += box(ar, ar ? 'قبل محاضرتك القادمة: نصّان مكتوبان، والوسط حر' : 'Before your next talk: write two scripts, keep the middle loose', (ar
+      ? `<div class="gcols g2"><div class="gscript"><h4>أول 30 ثانية</h4><p>كلمة كلمة، وعنهم لا عنك.</p></div><div class="gscript"><h4>آخر جملتين</h4><p>كلمة كلمة: الشيء الوحيد الذي تريدهم أن يتذكروه.</p></div></div><p>وكل ما بينهما يمكن أن يبقى حرًّا، فمادتك وجمهورك سيحملانه.</p><h4>قائمة الجيب</h4>`
+      : `<div class="gcols g2"><div class="gscript"><h4>Your first 30 seconds</h4><p>Word for word. About them, not you.</p></div><div class="gscript"><h4>Your last two sentences</h4><p>Word for word. The one thing to remember.</p></div></div><p>Everything in between can stay loose: your material and your audience will carry it.</p><h4>Pocket checklist</h4>`)
+      + `<ul class="gcheck">${ck.map(x => `<li>${x}</li>`).join('')}</ul>`, true);
+
+    h += `<blockquote class="gquote">${ar ? 'لستَ هناك لتثبت كم تعرف. أنت هناك ليغادروا وهم يشعرون أن السماء لهم أيضًا.' : 'You\'re not there to prove how much you know. You\'re there so they leave feeling the sky belongs to them too.'}</blockquote>`;
+
+    h += box(ar, ar ? 'المصادر' : 'Sources', `<div class="gcols g2"><div><h4>${ar ? 'دوري كلارك: مقاطع قصيرة' : 'Dorie Clark, short video clips'}</h4><ul class="facts gsrc">${['Morgan Freeman: sound your final consonants', 'Losing the room? Get quieter', 'Never start with "I\'m so glad to be here"', 'Do this in the first 30 seconds', 'Never end on "Any questions?" (peak-end, last word)', 'How to end a talk people remember', 'What to do if you freeze on stage', 'Obama: take control of a noisy room'].map(x => `<li dir="ltr">${esc(x)}</li>`).join('')}</ul>
+<h4>${ar ? 'الصوت والإرشاد' : 'Voice and guiding'}</h4><ul class="facts gsrc">${['Bowen, C. Voice care for tour guides (speech-language-therapy.com)', 'RCSLT Voice Care factsheet', 'US National Park Service: night-sky etiquette', 'NWU, SAAO, Aoraki Mackenzie: sky knowledge in astrotourism'].map(x => `<li dir="ltr">${esc(x)}</li>`).join('')}</ul></div>
+<div><h4>${ar ? 'الأبحاث' : 'Research'}</h4><ul class="facts gsrc">${['Shulman et al. (2020). Jargon and engagement. J. Lang. Soc. Psych.', 'Dahlstrom (2014). Narratives for nonexpert audiences. PNAS.', 'Tilden (1957). Interpreting Our Heritage.', 'Kahneman et al. (1993, 1996). Peak-end rule.', 'CAPjournal no. 29 (2021). Solar System scale models.', 'AAAS Communication Toolkit. Lead with the key point.', 'Nair et al. (2015). Upright vs slumped posture. Health Psych.', 'Ranehill et al. (2015). Power-pose replication. Psych. Science.', 'Power-posing meta-analyses (2022). Small effect on felt confidence.', 'Ambady & Rosenthal (1993). Half a minute: thin slices. JPSP.', 'Brooks (2014). Get excited. J. Exp. Psych.: General.', 'Balban et al. (2023). Cyclic sighing. Cell Reports Medicine.', 'Savitsky & Gilovich (2003). Illusion of transparency. JESP.', 'Instructor attire: Oliver et al. (2020); Knowledge (2022).', 'Horton, Adam & Galinsky (2023). Enclothed cognition meta-analysis.'].map(x => `<li dir="ltr">${esc(x)}</li>`).join('')}</ul></div></div>
+<p class="sh-note">${ar ? 'من الدورة التدريبية «أنزِل السماء إلى الأرض» لمرشدي السياحة الفلكية، إعداد يوسف عبدالفتاح.' : 'From the training "Bring the Sky Down to Earth" for astrotourism guides, by Yousef Abdulfattah.'}</p>`);
+    return h;
+  }
+
+  // simple drawings of telescopes and mounts (own artwork, so they work offline)
+  const AR = 'marker-end="url(#gs-ah-@)"';
+  const DEFS = `<defs><marker id="gs-ah-@" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" class="gs-af"/></marker></defs>`;
+  const TRI = (x, y) => `<path class="gs-l" d="M${x} ${y}L${x - 42} ${y + 66}M${x} ${y}L${x} ${y + 70}M${x} ${y}L${x + 42} ${y + 66}"/>`;
+  const SVG = {
+    refractor: `<g transform="rotate(-16 130 80)"><rect class="gs-t" x="44" y="68" width="140" height="22" rx="3"/><rect class="gs-t" x="182" y="64" width="40" height="30" rx="2"/><path class="gs-g" d="M186 66q5 13 0 26"/><rect class="gs-m" x="26" y="73" width="20" height="12" rx="2"/><path class="gs-m" d="M18 60h12v14h-12z"/><circle class="gs-m" cx="24" cy="57" r="5"/><path class="gs-p" d="M222 70L44 79M222 90L44 79"/></g>${TRI(122, 104)}<rect class="gs-m" x="110" y="94" width="24" height="14" rx="3"/>`,
+    newtonian: `<path class="gs-l" d="M120 110L96 150"/><path class="gs-l" d="M108 128L70 160"/><circle class="gs-m" cx="66" cy="163" r="10"/>${TRI(120, 112)}<rect class="gs-m" x="108" y="96" width="26" height="18" rx="3" transform="rotate(-35 121 105)"/><g transform="rotate(-22 130 80)"><rect class="gs-t" x="52" y="60" width="176" height="40" rx="3"/><path class="gs-g" d="M60 62q-6 18 0 36"/><path class="gs-g" d="M170 74l12 12"/><rect class="gs-m" x="168" y="46" width="16" height="14" rx="2"/><rect class="gs-m" x="172" y="38" width="8" height="9"/><path class="gs-p" d="M228 64L58 64L176 80M228 96L58 96L176 80L176 50"/></g>`,
+    dobsonian: `<g transform="rotate(-38 110 118)"><rect class="gs-t" x="78" y="100" width="162" height="36" rx="3"/><path class="gs-g" d="M86 102q-6 16 0 32"/><path class="gs-g" d="M200 112l12 12"/><rect class="gs-m" x="198" y="88" width="16" height="12" rx="2"/><path class="gs-p" d="M240 104L84 104L206 118M240 132L84 132L206 118L206 90"/></g><path class="gs-w" d="M74 172V112h14v44h48V112h14v60z"/><rect class="gs-w" x="60" y="170" width="104" height="8" rx="2"/>`,
+    sct: `<path class="gs-w" d="M92 118h76l-8 10H100z"/><path class="gs-m" d="M98 118V60h10v58M152 118V60h10v58"/><g transform="rotate(-28 130 66)"><rect class="gs-t" x="100" y="40" width="96" height="52" rx="6"/><path class="gs-g" d="M196 42v48"/><path class="gs-g" d="M104 46q-5 20 0 40"/><circle class="gs-m" cx="194" cy="66" r="5"/><rect class="gs-m" x="80" y="58" width="22" height="16" rx="2"/><rect class="gs-m" x="70" y="48" width="12" height="14"/><path class="gs-p" d="M200 54L106 56L170 66L104 66M200 78L106 76L170 66"/></g>${TRI(130, 120).replace(/L(\d+) (\d+)/g, (m, x, y) => `L${x} ${Math.min(+y, 176)}`)}`,
+    mak: `<g transform="rotate(-20 130 76)"><rect class="gs-t" x="90" y="58" width="100" height="36" rx="4"/><path class="gs-g" d="M188 58q8 18 0 36"/><path class="gs-g" d="M94 62q-5 14 0 28"/><rect class="gs-m" x="74" y="70" width="18" height="12" rx="2"/><rect class="gs-m" x="66" y="60" width="10" height="12"/><path class="gs-p" d="M196 64L92 66L160 76L94 76M196 88L92 86L160 76"/></g><path class="gs-m" d="M146 84h14v36h-14z"/>${TRI(153, 118)}`,
+    binos: `<g><rect class="gs-t" x="54" y="62" width="56" height="70" rx="12"/><rect class="gs-t" x="150" y="62" width="56" height="70" rx="12"/><rect class="gs-m" x="108" y="78" width="44" height="14" rx="4"/><circle class="gs-m" cx="130" cy="72" r="8"/><circle class="gs-g" cx="82" cy="110" r="20"/><circle class="gs-g" cx="178" cy="110" r="20"/><rect class="gs-m" x="64" y="40" width="36" height="24" rx="6"/><rect class="gs-m" x="160" y="40" width="36" height="24" rx="6"/></g>`,
+    // mounts
+    altaz: `${TRI(130, 112)}<rect class="gs-m" x="120" y="100" width="20" height="14" rx="3"/><path class="gs-m" d="M136 104V66h10v38z"/><g transform="rotate(-25 130 66)"><rect class="gs-t" x="64" y="56" width="132" height="20" rx="3"/><rect class="gs-m" x="50" y="60" width="16" height="12" rx="2"/></g><path class="gs-a" d="M204 52a40 40 0 0 1 4 46" ${AR}/><path class="gs-a" d="M96 128a40 10 0 0 0 68 0" ${AR}/>`,
+    dobbase: `<g transform="rotate(-40 110 112)"><rect class="gs-t" x="80" y="96" width="150" height="34" rx="3"/></g><path class="gs-w" d="M74 166V108h14v42h48V108h14v58z"/><rect class="gs-w" x="60" y="164" width="104" height="8" rx="2"/><path class="gs-a" d="M196 34a60 60 0 0 1 22 62" ${AR}/><path class="gs-a" d="M66 178a48 6 0 0 0 92 0" ${AR}/>`,
+    gem: `<text x="214" y="30" class="gs-s">★</text><path class="gs-pa" d="M108 120L210 26"/>${TRI(108, 120)}<g transform="rotate(-42 120 104)"><rect class="gs-m" x="96" y="96" width="44" height="16" rx="3"/></g><path class="gs-l" d="M126 92L84 140"/><circle class="gs-m" cx="80" cy="146" r="11"/><g transform="rotate(-30 150 66)"><rect class="gs-t" x="80" y="54" width="150" height="26" rx="3"/></g><path class="gs-a" d="M176 76a26 26 0 1 1 26-38" ${AR}/>`,
+    fork: `${TRI(130, 120)}<path class="gs-w" d="M96 116h68l-6 8h-56z"/><path class="gs-m" d="M100 116V66h10v50M150 116V66h10v50"/><g transform="rotate(-28 130 70)"><rect class="gs-t" x="104" y="46" width="88" height="46" rx="6"/></g><path class="gs-l" d="M164 112q22 0 26 20"/><rect class="gs-m" x="182" y="130" width="18" height="30" rx="3"/><circle class="gs-g" cx="191" cy="139" r="3"/><path class="gs-g" d="M186 148h10M186 153h10"/>`,
+    tracker: `<text x="208" y="34" class="gs-s">★</text><path class="gs-pa" d="M122 106L206 30"/>${TRI(120, 108)}<g transform="rotate(-42 124 98)"><rect class="gs-m" x="104" y="88" width="40" height="22" rx="4"/></g><path class="gs-l" d="M140 82L150 72"/><rect class="gs-t" x="146" y="48" width="38" height="26" rx="4"/><rect class="gs-m" x="182" y="51" width="20" height="20" rx="3"/><path class="gs-a" d="M96 82a30 30 0 0 1 20-34" ${AR}/>`,
+  };
+  // real photos from Wikimedia Commons (each with its own author and licence on its Commons page); the drawing shows until the photo loads, and stays if it can't (offline)
+  const PH = {
+    binos: 'Binoculars (AM 67343-1).jpg',
+    refractor: 'EightInchTelescope.JPG',
+    newtonian: 'Newtonian Telescopes.jpg',
+    dobsonian: 'Red dobsonian.jpg',
+    mak: 'Maksutov 150mm.jpg',
+    dobbase: 'Dobson class.jpg',
+    gem: 'Homemade German equatorial mount.jpg',
+    tracker: 'Amateur Astrophotography Tracker.jpg',
+  };
+  let figN = 0;
+  const fig = (id, cap) => { const n = 'f' + (++figN), f = PH[id], ar = state.lang === 'ar';
+    const ph = f ? `<img src="https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(f)}?width=480" loading="lazy" alt="" onload="this.parentNode.classList.add('ok')" onerror="this.remove()"><a class="gcr" href="https://commons.wikimedia.org/wiki/File:${encodeURIComponent(f.replace(/ /g, '_'))}" target="_blank" rel="noopener">${ar ? 'الصورة: ويكيميديا كومنز' : 'Photo: Wikimedia Commons'}</a>` : '';
+    return `<figure class="gfig${f ? ' ph' : ''}">${ph}<svg viewBox="0 0 260 182" role="img" aria-label="${cap.replace(/<[^>]+>/g, '')}">${(DEFS + SVG[id]).replace(/@/g, n)}</svg><figcaption>${cap}</figcaption></figure>`; };
+  const figs = list => `<div class="gfigs">${list.map(([id, cap]) => fig(id, cap)).join('')}</div>`;
+
+  /* ---------------- Astronomy equipment ---------------- */
+  function equipHTML(ar) {
+    // smart telescopes
+    const sm = ar
+      ? [['ZWO Seestar S30 Pro', '30 مم، عدسات', 'أوسع مجال (نحو 4.6°)، خفيف (نحو 1.7 كغ)'], ['ZWO Seestar S50 Pro', '50 مم، عدسات', 'فتحة أكبر للأجرام الخافتة (2026)'], ['Dwarflab Dwarf Mini', '30 مم، عدسات', 'الأخف (نحو 0.8 كغ)'], ['Dwarflab Dwarf 3', '35 مم، عدسات', 'كاميرتان: تلسكوب وزاوية واسعة، وللطبيعة نهارًا أيضًا'], ['Vaonis Vespera 3 و Vespera Pro 2', '50 مم، عدسات', 'بطارية لليلة كاملة، وصور فسيفسائية كبيرة (2026)'], ['Unistellar Odyssey و Odyssey Pro', '85 مم، مرآة', 'في Pro عدسة عينية إلكترونية تنظر فيها، ومشاريع علمية للهواة'], ['Unistellar eQuinox 2 و eVscope 2', '114 مم، مرآة', 'في eVscope 2 عدسة عينية إلكترونية، ومشاريع علمية للهواة'], ['Celestron Origin Mark II', '152 مم، RASA', 'الأكبر؛ نحو 19 كغ، للمكان الثابت']]
+      : [['ZWO Seestar S30 Pro', '30 mm, lens', 'Widest view (about 4.6°), light (about 1.7 kg)'], ['ZWO Seestar S50 Pro', '50 mm, lens', 'More aperture for faint objects (2026)'], ['Dwarflab Dwarf Mini', '30 mm, lens', 'The lightest (about 0.8 kg)'], ['Dwarflab Dwarf 3', '35 mm, lens', 'Two cameras, telescope and wide-angle; also for wildlife by day'], ['Vaonis Vespera 3 and Vespera Pro 2', '50 mm, lens', 'All-night battery, big mosaic pictures (2026)'], ['Unistellar Odyssey and Odyssey Pro', '85 mm, mirror', 'The Pro has an electronic eyepiece to look into; citizen science'], ['Unistellar eQuinox 2 and eVscope 2', '114 mm, mirror', 'The eVscope 2 has an electronic eyepiece; citizen science'], ['Celestron Origin Mark II', '152 mm, RASA', 'The biggest; about 19 kg, for a fixed spot']];
+    let h = `<p class="dsec-in">${ar
+      ? 'ما الذي يُريك إياه كل نوع من المعدات، وكيف تختار، وكيف تستخدمه مع مجموعة. لا توجد هنا أسعار. الشركات تغيّر طرازاتها كثيرًا، وقائمة التلسكوبات الذكية محدَّثة حتى نوفمبر 2026. ولمعظمها صورة حقيقية، وإن تعذّر تحميلها (بلا إنترنت مثلًا) ظهر بدلها رسم يبيّن فيه الخط الأصفر المتقطع طريق الضوء.'
+      : 'What each kind of equipment shows you, how to choose, and how to use it with a group. There are no prices here. Makers change their models often; the smart telescope list was checked in November 2026. Most have a real photo; when a photo cannot load (for example offline), a drawing shows instead, where the dashed yellow line is the path of the light.'}</p>`;
+
+    h += box(ar, ar ? 'ابدأ بعينيك' : 'Start with your eyes', ar
+      ? `<ul class="facts"><li>تحتاج عيناك 20 إلى 30 دقيقة في الظلام لتصبحا أشد حساسية بكثير، ولحظة ضوء أبيض واحدة تعيدك إلى البداية.</li><li><b>النظر الجانبي:</b> انظر بجانب الجرم الخافت قليلًا لا إليه مباشرة، فيظهر أوضح، لأن أطراف العين أحسّ بالضوء الخافت من مركزها.</li><li>استخدم الضوء الأحمر الخافت فقط، وشاشة «أحمر ليلي» في هذا الموقع.</li><li>بالعين المجردة: الكوكبات، والكواكب، والقمر، ودرب التبانة، والشهب، والمحطة الفضائية، والثريا، ومجرة المرأة المسلسلة من مكان مظلم.</li></ul>`
+      : `<ul class="facts"><li>Your eyes need 20 to 30 minutes in the dark to become far more sensitive, and one flash of white light sends you back to the start.</li><li><b>Averted vision:</b> look slightly to the side of a faint object, not straight at it, and it shows more clearly: the edge of your eye is more sensitive to faint light than the centre.</li><li>Use only dim red light, and this site's Night red screen.</li><li>With the naked eye: the constellations, planets, the Moon, the Milky Way, meteors, the Space Station, the Pleiades, and the Andromeda Galaxy from a dark site.</li></ul>`);
+
+    h += box(ar, ar ? 'المنظار الثنائي (الدربيل)' : 'Binoculars', figs([['binos', ar ? 'منظار ثنائي 10×50' : '10×50 binoculars']]) + (ar
+      ? `<p>أفضل أداة أولى لكثير من الناس: رخيص نسبيًّا، سريع، وتنظر فيه بالعينين معًا والصورة في الاتجاه الصحيح.</p><ul class="facts"><li><b>ماذا يعني «10×50»؟</b> الرقم الأول التكبير (10 مرات)، والثاني قطر كل عدسة أمامية بالمليمتر (50). العدسة الأكبر تجمع ضوءًا أكثر.</li><li>‏7×50 أو 8×42 أسهل على اليد وأوسع مجالًا، و10×50 شائع جدًّا. ما فوق 10× يحتاج غالبًا إلى حامل ثلاثي.</li><li>المناظير الكبيرة (مثل 15×70 و25×100) تحتاج حاملًا دائمًا، وتعطي مناظر رائعة لعناقيد النجوم ودرب التبانة.</li><li><b>ما يُظهره:</b> فوهات القمر، وأقمار المشتري الأربعة الكبيرة، والثريا، وسديم الجبار، ومجرة المرأة المسلسلة، وغيوم درب التبانة.</li><li><b>مع المجموعات:</b> ممتاز للأطفال. ثبّته على حامل ووجّهه إلى القمر ليتناوب الناس عليه.</li></ul>`
+      : `<p>The best first instrument for many people: fairly cheap, quick, you look with both eyes, and the view is the right way up.</p><ul class="facts"><li><b>What does "10×50" mean?</b> The first number is the magnification (10 times); the second is the width of each front lens in millimetres (50). Bigger lenses gather more light.</li><li>7×50 or 8×42 are steadier in the hand with a wider view; 10×50 is very popular. Above 10× you usually need a tripod.</li><li>Big binoculars (such as 15×70 and 25×100) need a mount, and give wonderful views of star clusters and the Milky Way.</li><li><b>What they show:</b> craters on the Moon, Jupiter's four big moons, the Pleiades, the Orion Nebula, the Andromeda Galaxy, and the star clouds of the Milky Way.</li><li><b>With groups:</b> great for children. Put them on a tripod, aim at the Moon, and let people take turns.</li></ul>`));
+
+    h += box(ar, ar ? 'لماذا الفتحة أهم من التكبير؟' : 'Why aperture matters more than magnification', ar
+      ? `<p><b>الفتحة</b> هي قطر العدسة أو المرآة الرئيسية في التلسكوب، وهي أهم رقم فيه. الفتحة الأكبر تجمع ضوءًا أكثر فتُظهر أجرامًا أخفت، وتُظهر تفاصيل أدق.</p><ul class="facts"><li>الضوء يزيد مع مساحة الفتحة: تلسكوب 200 مم يجمع ضوءًا أكثر من 100 مم بأربع مرات، وأكثر من عين الإنسان (نحو 7 مم في الظلام) بأكثر من 800 مرة.</li><li><b>التكبير</b> يتغير بتغيير العدسة العينية، فلا تصدّق علبة تلسكوب تفتخر بـ«تكبير 600 مرة».</li><li>حين تقول بطاقات الأجرام في هذا الموقع «تلسكوب صغير (70 إلى 80 مم)» فالمقصود قطر الفتحة.</li><li><b>البعد البؤري</b> هو المسافة التي يجمع فيها التلسكوب الضوء في صورة. و<b>النسبة البؤرية</b> (مثل f/5) هي البعد البؤري مقسومًا على الفتحة: الرقم الصغير يعني مجالًا أوسع وتصويرًا أسرع، والكبير يعني تكبيرًا أعلى ومجالًا أضيق.</li></ul>`
+      : `<p><b>Aperture</b> is the width of a telescope's main lens or mirror, and it is the most important number. A bigger aperture gathers more light, so it shows fainter objects, and it shows finer detail.</p><ul class="facts"><li>Light grows with the area: a 200 mm telescope gathers four times the light of a 100 mm one, and over 800 times as much as your eye (about 7 mm in the dark).</li><li><b>Magnification</b> changes whenever you change the eyepiece, so don't trust a telescope box that boasts "600× power".</li><li>When the deep-sky cards on this site say "Small telescope (70–80 mm)", that is the aperture.</li><li><b>Focal length</b> is how far the telescope takes to bring light to a focus. The <b>focal ratio</b> (such as f/5) is the focal length divided by the aperture: a small number means a wider view and faster photography; a large one means higher power and a narrower view.</li></ul>`);
+
+    h += box(ar, ar ? 'التلسكوبات الكاسرة (بالعدسات)' : 'Refractors (lens telescopes)', figs([['refractor', ar ? 'تلسكوب كاسر على حامل ثلاثي' : 'A refractor on a tripod']]) + (ar
+      ? `<p>الشكل الكلاسيكي: عدسة كبيرة في مقدمة أنبوب مغلق، والعين في الخلف. أول تلسكوبات غاليليو كانت من هذا النوع.</p><ul class="facts"><li><b>الأكروماتي:</b> عدستان، رخيص، لكنه يُظهر هالة بنفسجية حول الأجرام الساطعة مثل القمر والزهرة.</li><li><b>الأبوكروماتي (ED أو APO):</b> بزجاج خاص، بلا هالة ألوان تقريبًا، صور حادة جدًّا. ممتاز للتصوير، وغالي الثمن مقارنة بحجمه.</li><li><b>مميزاته:</b> لا يحتاج إلى ضبط، وجاهز فورًا تقريبًا، وأنبوبه مغلق فلا يدخله الغبار، ويتحمل التنقل.</li><li><b>عيوبه:</b> الفتحة الكبيرة غالية وثقيلة، وأغلبها بين 60 و150 مم.</li><li><b>الأفضل لـ:</b> القمر والكواكب والنجوم المزدوجة والمناظر الواسعة والسفر، والتصوير بالأنواع الأبوكروماتية.</li></ul>`
+      : `<p>The classic shape: a big lens at the front of a closed tube, your eye at the back. Galileo's first telescopes were this kind.</p><ul class="facts"><li><b>Achromat:</b> two lenses, cheap, but shows a purple fringe around bright objects such as the Moon and Venus.</li><li><b>Apochromat (ED or APO):</b> special glass, almost no colour fringe, very sharp views. Excellent for photography, and expensive for its size.</li><li><b>Good:</b> needs no adjusting, ready almost at once, the closed tube keeps dust out, and it travels well.</li><li><b>Keep in mind:</b> big apertures are costly and heavy; most are 60 to 150 mm.</li><li><b>Best for:</b> the Moon, planets, double stars, wide views, travel, and (apochromats) photography.</li></ul>`));
+
+    h += box(ar, ar ? 'التلسكوبات العاكسة (بالمرايا)' : 'Reflectors (mirror telescopes)', figs(ar ? [['newtonian', 'نيوتوني على حامل استوائي'], ['dobsonian', 'دوبسوني']] : [['newtonian', 'Newtonian on an equatorial mount'], ['dobsonian', 'Dobsonian']]) + (ar
+      ? `<p>مرآة مقعرة في أسفل الأنبوب تجمع الضوء وتعكسه. اخترعه نيوتن. المرايا أرخص من العدسات، فهذا النوع يعطيك أكبر فتحة مقابل المال.</p><ul class="facts"><li><b>النيوتوني:</b> تنظر من جانب الأنبوب قرب مقدمته. يوضع على حامل استوائي أو سمتي.</li><li><b>الدوبسوني:</b> تلسكوب نيوتوني على قاعدة خشبية بسيطة تدفعه يمينًا ويسارًا وأعلى وأسفل. أفضل «دلو ضوء» لليالي الرصد العامة: سهل، ثابت، وفتحات كبيرة (150 إلى 400 مم وأكثر). منه أنواع محوسبة تجد الأجرام بنفسها.</li><li><b>يحتاج إلى:</b> ضبط محاذاة المرايا من حين لآخر (المسامتة)، ونحو 30 دقيقة ليبرد ويستقر مع حرارة الهواء قبل أفضل منظر.</li><li><b>مع المجموعات:</b> العدسة العينية في التلسكوبات الكبيرة قد تكون عالية، فاحمل سلّمًا صغيرًا ثابتًا للأطفال.</li><li><b>الأفضل لـ:</b> الأجرام الخافتة (المجرات والسدم والعناقيد)، والكواكب أيضًا.</li></ul>`
+      : `<p>A curved mirror at the bottom of the tube collects the light and bounces it back. Newton invented it. Mirrors are cheaper than lenses, so this kind gives you the most aperture for your money.</p><ul class="facts"><li><b>Newtonian:</b> you look in at the side of the tube, near the front. It sits on an equatorial or an up-down mount.</li><li><b>Dobsonian:</b> a Newtonian on a simple wooden base that you push left, right, up and down. The best "light bucket" for public star nights: easy, steady, and big apertures (150 to 400 mm and more). Some have a computer that finds objects for you.</li><li><b>Needs:</b> the mirrors lined up now and then ("collimation"), and about 30 minutes to cool to the air temperature before the best views.</li><li><b>With groups:</b> on big ones the eyepiece can be high up, so bring a small, steady step for children.</li><li><b>Best for:</b> faint objects (galaxies, nebulae, clusters), and planets too.</li></ul>`));
+
+    h += box(ar, ar ? 'التلسكوبات المركّبة (مرايا وعدسات)' : 'Catadioptric telescopes (mirrors and lenses)', figs(ar ? [['sct', 'شميت-كاسغرين على حامل شوكي'], ['mak', 'ماكسوتوف-كاسغرين']] : [['sct', 'Schmidt-Cassegrain on a fork mount'], ['mak', 'Maksutov-Cassegrain']]) + (ar
+      ? `<p>تجمع بين مرآة ولوح أو عدسة تصحيح في المقدمة، ويرتد الضوء داخلها مرتين، فيكون الأنبوب قصيرًا والبعد البؤري طويلًا.</p><ul class="facts"><li><b>شميت-كاسغرين:</b> فتحات 125 إلى 360 مم في أنبوب قصير، وغالبًا على حامل محوسب. متعدد الاستخدامات، ومحبوب في المراصد والأندية.</li><li><b>ماكسوتوف-كاسغرين:</b> صغير وصلب، يكاد لا يحتاج إلى ضبط، وحاد جدًّا للقمر والكواكب والنجوم المزدوجة.</li><li><b>مميزاتها:</b> سهلة الحمل لحجم فتحتها، وتكبير عالٍ بسهولة.</li><li><b>عيوبها:</b> مجال رؤية ضيق، فلا تناسب الأجرام الكبيرة جدًّا، وتحتاج وقتًا لتبرد، ويتجمع الندى على لوحها الأمامي (استخدم واقي الندى).</li></ul>`
+      : `<p>These combine a mirror with a correcting plate or lens at the front. The light bounces twice inside, so the tube is short but the focal length is long.</p><ul class="facts"><li><b>Schmidt-Cassegrain (SCT):</b> 125 to 360 mm in a short tube, often on a computer mount. Very versatile, and a favourite of observatories and clubs.</li><li><b>Maksutov-Cassegrain (Mak):</b> small and sturdy, hardly ever needs adjusting, and very sharp on the Moon, planets and double stars.</li><li><b>Good:</b> easy to carry for their aperture, and high power comes easily.</li><li><b>Keep in mind:</b> a narrow view, so very big objects don't fit; they need time to cool; and dew forms on the front plate (use a dew shield).</li></ul>`));
+
+
+    h += box(ar, ar ? 'التلسكوبات الذكية' : 'Smart telescopes', (ar
+      ? `<p>تلسكوب صغير وكاميرا وحامل آلي وحاسوب في جهاز واحد، تتحكم فيه بتطبيق على الهاتف. تختار الجرم فيجده التلسكوب وحده، ثم يلتقط صورًا قصيرة كثيرة ويدمجها معًا، فتظهر الصورة على الهاتف وتزداد وضوحًا وألوانًا دقيقة بعد دقيقة.</p>
+<div class="gcols g2"><div><h4>مميزاتها للمرشد</h4><ul class="facts"><li>تُعدّ في دقائق، بلا ضبط أو محاذاة.</li><li>تُظهر ألوان السدم والمجرات، وهو ما لا تراه العين أبدًا في تلسكوب.</li><li>تعمل في المدن رغم التلوث الضوئي.</li><li>يمكن أن يتابع الصورة كثيرون معًا على هواتفهم أو على شاشة كبيرة، وهذا ممتاز لمن لا يستطيع الوصول إلى العدسة العينية، ومنهم ذوو الإعاقة والأطفال الصغار.</li></ul></div>
+<div><h4>انتبه إلى</h4><ul class="facts"><li>أغلبها بلا عدسة عينية: الناس ينظرون إلى شاشة، وتفوتهم دهشة رؤية الضوء الحقيقي بأعينهم.</li><li>الفتحات صغيرة، فالكواكب تظهر صغيرة.</li><li>الصورة تحتاج دقائق لتتكوّن، فاملأ هذا الوقت بقصة.</li><li>لا تنظر فيها إلى الشمس إلا بمرشحها الشمسي المخصص.</li></ul></div></div>
+<p><b>أشهر الطرازات (نوفمبر 2026):</b></p>`
+      : `<p>A small telescope, a camera, a motorised mount and a computer in one box, controlled from a phone app. You pick an object and the telescope finds it by itself, then takes many short pictures and stacks them, so the picture on your phone grows clearer and more colourful minute by minute.</p>
+<div class="gcols g2"><div><h4>Good for guides</h4><ul class="facts"><li>Set up in minutes, with no adjusting or alignment.</li><li>They show the colours of nebulae and galaxies, which eyes never see through a telescope.</li><li>They work in cities despite light pollution.</li><li>Many people can follow the picture at once on their phones or a big screen: great for anyone who can't reach an eyepiece, including wheelchair users and small children.</li></ul></div>
+<div><h4>Keep in mind</h4><ul class="facts"><li>Most have no eyepiece: people look at a screen and miss the thrill of real light reaching their own eyes.</li><li>Small apertures, so planets look small.</li><li>A picture takes minutes to build: fill that time with a story.</li><li>Never point one at the Sun without its own solar filter.</li></ul></div></div>
+<p><b>The best-known models (November 2026):</b></p>`)
+      + tab(ar ? ['الطراز', 'الفتحة', 'ما يميّزه'] : ['Model', 'Aperture', 'What stands out'], sm.map(r => [`<bdi dir="ltr">${r[0]}</bdi>`, r[1], r[2]]))
+      + (ar
+      ? `<p class="sh-note">الطرازات الأقدم (Seestar S30 وS50، وVespera II، وeVscope الأول) ما زالت شائعة ومستعملة كثيرًا. وأُعلن عن طرازات أكبر قادمة، مثل Dwarflab Draco بفتحة 90 مم وVaonis Atlas في 2027.</p>`
+      : `<p class="sh-note">Older models (Seestar S30 and S50, Vespera II, the first eVscope) are still common and widely used. Bigger ones have been announced, such as the 90 mm Dwarflab Draco and the Vaonis Atlas due in 2027.</p>`));
+
+    // type comparison table
+    h += box(ar, ar ? 'أي تلسكوب لأي شيء؟' : 'Which telescope for what?', tab(ar ? ['النوع', 'الأفضل لـ', 'انتبه إلى'] : ['Type', 'Best for', 'Keep in mind'], ar
+      ? [['المنظار الثنائي', 'البداية، والمناظر الواسعة، والأطفال', 'تكبير محدود؛ حامل للكبير'], ['الكاسر الأكروماتي', 'القمر والكواكب، والبداية', 'هالة ألوان حول الساطع'], ['الكاسر الأبوكروماتي', 'المناظر الحادة، والتصوير، والسفر', 'غالٍ لحجمه'], ['الدوبسوني', 'الأجرام الخافتة، وليالي الرصد العامة', 'كبير؛ يحتاج وقتًا ليبرد'], ['النيوتوني على حامل استوائي', 'الرصد والتصوير', 'ضبط المرايا؛ حامل ثقيل'], ['شميت-كاسغرين', 'كل شيء تقريبًا، والمراصد', 'مجال ضيق؛ الندى'], ['ماكسوتوف', 'القمر والكواكب، والسفر', 'مجال ضيق'], ['الذكي', 'المجموعات والمدن والتصوير السهل', 'تنظر في شاشة لا في عدسة']]
+      : [['Binoculars', 'First steps, wide views, children', 'Limited power; big ones need a mount'], ['Achromatic refractor', 'Moon and planets, beginners', 'Colour fringe on bright objects'], ['Apochromatic refractor', 'Sharp views, photography, travel', 'Costly for its size'], ['Dobsonian', 'Faint objects, public star nights', 'Bulky; needs to cool'], ['Newtonian on an equatorial mount', 'Observing and photography', 'Collimation; heavy mount'], ['Schmidt-Cassegrain', 'Almost everything, observatories', 'Narrow view; dew'], ['Maksutov', 'Moon, planets, travel', 'Narrow view'], ['Smart telescope', 'Groups, cities, easy pictures', 'You look at a screen, not an eyepiece']]));
+
+    h += box(ar, ar ? 'الحوامل' : 'Mounts', figs(ar ? [['altaz', 'سمتي ارتفاعي: أعلى وأسفل، ويمين ويسار'], ['dobbase', 'قاعدة دوبسونية'], ['gem', 'استوائي ألماني: محوره نحو القطب'], ['fork', 'شوكي محوسب (GoTo) بيد التحكم'], ['tracker', 'متتبّع النجوم للكاميرا']] : [['altaz', 'Alt-azimuth: up-down and left-right'], ['dobbase', 'Dobsonian base'], ['gem', 'German equatorial: one axis at the pole'], ['fork', 'Computer (GoTo) fork with hand controller'], ['tracker', 'Star tracker for a camera']]) + (ar
+      ? `<p>الحامل نصف التلسكوب: أفضل عدسة لا تنفع إن كانت الصورة تهتز. إن ارتجت الصورة حين تلمس التركيز فالحامل ضعيف.</p><ul class="facts"><li><b>السمتي الارتفاعي:</b> يتحرك يمينًا ويسارًا وأعلى وأسفل. بسيط وسريع، ومنه قاعدة الدوبسوني.</li><li><b>الاستوائي (الألماني):</b> يُوجَّه أحد محاوره نحو القطب السماوي، فيتبع حركة النجوم بتدوير محور واحد. ضروري للتصوير الطويل، ويحتاج إلى ضبط قبل الاستخدام.</li><li><b>المحوسب (GoTo):</b> غالبًا شوكي أو بذراع واحدة. تختار الجرم من قائمة فيتجه إليه الحامل ويتابعه. يوفر وقتًا كبيرًا في الجولات.</li><li><b>متتبّع النجوم:</b> حامل استوائي صغير لكاميرا وعدسة، لصور درب التبانة الطويلة. خفيف للسفر.</li></ul>`
+      : `<p>The mount is half the telescope: the best optics are useless if the view shakes. If the picture wobbles when you touch the focuser, the mount is too weak.</p><ul class="facts"><li><b>Alt-azimuth:</b> moves left-right and up-down. Simple and quick; a Dobsonian base is one.</li><li><b>German equatorial:</b> one axis points at the celestial pole, so it follows the stars by turning one axis. Needed for long-exposure photography, and it must be set up first.</li><li><b>GoTo (computer):</b> often a fork or a single arm. Pick an object from a list and the mount goes there and follows it. A big time-saver on tours.</li><li><b>Star tracker:</b> a small equatorial mount for a camera and lens, for long Milky Way shots. Light for travel.</li></ul>`));
+
+    h += box(ar, ar ? 'العدسات العينية والتكبير' : 'Eyepieces and magnification', (ar
+      ? `<p>التكبير = البعد البؤري للتلسكوب ÷ البعد البؤري للعدسة العينية. الأرقام على العدسة العينية بالمليمتر: الرقم الأصغر يعطي تكبيرًا أكبر.</p>`
+      : `<p>Magnification = the telescope's focal length ÷ the eyepiece's focal length. The number on an eyepiece is in millimetres: a smaller number gives more power.</p>`)
+      + `<div class="gcalc" id="gmag"><label><span>${ar ? 'البعد البؤري للتلسكوب (مم)' : 'Telescope focal length (mm)'}</span><input type="number" data-g="F" min="50" max="20000" step="any" value="1200" inputmode="decimal" dir="ltr"></label><label><span>${ar ? 'البعد البؤري للعدسة العينية (مم)' : 'Eyepiece focal length (mm)'}</span><input type="number" data-g="f" min="1" max="100" step="any" value="25" inputmode="decimal" dir="ltr"></label><label><span>${ar ? 'فتحة التلسكوب (مم)' : 'Telescope aperture (mm)'}</span><input type="number" data-g="D" min="20" max="2000" step="any" value="200" inputmode="decimal" dir="ltr"></label><div class="gout" aria-live="polite"></div></div>`
+      + (ar
+      ? `<ul class="facts"><li><b>ابدأ دائمًا بأقل تكبير:</b> يسهل العثور على الجرم، ثم كبّر إن احتجت.</li><li><b>الحد المفيد</b> نحو ضعف الفتحة بالمليمتر (تلسكوب 100 مم ≈ 200×)، وغالبًا أقل بسبب اضطراب الهواء.</li><li><b>عدسة بارلو</b> تضاعف تكبير كل عدسة عينية (عادة 2×).</li><li>العدسات العينية ذات المجال الواسع تُظهر مساحة أكبر من السماء بالتكبير نفسه، ومريحة للزوار.</li><li>العدسة العينية التي تبعد العين عنها مسافة أطول أريح لمن يلبسون النظارات.</li></ul>`
+      : `<ul class="facts"><li><b>Always start with the lowest power:</b> it is easier to find the object, then zoom in if you need to.</li><li><b>The useful limit</b> is about twice the aperture in millimetres (a 100 mm telescope ≈ 200×), and often less because of the moving air.</li><li><b>A Barlow lens</b> multiplies every eyepiece's power (usually 2×).</li><li>Wide-field eyepieces show more sky at the same power and are comfortable for visitors.</li><li>Eyepieces with long "eye relief" are easier for people who wear glasses.</li></ul>`));
+
+    h += box(ar, ar ? 'إضافات مفيدة' : 'Useful extras', ar
+      ? `<ul class="facts"><li><b>الباحث بالنقطة الحمراء:</b> يرسم نقطة على السماء لتصويب التلسكوب. اضبطه نهارًا على شيء بعيد.</li><li><b>مصباح أحمر:</b> خافت، ويفضل أن تُضبط شدته.</li><li><b>خرائط السماء والتطبيقات:</b> Stellarium (ومنه الروابط في هذا الموقع)، وخريطة نجوم مطبوعة بالضوء الأحمر.</li><li><b>المرشحات:</b> مرشح القمر يخفف سطوعه، ومرشحات السدم (UHC وOIII) تُظهر بعض السدم أوضح. «مرشحات التلوث الضوئي» لا تُعيد سماء مظلمة.</li><li><b>الندى:</b> واقي الندى، أو شريط تدفئة صغير، أو مجفف شعر يعمل بالبطارية.</li><li><b>الطاقة:</b> بطاريات احتياطية، فالبرد يُفرغها أسرع.</li><li><b>مؤشرات الليزر:</b> قوية جدًّا، وقوانينها تختلف من بلد إلى آخر وبعض الدول تمنعها. تأكّد من القانون المحلي، ولا توجّهها أبدًا نحو طائرات أو أشخاص أو سيارات، وأبعدها عن الأطفال.</li></ul>`
+      : `<ul class="facts"><li><b>Red-dot finder:</b> puts a dot on the sky to aim the telescope. Line it up in daylight on something far away.</li><li><b>Red torch:</b> dim, ideally adjustable.</li><li><b>Charts and apps:</b> Stellarium (including the links on this site), and a printed star chart read by red light.</li><li><b>Filters:</b> a Moon filter tones down its glare; nebula filters (UHC and OIII) make some nebulae stand out. "Light pollution filters" don't bring back a dark sky.</li><li><b>Dew:</b> a dew shield, a small heater strip, or a battery hair dryer.</li><li><b>Power:</b> spare batteries; cold drains them faster.</li><li><b>Laser pointers:</b> very powerful, and the rules differ by country; some ban them. Check the local law, never point one near aircraft, people or vehicles, and keep it away from children.</li></ul>`);
+
+    h += box(ar, ar ? 'الكاميرات وتصوير السماء' : 'Cameras and astrophotography', ar
+      ? `<ul class="facts"><li><b>الهاتف:</b> ضعه على العدسة العينية بحامل خاص للقمر والكواكب، أو على حامل ثلاثي بالوضع الليلي لصور السماء الواسعة. يمكن للزوار أن يأخذوا صورة القمر معهم إلى البيت.</li>
+<li><b>الكاميرا العادية (DSLR أو بدون مرآة) على حامل ثلاثي:</b> عدسة واسعة الزاوية بفتحة كبيرة (f/2.8 أو أقل)، وحساسية ISO بين 1600 و6400، وتعريض بين 10 و25 ثانية. أطول من ذلك تصير النجوم خطوطًا. لدرب التبانة وخطوط النجوم والشفق والمناظر الليلية.</li>
+<li><b>الكاميرا مع متتبّع النجوم:</b> تعريضات أطول بكثير وعدسات مقرّبة، فتظهر السدم والمجرات الكبيرة.</li>
+<li><b>كاميرات الكواكب:</b> مستشعر صغير سريع يصور فيديو بآلاف الإطارات، ثم يختار البرنامج أوضحها في لحظات ثبات الهواء ويدمجها. هكذا تُلتقط صور الهواة الحادة للمشتري وزحل والقمر.</li>
+<li><b>كاميرات الفضاء العميق المبرّدة:</b> يبرّد المستشعر إلى ما تحت حرارة الهواء بكثير، فيقل التشويش في التعريضات الطويلة.<br>- <b>الملونة:</b> تلتقط الألوان دفعة واحدة، أسهل للبداية.<br>- <b>أحادية اللون:</b> مع مرشحات (أحمر وأخضر وأزرق، أو مرشحات النطاق الضيق: هيدروجين ألفا والأكسجين III والكبريت II، ومنها «ألوان هابل»). أكثر حساسية وتعمل في المدن، لكنها أبطأ وأعقد.</li>
+<li><b>كاميرا التوجيه:</b> كاميرا صغيرة على تلسكوب صغير تراقب نجمًا وتصحح الحامل لتبقى الصورة الطويلة حادة.</li>
+<li><b>كاميرات السماء الكاملة والشهب:</b> عدسة عين السمكة ترى السماء كلها طوال الليل، وتلتقط الشهب والكرات النارية. بعضها جزء من شبكات علمية عالمية.</li>
+<li><b>المعالجة:</b> صورة السماء الجيدة تُبنى من صور كثيرة تُدمج في برامج مثل Siril أو DeepSkyStacker (مجانيان)، ثم تُعالج.</li></ul>
+<p><b>العرض الحي على الشاشة:</b> ضع كاميرا مكان العدسة العينية واعرض الصورة وهي تتراكم على حاسوب أو شاشة كبيرة. يرى الجميع الجرم بالألوان في وقت واحد، وهو حل ممتاز للمجموعات الكبيرة وللمدن.</p>`
+      : `<ul class="facts"><li><b>Phone:</b> hold it to the eyepiece with an adapter for the Moon and planets, or put it on a tripod in night mode for wide sky shots. Visitors can take their own Moon picture home.</li>
+<li><b>Ordinary camera (DSLR or mirrorless) on a tripod:</b> a wide-angle lens with a wide aperture (f/2.8 or lower), ISO 1600 to 6400, and 10 to 25 seconds. Any longer and the stars turn into lines. For the Milky Way, star trails, auroras and night landscapes.</li>
+<li><b>Camera on a star tracker:</b> much longer exposures and telephoto lenses, so the big nebulae and galaxies appear.</li>
+<li><b>Planetary cameras:</b> a small, fast sensor shoots video with thousands of frames; software keeps the sharpest ones, from moments when the air was steady, and stacks them. That is how amateurs get sharp pictures of Jupiter, Saturn and the Moon.</li>
+<li><b>Cooled deep-sky cameras:</b> the sensor is cooled well below the air temperature, so long exposures are much less noisy.<br>- <b>Colour:</b> captures colour in one go; easier to start with.<br>- <b>Mono:</b> used with filters (red, green and blue, or narrowband filters: hydrogen-alpha, oxygen III and sulphur II, which make the "Hubble palette"). More sensitive and works in cities, but slower and more complex.</li>
+<li><b>Guide camera:</b> a small camera on a small scope watches one star and corrects the mount, so long exposures stay sharp.</li>
+<li><b>All-sky and meteor cameras:</b> a fisheye lens watches the whole sky all night and catches meteors and fireballs. Some are part of worldwide science networks.</li>
+<li><b>Processing:</b> a good sky picture is built from many frames, stacked in programs such as Siril or DeepSkyStacker (both free), then processed.</li></ul>
+<p><b>Live view on a screen:</b> put a camera where the eyepiece goes and show the picture building up on a laptop or big screen. Everyone sees the object in colour at the same time: a great answer for big groups and city skies.</p>`);
+
+    h += box(ar, ar ? 'النظر إلى الشمس بأمان' : 'Looking at the Sun safely', ar
+      ? `<p class="gwarn"><b>لا تنظر أبدًا إلى الشمس من خلال تلسكوب أو منظار أو عدسة كاميرا بلا مرشح شمسي صحيح.</b> العمى قد يحدث فورًا وبلا ألم. ولا تترك تلسكوبًا موجّهًا إلى الشمس دون رقابة مع مجموعة.</p><ul class="facts"><li><b>مرشح الضوء الأبيض:</b> رقاقة أو زجاج شمسي معتمد يغطي <b>مقدمة</b> التلسكوب كلها، مثبّت بإحكام فلا تسقطه الريح أو يد طفل. يُظهر البقع الشمسية. ولا تستخدم أبدًا المرشحات القديمة التي تُركّب على العدسة العينية، فقد تنكسر من الحرارة.</li><li>غطِّ المنظار الصغير المساعد أو انزعه، فهو أيضًا يركّز ضوء الشمس.</li><li><b>نظارات الكسوف:</b> للعين المجردة فقط، ويجب أن تكون معتمدة بمعيار ISO 12312-2. لا تنظر بها أبدًا من خلال تلسكوب أو منظار.</li><li><b>طريقة الإسقاط:</b> صندوق ثقب الإبرة أو جهاز «Sunspotter» يُظهر صورة الشمس على ورقة فيراها الجميع معًا بأمان.</li></ul>`
+      : `<p class="gwarn"><b>Never look at the Sun through a telescope, binoculars or camera lens without a proper solar filter.</b> Blindness can happen instantly and without pain. Never leave a telescope pointed at the Sun unattended with a group.</p><ul class="facts"><li><b>White-light filter:</b> certified solar film or glass that covers the whole <b>front</b> of the telescope, fixed firmly so wind or a curious hand can't knock it off. It shows sunspots. Never use old screw-in filters that go on the eyepiece: they can crack from the heat.</li><li>Cover or remove the small finder scope: it focuses sunlight too.</li><li><b>Eclipse glasses:</b> for the naked eye only, and they must meet ISO 12312-2. Never use them to look through a telescope or binoculars.</li><li><b>Projection:</b> a pinhole box or a "Sunspotter" puts the Sun's picture on paper, so everyone can see it together, safely.</li></ul>`);
+
+    h += box(ar, ar ? 'تشغيل ليلة رصد عامة بالمعدات' : 'Running a public night with equipment', ar
+      ? `<ul class="gcheck"><li>جهّز قبل الظلام، واترك التلسكوبات تبرد.</li><li>اضبط الباحث نهارًا على شيء بعيد.</li><li>جرم واحد لكل تلسكوب، وورقة صغيرة بجانبه باسمه.</li><li>ابدأ بالقمر أو كوكب ساطع: أسهل منظر وأكبر دهشة.</li><li>علّم الزوار: «انظر ولا تلمس التلسكوب، ويمكنك ضبط التركيز فقط».</li><li>اسأل بعد أن ينظروا: «ماذا ترى؟» لتعرف أنهم رأوه حقًّا.</li><li>سلّم ثابت للأطفال، ومنظار أو شاشة لمن لا يصل إلى العدسة.</li><li>أعِد التوجيه كل بضع دقائق إن لم يكن الحامل يتابع النجوم.</li><li>مصابيح حمراء فقط، وبطاريات احتياطية، ومناديل للعدسات.</li><li>غطِّ كل شيء في النهاية قبل أن ينزل الندى.</li></ul>`
+      : `<ul class="gcheck"><li>Set up before dark, and let the telescopes cool.</li><li>Line up the finders in daylight on something far away.</li><li>One object per telescope, with a small card beside it naming it.</li><li>Start with the Moon or a bright planet: the easiest view and the biggest wow.</li><li>Tell visitors: "Look, but don't touch the telescope; you can adjust the focus."</li><li>Ask after they look: "What do you see?" so you know they really saw it.</li><li>A steady step for children, and binoculars or a screen for anyone who can't reach the eyepiece.</li><li>Re-aim every few minutes if the mount doesn't follow the stars.</li><li>Red lights only, spare batteries, and lens tissues.</li><li>Cover everything at the end, before the dew comes.</li></ul>`);
+
+    h += box(ar, ar ? 'ماذا أشتري أولًا؟' : 'What should I get first?', ar
+      ? `<ul class="facts"><li><b>للمبتدئ:</b> منظار 7×50 أو 10×50، وتطبيق خرائط سماء، ومصباح أحمر. تعلّم السماء أولًا.</li><li><b>أول تلسكوب للرصد:</b> دوبسوني بين 150 و200 مم: أكثر ما تحصل عليه مقابل المال، وسهل الاستخدام.</li><li><b>للسفر:</b> كاسر صغير أو ماكسوتوف على حامل خفيف، أو تلسكوب ذكي صغير.</li><li><b>للمرشد مع مجموعات:</b> دوبسوني كبير للمناظر الحية، وتلسكوب ذكي أو كاميرا على شاشة للألوان والمجموعات الكبيرة، ومنظار على حامل للأطفال، ومرشح شمسي معتمد لجولات النهار.</li><li><b>للتصوير:</b> ابدأ بكاميرا وعدسة واسعة على متتبّع نجوم قبل التلسكوبات الكبيرة. التصوير الفلكي هواية طويلة الطريق.</li><li>اشترِ من متجر فلكي متخصص أو نادٍ فلكي لا من متجر ألعاب، وتجنّب التلسكوبات التي تُباع بالتكبير.</li></ul>`
+      : `<ul class="facts"><li><b>Just starting:</b> 7×50 or 10×50 binoculars, a sky chart app and a red torch. Learn the sky first.</li><li><b>First telescope for looking:</b> a 150 to 200 mm Dobsonian: the most you get for your money, and easy to use.</li><li><b>For travel:</b> a small refractor or Maksutov on a light mount, or a small smart telescope.</li><li><b>For a guide with groups:</b> a big Dobsonian for live views, a smart telescope or a camera on a screen for colour and big groups, binoculars on a tripod for children, and a certified solar filter for daytime tours.</li><li><b>For photography:</b> start with a camera and wide lens on a star tracker before big telescopes. Astrophotography is a long road.</li><li>Buy from an astronomy shop or club, not a toy shop, and avoid telescopes sold on their magnification.</li></ul>`);
+    return h;
+  }
+
+  function scaleCalc(root, ar) {
+    const w = root.querySelector('#gscale'); if (!w) return;
+    const sel = w.querySelector('[data-g=obj]'), cm = w.querySelector('[data-g=cm]'), cust = w.querySelector('.gcust'), out = w.querySelector('.gout');
+    const SUN = 1391400; // km
+    const len = km => { // pretty length from km
+      const m = km * 1000;
+      if (m < 0.01) return ar ? `${nf(m * 1000, m * 1000 < 1 ? 2 : 1)} مم` : `${nf(m * 1000, m * 1000 < 1 ? 2 : 1)} mm`;
+      if (m < 1) return ar ? `${nf(m * 100, 1)} سم` : `${nf(m * 100, 1)} cm`;
+      if (m < 1000) return ar ? `${nf(m, m < 10 ? 1 : 0)} م` : `${nf(m, m < 10 ? 1 : 0)} m`;
+      return ar ? `${nf(km, km < 10 ? 1 : 0)} كم` : `${nf(km, km < 10 ? 1 : 0)} km`;
+    };
+    const B = [['earth', 'Earth', 'الأرض', 12742, 149.6e6], ['moon', 'The Moon', 'القمر', 3474, null], ['jupiter', 'Jupiter', 'المشتري', 139820, 778.5e6], ['neptune', 'Neptune', 'نبتون', 49244, 4495e6]];
+    const run = () => {
+      cust.hidden = sel.value !== 'c';
+      const d = sel.value === 'c' ? parseFloat(cm.value) : parseFloat(sel.value);
+      if (!(d > 0)) { out.innerHTML = ''; return; }
+      const k = (d / 100 / 1000) / SUN; // km per km
+      const rows = B.map(([id, en, a, size, dist]) => {
+        const nm = ar ? a : en;
+        if (id === 'moon') return `<li><b>${nm}</b>: ${ar ? `بحجم ${len(size * k)}، على بعد ${len(384400 * k)} من الأرض` : `${len(size * k)} across, ${len(384400 * k)} from Earth`}</li>`;
+        const steps = dist * k * 1000;
+        return `<li><b>${nm}</b>: ${ar ? `بحجم ${len(size * k)}، على بعد ${len(dist * k)}` : `${len(size * k)} across, ${len(dist * k)} away`}${steps >= 3 && steps < 20000 ? ` <span class="muted">(${ar ? `نحو ${nf(Math.round(steps))} خطوة واسعة` : `about ${nf(Math.round(steps))} big steps`})</span>` : ''}</li>`;
+      });
+      rows.push(`<li><b>${ar ? 'أقرب نجم (بروكسيما قنطورس)' : 'The nearest star (Proxima Centauri)'}</b>: ${ar ? `على بعد ${len(4.0175e13 * k)}` : `${len(4.0175e13 * k)} away`}</li>`);
+      out.innerHTML = `<ul class="facts">${rows.join('')}</ul>`;
+    };
+    sel.addEventListener('change', run); cm.addEventListener('input', run); run();
+  }
+  function magCalc(root, ar) {
+    const w = root.querySelector('#gmag'); if (!w) return;
+    const g = k => parseFloat(w.querySelector(`[data-g=${k}]`).value), out = w.querySelector('.gout');
+    const run = () => {
+      const F = g('F'), f = g('f'), D = g('D');
+      if (!(F > 0 && f > 0 && D > 0)) { out.innerHTML = ''; return; }
+      const M = F / f, max = 2 * D, ep = D / M, fov = 52 / M;
+      const warn = M > max ? `<li class="gbad">${ar ? `هذا أكثر من الحد المفيد لهذا التلسكوب (نحو ${nf(max)}×): ستكون الصورة باهتة وضبابية.` : `That is more than this telescope's useful limit (about ${nf(max)}×): the view will be dim and blurry.`}</li>` : '';
+      out.innerHTML = `<ul class="facts"><li><b>${ar ? 'التكبير' : 'Magnification'}</b>: <bdi dir="ltr">${nf(M, M < 20 ? 1 : 0)}×</bdi></li><li><b>${ar ? 'أقصى تكبير مفيد' : 'Most useful power'}</b>: ${ar ? 'نحو' : 'about'} <bdi dir="ltr">${nf(max)}×</bdi></li><li><b>${ar ? 'مساحة السماء الظاهرة' : 'How much sky you see'}</b>: ${ar ? 'نحو' : 'about'} <bdi dir="ltr">${nf(fov, fov < 1 ? 2 : 1)}°</bdi> ${ar ? `(القمر نحو 0.5°)` : `(the Moon is about 0.5°)`}</li><li><b>${ar ? 'حزمة الضوء الخارجة إلى عينك' : 'Exit pupil'}</b>: <bdi dir="ltr">${nf(ep, 1)} ${ar ? 'مم' : 'mm'}</bdi> ${ep > 7 ? (ar ? '(أكبر من حدقة العين، فيضيع بعض الضوء)' : '(wider than your pupil, so some light is wasted)') : ep < 0.5 ? (ar ? '(صغيرة جدًّا: الصورة باهتة)' : '(very small: the view will be dim)') : ''}</li>${warn}</ul><p class="sh-note">${ar ? 'مساحة السماء تقريبية لعدسة عينية عادية (مجالها الظاهر نحو 52°).' : 'The sky area assumes an ordinary eyepiece (about 52° apparent field).'}</p>`;
+    };
+    w.querySelectorAll('input').forEach(i => i.addEventListener('input', run)); run();
+  }
+
+  function html(lang) {
+    const ar = lang === 'ar';
+    let h = `<div class="sci gd${ar ? ' rtl' : ''}"${ar ? ' dir="rtl" lang="ar"' : ''}>`;
+    h += `<div class="gpages" role="tablist" aria-label="${ar ? 'الصفحات' : 'Pages'}">${PAGES.map(([id, en, a]) => `<button type="button" role="tab" data-gp="${id}" aria-selected="${id === page}">${ar ? a : en}</button>`).join('')}</div>`;
+    h += page === 'equip' ? equipHTML(ar) : commHTML(ar);
+    return h + `</div>`;
+  }
+  function draw() {
+    document.querySelectorAll('#cultures input').forEach(i => { i.checked = false; });
+    const card = document.getElementById('card'), ar = state.lang === 'ar';
+    card.style.setProperty('--cc', 'var(--c-guides, #2f9e7a)');
+    let h = `<div class="card-head"><div><div class="eyebrow"><span class="dot"></span>${ar ? 'للمرشدين' : 'For guides'}</div><h2${ar ? ' lang="ar" style="font-family:var(--f-ar)"' : ''}>${ar ? 'تدريب مرشدي السماء' : 'Training for sky guides'}</h2></div></div>`;
+    h += `<div class="langs" role="group" aria-label="Language">${[['en', 'English'], ['ar', 'العربية']].map(([id, l]) => `<button type="button" data-lang="${id}" aria-pressed="${(ar ? 'ar' : 'en') === id}"${id === 'ar' ? ' lang="ar"' : ''}>${l}</button>`).join('')}</div>`;
+    h += html(ar ? 'ar' : 'en');
+    card.innerHTML = h;
+    card.querySelectorAll('[data-lang]').forEach(b => b.addEventListener('click', () => { state.lang = b.dataset.lang; try { localStorage.setItem('osms-lang', state.lang); } catch (e) {} render(); }));
+    card.querySelectorAll('[data-gp]').forEach(b => b.addEventListener('click', () => { if (page === b.dataset.gp) return; page = b.dataset.gp; try { localStorage.setItem('osms-gpage', page); } catch (e) {} writeHash(); draw(); const c = document.getElementById('card'); if (c && c.getBoundingClientRect().top < 0) window.scrollTo({top: Math.max(0, c.getBoundingClientRect().top + scrollY - 80)}); }));
+    scaleCalc(card, ar); magCalc(card, ar);
+  }
+  return {render: draw, get page() { return page; }, set page(p) { if (p === 'comm' || p === 'equip') page = p; }};
+})();
+
 function render() {
   writeHash();
   setTimeout(() => RET.sync(), 0);
   { const fp = document.getElementById('feedback'); if (fp && !fp.hidden) fbRender(); }
-  document.querySelector('.layout').classList.toggle('cal-mode', state.cul === 'calendar' || state.cul === 'guide' || state.cul === 'plan' || state.cul === 'quiz');
+  document.querySelector('.layout').classList.toggle('cal-mode', state.cul === 'calendar' || state.cul === 'guide' || state.cul === 'plan' || state.cul === 'quiz' || state.cul === 'learn');
   if (state.cul === 'plan') { PLAN.render(); return; }
+  if (state.cul === 'learn') { GUIDES.render(); return; }
   if (state.cul === 'quiz') { QUIZ.render(); return; }
   if (state.cul === 'guide') {
     document.querySelectorAll('#cultures input').forEach(i => { i.checked = i.value === 'guide'; i.closest('.chip').classList.remove('none'); });
