@@ -380,12 +380,6 @@ body.chrome-ar .shtab thead th, body.chrome-ar .shtab tbody th { font-family: va
 :root[data-skin="red"] .gd .gfig .gs-p, :root[data-skin="red"] .gd .gfig .gs-pa, :root[data-skin="red"] .gd .gfig .gs-a { stroke: #b32a20; }
 :root[data-skin="red"] .gd .gfig .gs-af, :root[data-skin="red"] .gd .gfig .gs-s { fill: #ff6a55; }
 :root[data-skin="red"] .gd .gfig figcaption { color: #ff5a4a; }
-.gd .gfig.ph img { display: block; width: 100%; height: 1px; opacity: 0; object-fit: contain; background: #0b0f1a; border-radius: 8px; }
-.gd .gfig.ph.ok img { height: auto; aspect-ratio: 260 / 182; opacity: 1; }
-.gd .gfig.ph.ok svg { display: none; }
-.gd .gfig .gcr { display: none; font-size: 11.5px; color: #9aa6c0; text-align: center; margin-top: 3px; }
-.gd .gfig.ph.ok .gcr { display: block; }
-:root[data-skin="red"] .gd .gfig.ph.ok img { filter: grayscale(1) sepia(1) saturate(6) hue-rotate(-50deg) brightness(.6); }
 .dsos .dfact { margin: 6px 0 0; font-size: 15.5px; line-height: 1.5; }
 .dsos .dfact span { color: var(--accent); }
 .dsod { margin-top: 4px; font-size: 15px; }
@@ -3745,21 +3739,8 @@ ${ask(ar, '"What\'s the hardest question anyone has asked you?" Practise the hon
     fork: `${TRI(130, 120)}<path class="gs-w" d="M96 116h68l-6 8h-56z"/><path class="gs-m" d="M100 116V66h10v50M150 116V66h10v50"/><g transform="rotate(-28 130 70)"><rect class="gs-t" x="104" y="46" width="88" height="46" rx="6"/></g><path class="gs-l" d="M164 112q22 0 26 20"/><rect class="gs-m" x="182" y="130" width="18" height="30" rx="3"/><circle class="gs-g" cx="191" cy="139" r="3"/><path class="gs-g" d="M186 148h10M186 153h10"/>`,
     tracker: `<text x="208" y="34" class="gs-s">★</text><path class="gs-pa" d="M122 106L206 30"/>${TRI(120, 108)}<g transform="rotate(-42 124 98)"><rect class="gs-m" x="104" y="88" width="40" height="22" rx="4"/></g><path class="gs-l" d="M140 82L150 72"/><rect class="gs-t" x="146" y="48" width="38" height="26" rx="4"/><rect class="gs-m" x="182" y="51" width="20" height="20" rx="3"/><path class="gs-a" d="M96 82a30 30 0 0 1 20-34" ${AR}/>`,
   };
-  // real photos from Wikimedia Commons (each with its own author and licence on its Commons page); the drawing shows until the photo loads, and stays if it can't (offline)
-  const PH = {
-    binos: 'Binoculars (AM 67343-1).jpg',
-    refractor: 'EightInchTelescope.JPG',
-    newtonian: 'Newtonian Telescopes.jpg',
-    dobsonian: 'Red dobsonian.jpg',
-    mak: 'Maksutov 150mm.jpg',
-    dobbase: 'Dobson class.jpg',
-    gem: 'Homemade German equatorial mount.jpg',
-    tracker: 'Amateur Astrophotography Tracker.jpg',
-  };
   let figN = 0;
-  const fig = (id, cap) => { const n = 'f' + (++figN), f = PH[id], ar = state.lang === 'ar';
-    const ph = f ? `<img src="https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(f)}?width=480" loading="lazy" alt="" onload="this.parentNode.classList.add('ok')" onerror="this.remove()"><a class="gcr" href="https://commons.wikimedia.org/wiki/File:${encodeURIComponent(f.replace(/ /g, '_'))}" target="_blank" rel="noopener">${ar ? 'الصورة: ويكيميديا كومنز' : 'Photo: Wikimedia Commons'}</a>` : '';
-    return `<figure class="gfig${f ? ' ph' : ''}">${ph}<svg viewBox="0 0 260 182" role="img" aria-label="${cap.replace(/<[^>]+>/g, '')}">${(DEFS + SVG[id]).replace(/@/g, n)}</svg><figcaption>${cap}</figcaption></figure>`; };
+  const fig = (id, cap) => { const n = 'f' + (++figN); return `<figure class="gfig"><svg viewBox="0 0 260 182" role="img" aria-label="${cap.replace(/<[^>]+>/g, '')}">${(DEFS + SVG[id]).replace(/@/g, n)}</svg><figcaption>${cap}</figcaption></figure>`; };
   const figs = list => `<div class="gfigs">${list.map(([id, cap]) => fig(id, cap)).join('')}</div>`;
 
   /* ---------------- Astronomy equipment ---------------- */
@@ -3769,8 +3750,8 @@ ${ask(ar, '"What\'s the hardest question anyone has asked you?" Practise the hon
       ? [['ZWO Seestar S30 Pro', '30 مم، عدسات', 'أوسع مجال (نحو 4.6°)، خفيف (نحو 1.7 كغ)'], ['ZWO Seestar S50 Pro', '50 مم، عدسات', 'فتحة أكبر للأجرام الخافتة (2026)'], ['Dwarflab Dwarf Mini', '30 مم، عدسات', 'الأخف (نحو 0.8 كغ)'], ['Dwarflab Dwarf 3', '35 مم، عدسات', 'كاميرتان: تلسكوب وزاوية واسعة، وللطبيعة نهارًا أيضًا'], ['Vaonis Vespera 3 و Vespera Pro 2', '50 مم، عدسات', 'بطارية لليلة كاملة، وصور فسيفسائية كبيرة (2026)'], ['Unistellar Odyssey و Odyssey Pro', '85 مم، مرآة', 'في Pro عدسة عينية إلكترونية تنظر فيها، ومشاريع علمية للهواة'], ['Unistellar eQuinox 2 و eVscope 2', '114 مم، مرآة', 'في eVscope 2 عدسة عينية إلكترونية، ومشاريع علمية للهواة'], ['Celestron Origin Mark II', '152 مم، RASA', 'الأكبر؛ نحو 19 كغ، للمكان الثابت']]
       : [['ZWO Seestar S30 Pro', '30 mm, lens', 'Widest view (about 4.6°), light (about 1.7 kg)'], ['ZWO Seestar S50 Pro', '50 mm, lens', 'More aperture for faint objects (2026)'], ['Dwarflab Dwarf Mini', '30 mm, lens', 'The lightest (about 0.8 kg)'], ['Dwarflab Dwarf 3', '35 mm, lens', 'Two cameras, telescope and wide-angle; also for wildlife by day'], ['Vaonis Vespera 3 and Vespera Pro 2', '50 mm, lens', 'All-night battery, big mosaic pictures (2026)'], ['Unistellar Odyssey and Odyssey Pro', '85 mm, mirror', 'The Pro has an electronic eyepiece to look into; citizen science'], ['Unistellar eQuinox 2 and eVscope 2', '114 mm, mirror', 'The eVscope 2 has an electronic eyepiece; citizen science'], ['Celestron Origin Mark II', '152 mm, RASA', 'The biggest; about 19 kg, for a fixed spot']];
     let h = `<p class="dsec-in">${ar
-      ? 'ما الذي يُريك إياه كل نوع من المعدات، وكيف تختار، وكيف تستخدمه مع مجموعة. لا توجد هنا أسعار. الشركات تغيّر طرازاتها كثيرًا، وقائمة التلسكوبات الذكية محدَّثة حتى نوفمبر 2026. ولمعظمها صورة حقيقية، وإن تعذّر تحميلها (بلا إنترنت مثلًا) ظهر بدلها رسم يبيّن فيه الخط الأصفر المتقطع طريق الضوء.'
-      : 'What each kind of equipment shows you, how to choose, and how to use it with a group. There are no prices here. Makers change their models often; the smart telescope list was checked in November 2026. Most have a real photo; when a photo cannot load (for example offline), a drawing shows instead, where the dashed yellow line is the path of the light.'}</p>`;
+      ? 'ما الذي يُريك إياه كل نوع من المعدات، وكيف تختار، وكيف تستخدمه مع مجموعة. لا توجد هنا أسعار. الشركات تغيّر طرازاتها كثيرًا، وقائمة التلسكوبات الذكية محدَّثة حتى نوفمبر 2026. وفي الرسوم يبيّن الخط الأصفر المتقطع طريق الضوء.'
+      : 'What each kind of equipment shows you, how to choose, and how to use it with a group. There are no prices here. Makers change their models often; the smart telescope list was checked in November 2026. In the drawings, the dashed yellow line shows the path of the light.'}</p>`;
 
     h += box(ar, ar ? 'ابدأ بعينيك' : 'Start with your eyes', ar
       ? `<ul class="facts"><li>تحتاج عيناك 20 إلى 30 دقيقة في الظلام لتصبحا أشد حساسية بكثير، ولحظة ضوء أبيض واحدة تعيدك إلى البداية.</li><li><b>النظر الجانبي:</b> انظر بجانب الجرم الخافت قليلًا لا إليه مباشرة، فيظهر أوضح، لأن أطراف العين أحسّ بالضوء الخافت من مركزها.</li><li>استخدم الضوء الأحمر الخافت فقط، وشاشة «أحمر ليلي» في هذا الموقع.</li><li>بالعين المجردة: الكوكبات، والكواكب، والقمر، ودرب التبانة، والشهب، والمحطة الفضائية، والثريا، ومجرة المرأة المسلسلة من مكان مظلم.</li></ul>`
