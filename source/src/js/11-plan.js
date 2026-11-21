@@ -79,6 +79,7 @@ const PLAN = (() => {
     const hh = x => { const d = new Date(x + N.pl.tz * 36e5); return String(d.getUTCHours()).padStart(2, '0') + ':' + String(d.getUTCMinutes()).padStart(2, '0'); };
     h += `<div class="pnight">${moonIcon(m.illum, m.waxing, N.pl.lat < 0, 34)}<div><b>${fmtD(Date.UTC(N.Y, N.M, N.D), ar ? 'ar' : 'en', {weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'})}</b> · ${esc(ar ? N.pl.ar : N.pl.en)}<br>`;
     h += `${t.moon}: ${Math.round(m.illum * 100)}% ${t.lit}${ar ? '، ' : ', '}${malt > 0 ? t.up : t.down}${se.set ? ` · ${t.sunset} ${hh(se.set)}` : ''}</div></div>`;
+    h += WX.box(N.pl, N.Y, N.M, N.D, 'mini');
     return h;
   }
   function step2(t, ar, N) {

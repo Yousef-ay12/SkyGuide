@@ -115,6 +115,9 @@ function calHTML(lang) {
   h += `<label>${T.month}<select id="cal-month">${months.map(([y, m]) => `<option value="${y}-${m}"${`${y}-${m}` === st.month ? ' selected' : ''}>${MONTHS[lang][m]} ${y}</option>`).join('')}</select></label></div>`;
   h += `<p class="muted cal-where">${ar ? `السماء من ${pname(pl)} (${latTxt(Math.round(pl.lat), true)})، والأوقات بالتوقيت المحلي القياسي دون التوقيت الصيفي.` : `The sky from ${pname(pl)} (${latTxt(Math.round(pl.lat))}). Times are local standard time, without daylight saving.`}</p>`;
 
+  // 0. weather for the chosen night
+  h += `<section class="cal-sec wx-sec">${WX.box(pl, Y, M, st.day)}</section>`;
+
   // 1. constellations of the month
   const best = Object.entries(CAL.iau).filter(([ab, v]) => v.vis.month === M).map(([ab, v]) => ({ab, ...v, alt: Math.round(90 - Math.abs(pl.lat - v.vis.dec))})).sort((a, b) => b.alt - a.alt);
   const up = best.filter(b => b.alt > 0), down = best.filter(b => b.alt <= 0);
