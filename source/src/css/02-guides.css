@@ -1,0 +1,56 @@
+.gd .gpages { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 16px; }
+.gd .gpages button { font: inherit; font-size: 15px; padding: 7px 13px; border-radius: 999px; border: 1px solid var(--line); background: var(--panel); color: var(--ink); cursor: pointer; }
+.gd .gpages button[aria-selected="true"] { background: var(--cc); border-color: var(--cc); color: var(--panel); font-weight: 600; }
+.gd .gstop { color: var(--cc); font-weight: 400; font-size: 14px; text-transform: uppercase; letter-spacing: .06em; }
+.gd.rtl .gstop { text-transform: none; letter-spacing: 0; font-size: 15px; }
+.gd .gstops { display: flex; flex-wrap: wrap; gap: 6px 8px; padding: 0; margin: 0 0 14px; list-style: none; counter-reset: gs; }
+.gd .gstops li { counter-increment: gs; padding: 4px 12px; border: 1px solid var(--line); border-radius: 999px; font-size: 15px; }
+.gd .gstops li::before { content: counter(gs) " · "; color: var(--cc); font-weight: 600; }
+.gd .gask, .gd .grule, .gd .gtry { max-width: 70ch; padding: 8px 12px; border-inline-start: 3px solid var(--cc); background: color-mix(in srgb, var(--cc) 8%, transparent); border-radius: 0 8px 8px 0; }
+.gd.rtl .gask, .gd.rtl .grule, .gd.rtl .gtry { border-radius: 8px 0 0 8px; }
+.gd .gask { border-inline-start-style: dashed; }
+.gd .gproof { margin: 10px 0 4px; max-width: 70ch; }
+.gd .gproof > summary { cursor: pointer; color: var(--accent); font-size: 15px; }
+.gd .gproof > div { padding: 6px 0 0; font-size: 15.5px; }
+.gd .gcols { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); gap: 10px 18px; margin: 8px 0; }
+.gd .gcols h4 { margin: 4px 0 6px; font-size: 16px; color: var(--cc); }
+.gd .gscript { border: 1px solid var(--line); border-radius: 12px; padding: 10px 14px; }
+.gd .gscript p { margin: 0; }
+.gd h4 { margin: 12px 0 6px; }
+.gd .gcheck { list-style: none; padding: 0; margin: 6px 0; columns: 2 260px; column-gap: 24px; }
+.gd .gcheck li { padding-inline-start: 1.4em; position: relative; margin: 0 0 7px; break-inside: avoid; }
+.gd .gcheck li::before { content: "✦"; color: var(--cc); position: absolute; inset-inline-start: 0; }
+.gd .gquote { margin: 22px 0; padding: 14px 18px; font-size: 20px; line-height: 1.45; border-inline-start: 4px solid var(--cc); font-style: italic; max-width: 60ch; }
+.gd.rtl .gquote { font-style: normal; }
+.gd .gwarn { padding: 10px 12px; border: 1px solid #d9534f; border-radius: 10px; background: color-mix(in srgb, #d9534f 10%, transparent); max-width: 70ch; }
+.gd .gcalc { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); gap: 10px 14px; padding: 12px 14px; margin: 10px 0; border: 1px solid var(--line); border-radius: 12px; background: color-mix(in srgb, var(--cc) 5%, var(--panel)); }
+.gd .gcalc label { display: flex; flex-direction: column; gap: 4px; font-size: 14.5px; color: var(--muted); }
+.gd .gcalc input, .gd .gcalc select { font: inherit; font-size: 16px; padding: 7px 9px; border: 1px solid var(--line); border-radius: 8px; background: var(--bg); color: var(--ink); }
+.gd .gcalc .gout { grid-column: 1 / -1; }
+.gd .gcalc label[hidden] { display: none; }
+.gd .gcalc .gout .facts { margin: 0; }
+.gd .gcalc .gout .sh-note { margin: 4px 0 0; font-size: 13.5px; }
+.gd .gbad { color: #d9534f; }
+.gd .gtab td { white-space: normal; }
+.gd .gtab s { color: var(--muted); text-decoration-color: #d9534f; }
+.gd .gsrc li { font-size: 14.5px; margin-bottom: 3px; }
+.gd.rtl .gsrc { padding: 0 1.1em 0 0; }
+.gd .gfigs { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 130px), 1fr)); gap: 10px; margin: 10px 0 12px; }
+.gd .gfig { margin: 0; border: 1px solid var(--line); border-radius: 12px; background: var(--sky, #0d1424); padding: 6px 6px 8px; }
+.gd .gfig svg { display: block; width: 100%; height: auto; }
+.gd .gfig figcaption { font-size: 13.5px; line-height: 1.3; text-align: center; color: #d9deea; padding: 2px 4px 0; }
+.gd .gfig .gs-t { fill: #3d5a8a; fill-opacity: .8; stroke: #c9d3e8; stroke-width: 1.6; }
+.gd .gfig .gs-m { fill: #6b7385; stroke: #c9d3e8; stroke-width: 1.4; }
+.gd .gfig .gs-w { fill: #8a6a45; stroke: #e0cbb0; stroke-width: 1.4; }
+.gd .gfig .gs-l { fill: none; stroke: #c9d3e8; stroke-width: 3; stroke-linecap: round; }
+.gd .gfig .gs-g { fill: none; stroke: #9fd3ff; stroke-width: 2; }
+.gd .gfig .gs-p { fill: none; stroke: #f2c14e; stroke-width: 1.4; stroke-dasharray: 4 3; opacity: .9; }
+.gd .gfig .gs-pa { fill: none; stroke: #f2c14e; stroke-width: 1.2; stroke-dasharray: 2 4; }
+.gd .gfig .gs-a { fill: none; stroke: #5fd3a8; stroke-width: 2.4; }
+.gd .gfig .gs-af { fill: #5fd3a8; }
+.gd .gfig .gs-s { fill: #f2c14e; font-size: 18px; }
+:root[data-skin="red"] .gd .gfig .gs-t, :root[data-skin="red"] .gd .gfig .gs-m, :root[data-skin="red"] .gd .gfig .gs-w { fill: #2a0605; stroke: #ff5a4a; }
+:root[data-skin="red"] .gd .gfig .gs-l, :root[data-skin="red"] .gd .gfig .gs-g { stroke: #ff5a4a; }
+:root[data-skin="red"] .gd .gfig .gs-p, :root[data-skin="red"] .gd .gfig .gs-pa, :root[data-skin="red"] .gd .gfig .gs-a { stroke: #b32a20; }
+:root[data-skin="red"] .gd .gfig .gs-af, :root[data-skin="red"] .gd .gfig .gs-s { fill: #ff6a55; }
+:root[data-skin="red"] .gd .gfig figcaption { color: #ff5a4a; }

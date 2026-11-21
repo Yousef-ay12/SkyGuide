@@ -1,0 +1,112 @@
+
+<div class="wrap">
+  <header class="top">
+    <div>
+      <h1>One Sky, Many Stories</h1>
+      <p class="lede">Choose a culture and a group of stars, and read what that culture saw there: the story, the poem, and where it was recorded. Or open Science for the facts, and the Sky calendar for what to see tonight.</p>
+    </div>
+    <div class="topmeta">
+      <label class="skins" for="bgsel">Background
+        <select id="bgsel">
+          <option value="">Plain</option>
+          <option value="stars">Starfield</option>
+          <option value="milky">Milky Way glow</option>
+          <option value="desert">Desert night</option>
+          <option value="twilight">Twilight</option>
+          <option value="chart">Star-chart paper</option>
+          <option value="aurora">Aurora</option>
+          <option value="nebula">Nebula</option>
+          <option value="moon">Moonlit night</option>
+          <option value="map">Constellation map</option>
+          <option value="arabian">Arabian night</option>
+          <option value="dawn">Dawn</option>
+        </select>
+      </label>
+      <label class="skins" for="skin">Screen
+        <select id="skin">
+          <option value="">Automatic</option>
+          <option value="light">Light</option>
+          <option value="dark">Dark</option>
+          <option value="black">Black</option>
+          <option value="sepia">Sepia</option>
+          <option value="red">Night red (for stargazing)</option>
+        </select>
+      </label>
+      <div class="hbrow"><button type="button" class="tourbtn" id="tourbtn" aria-label="How to use this page: a step-by-step tour"><span aria-hidden="true">?</span> How to use</button>
+      <button type="button" class="tourbtn" id="installbtn" hidden aria-label="Install Sky Guide as an app on this device"><span aria-hidden="true">↓</span> Install app</button>
+      <button type="button" class="tourbtn" id="iconbtn" hidden aria-label="Change the Sky Guide app icon"><span aria-hidden="true">◐</span> Change icon</button></div>
+      <div class="count" id="count"></div>
+    </div>
+  </header>
+
+  <div class="qzpromo" id="qzpromo" role="region" aria-label="Quiz" hidden></div>
+  <nav class="mainnav" id="mainnav" aria-label="Sections"></nav>
+  <fieldset class="cultures" id="cultures" hidden><legend>Choose a culture</legend></fieldset>
+
+  <div class="layout">
+    <details class="index" id="index" open>
+      <summary><span>Constellations</span><span class="cur" id="curName"></span><span class="chev" aria-hidden="true">▾</span></summary>
+      <div class="search"><label for="q" class="sect-lbl">Search</label><input id="q" type="search" placeholder="Orion, Pleiades, الثريا…" autocomplete="off"></div>
+      <div class="list" id="list" role="list"></div>
+    </details>
+    <main class="card" id="card" aria-live="polite"><div id="nojs" class="none-box"><p><b>Loading the Sky Guide…</b></p><p>If this message stays, the app you opened the file in is only previewing it and does not run the page. Open the file in a web browser instead: Chrome, Safari, Edge or Firefox. On a phone, tap Share or ⋮ and choose “Open in Chrome” or “Open in Safari”.</p><p dir="rtl" lang="ar" style="font-family:var(--f-ar)">إذا بقيت هذه الرسالة ظاهرة، فالتطبيق الذي فتحت فيه الملف يعرض معاينة فقط ولا يشغّل الصفحة. افتح الملف في متصفح ويب مثل كروم أو سفاري أو إيدج أو فايرفوكس. على الهاتف اضغط «مشاركة» أو ⋮ واختر «فتح في كروم» أو «فتح في سفاري».</p></div></main>
+  </div>
+
+  <div class="srcrow" role="tablist"><button type="button" class="srctab" data-sp="sources" aria-expanded="false" aria-controls="sources"><span lang="en">Sources</span><span lang="ar">المصادر</span></button><button type="button" class="srctab" data-sp="credits" aria-expanded="false" aria-controls="credits"><span lang="en">Credits</span><span lang="ar">الإعداد</span></button><button type="button" class="srctab" data-sp="feedback" aria-expanded="false" aria-controls="feedback"><span lang="en">Feedback</span><span lang="ar">ملاحظاتك</span></button><button type="button" class="srctab" data-sp="privacy" aria-expanded="false" aria-controls="privacy"><span lang="en">Privacy</span><span lang="ar">الخصوصية</span></button></div>
+  <section class="srcs" id="sources" hidden>
+    <div class="srcbody">
+      <p class="srcnote">Every story, verse and fact on this page comes from the sources below. Tap a name to open it. Each story also names its own source underneath it.</p>
+      <div class="srcgrid">
+        <section><h3>Arab sky <span lang="ar">سماء العرب</span></h3><ul><li><a href="https://kutaibaa-akraa.github.io/urjuzah/" target="_blank" rel="noopener">Ibn al-Sufi, Urjuzat al-Kawakib (around 1000 CE), with the commentary Abha al-Mawakib fi Sharh Urjuzat al-Kawakib by Kutaiba Akraa</a></li><li><a href="https://github.com/OpenITI/0300AH/tree/master/data/0276IbnQutaybaDinawari/0276IbnQutaybaDinawari.AnwaFiMawasim" target="_blank" rel="noopener">Ibn Qutayba, Kitab al-Anwa&#x27; (9th century), OpenITI text</a></li><li><a href="https://github.com/OpenITI/0425AH/tree/master/data/0421IbnMuhammadMarzuqi/0421IbnMuhammadMarzuqi.AzminaWaAmkina" target="_blank" rel="noopener">al-Marzuqi, al-Azmina wa al-Amkina (11th century), OpenITI text</a></li><li><a href="https://github.com/OpenITI/0525AH/tree/master/data/0518IbnMuhammadMaydaniNaysaburi/0518IbnMuhammadMaydaniNaysaburi.MajmacAmthal" target="_blank" rel="noopener">al-Maydani, Majma&#x27; al-Amthal (12th century), OpenITI text</a></li><li><a href="https://en.wikipedia.org/wiki/The_Book_of_Fixed_Stars" target="_blank" rel="noopener">al-Sufi, The Book of Fixed Stars (964)</a></li><li><a href="https://en.wikipedia.org/wiki/Al-Mu%27jam_al-Kabir_(Al-Tabarani)" target="_blank" rel="noopener">al-Tabarani, al-Mu&#x27;jam al-Kabir</a></li><li><a href="https://doc.aljazeera.net/science-and-tech/2024/1/4/%D8%A3%D8%B3%D8%A7%D8%B7%D9%8A%D8%B1-%D8%A7%D9%84%D8%B3%D9%85%D8%A7%D8%A1-%D8%AB%D8%A3%D8%B1-%D9%88%D8%B9%D8%B4%D9%82-%D9%88%D8%A7%D8%BA%D8%AA%D9%8A%D8%A7%D9%84%D8%A7%D8%AA" target="_blank" rel="noopener">Al Jazeera, &#x27;Legends of the sky&#x27; (2024)</a></li><li>Kitab al-Sama&#x27; (printed book, not online)</li><li>Popular Bedouin tradition, as told by Saudi and Gulf sky-watchers</li></ul></section>
+        <section><h3>The Quran <span lang="ar">القرآن الكريم</span></h3><ul><li><a href="https://tanzil.net/" target="_blank" rel="noopener">Quran text, Hafs reading: Tanzil</a></li><li><a href="https://github.com/risan/quran-json" target="_blank" rel="noopener">Quran JSON (the copy of the Tanzil text used here)</a></li></ul></section>
+        <section><h3>Greek sky <span lang="ar">سماء الإغريق</span></h3><ul><li><a href="https://en.wikipedia.org/wiki/Catasterismi" target="_blank" rel="noopener">Pseudo-Eratosthenes, Catasterismi</a></li><li><a href="https://en.wikipedia.org/wiki/De_astronomia" target="_blank" rel="noopener">Hyginus, De Astronomia</a></li><li><a href="https://ovid.lib.virginia.edu/trans/Ovhome.htm" target="_blank" rel="noopener">Ovid, Metamorphoses (translation by A. S. Kline)</a></li><li><a href="https://poetryintranslation.com/klineasfasti.php" target="_blank" rel="noopener">Ovid, Fasti (translation by A. S. Kline)</a></li><li><a href="https://catalog.perseus.org/catalog/urn:cts:greekLit:tlg0653.tlg001.opp-eng1" target="_blank" rel="noopener">Aratus, Phaenomena (Perseus)</a></li><li><a href="https://catalog.perseus.org/catalog/urn:cts:greekLit:tlg0012.tlg001" target="_blank" rel="noopener">Homer, Iliad (Perseus)</a></li><li><a href="https://catalog.perseus.org/catalog/urn:cts:greekLit:tlg0020.tlg002" target="_blank" rel="noopener">Hesiod, Works and Days (Perseus)</a></li><li><a href="https://en.wikipedia.org/wiki/Midnight_poem" target="_blank" rel="noopener">Sappho, the &#x27;Midnight poem&#x27;</a></li><li><a href="https://en.wikipedia.org/wiki/Almagest" target="_blank" rel="noopener">Ptolemy, Almagest</a></li><li><a href="https://en.wikipedia.org/wiki/Astronomica_(Manilius)" target="_blank" rel="noopener">Manilius, Astronomica</a></li></ul></section>
+        <section><h3>Chinese sky <span lang="ar">سماء الصين</span></h3><ul><li><a href="https://ctext.org/shiji/tian-guan-shu/zh" target="_blank" rel="noopener">Sima Qian, Shiji, &#x27;Book of the Celestial Offices&#x27; (Chinese Text Project)</a></li><li><a href="https://ctext.org/analects/wei-zheng" target="_blank" rel="noopener">Confucius, Analects, book 2 (Chinese Text Project)</a></li><li><a href="https://ctext.org/chun-qiu-zuo-zhuan/zhao-gong" target="_blank" rel="noopener">Zuo zhuan, Duke Zhao (Chinese Text Project)</a></li><li><a href="https://ctext.org/book-of-poetry/chou-mou" target="_blank" rel="noopener">Book of Songs (Shijing), &#x27;Choumou&#x27; (Chinese Text Project)</a></li><li><a href="https://en.wikipedia.org/wiki/Soushen_Ji" target="_blank" rel="noopener">Gan Bao, Soushen ji</a></li><li><a href="https://en.wikipedia.org/wiki/Nineteen_Old_Poems" target="_blank" rel="noopener">Nineteen Old Poems (Han dynasty)</a></li><li><a href="https://www.cn-poetry.com/dufu-poetry/friend-wei.html" target="_blank" rel="noopener">Du Fu, &#x27;To My Retired Friend Wei&#x27; (759)</a></li><li><a href="https://en.wikipedia.org/wiki/Su_Shi" target="_blank" rel="noopener">Su Shi</a></li><li><a href="https://en.wikipedia.org/wiki/The_Cowherd_and_the_Weaver_Girl" target="_blank" rel="noopener">The Cowherd and the Weaver Girl</a></li><li><a href="https://en.wikipedia.org/wiki/Old_Man_of_the_South_Pole" target="_blank" rel="noopener">Old Man of the South Pole</a></li><li><a href="https://en.wikipedia.org/wiki/Four_Symbols" target="_blank" rel="noopener">The Four Symbols</a></li></ul></section>
+        <section><h3>Ancient Egyptian sky <span lang="ar">سماء مصر القديمة</span></h3><ul><li><a href="https://egyptianstreets.com/2024/01/19/ancient-egyptian-constellations-and-the-myths-behind-them/" target="_blank" rel="noopener">Egyptian Streets, &#x27;Ancient Egyptian constellations and the myths behind them&#x27; (2024)</a></li><li><a href="https://en.wikipedia.org/wiki/Dendera_zodiac" target="_blank" rel="noopener">The Dendera zodiac</a></li><li><a href="https://en.wikipedia.org/wiki/Pyramid_Texts" target="_blank" rel="noopener">The Pyramid Texts</a></li><li>Meskhetyu (the Big Dipper as the bull&#x27;s foreleg)</li></ul></section>
+        <section><h3>Indian sky <span lang="ar">سماء الهند</span></h3><ul><li><a href="https://sacred-texts.com/hin/rigveda/rv01024.htm" target="_blank" rel="noopener">Rig Veda 1.24 (translation by R. T. H. Griffith)</a></li><li><a href="https://en.wikipedia.org/wiki/Aitareya_Brahmana" target="_blank" rel="noopener">Aitareya Brahmana</a></li><li><a href="https://sacred-texts.com/hin/maha/" target="_blank" rel="noopener">Mahabharata (translation by K. M. Ganguli)</a></li><li><a href="https://sacred-texts.com/hin/rama/" target="_blank" rel="noopener">Ramayana (translation by R. T. H. Griffith)</a></li><li><a href="https://sacred-texts.com/hin/vp/" target="_blank" rel="noopener">Vishnu Purana (translation by H. H. Wilson)</a></li><li><a href="https://en.wikipedia.org/wiki/Puranas" target="_blank" rel="noopener">The Puranas</a></li><li><a href="https://en.wikipedia.org/wiki/Bhagavata_Purana" target="_blank" rel="noopener">Bhagavata Purana</a></li><li><a href="https://en.wikipedia.org/wiki/Skanda_Purana" target="_blank" rel="noopener">Skanda Purana</a></li><li><a href="https://en.wikipedia.org/wiki/Agastya" target="_blank" rel="noopener">Agastya</a></li><li><a href="https://en.wikipedia.org/wiki/Saptarshi" target="_blank" rel="noopener">Saptarishi</a></li><li><a href="https://en.wikipedia.org/wiki/Mrigash%C4%ABra" target="_blank" rel="noopener">Mrigashira</a></li><li><a href="https://en.wikipedia.org/wiki/Jyeshtha_(nakshatra)" target="_blank" rel="noopener">Jyeshtha (nakshatra)</a></li><li><a href="https://en.wikipedia.org/wiki/Nakshatra" target="_blank" rel="noopener">Nakshatra (the lunar mansions, including Chitra)</a></li><li><a href="https://en.wikipedia.org/wiki/Crux" target="_blank" rel="noopener">Crux</a></li></ul></section>
+        <section><h3>Japanese sky <span lang="ar">سماء اليابان</span></h3><ul><li><a href="https://en.wikipedia.org/wiki/H%C5%8Dei_Nojiri" target="_blank" rel="noopener">Hōei Nojiri, collector of Japanese star folklore</a></li><li><a href="https://en.wikipedia.org/wiki/The_Pillow_Book" target="_blank" rel="noopener">Sei Shōnagon, The Pillow Book (around 1000)</a></li><li><a href="https://en.wikipedia.org/wiki/Pleiades" target="_blank" rel="noopener">The Pleiades (Subaru)</a></li></ul></section>
+        <section><h3>Southern African sky <span lang="ar">سماء جنوب أفريقيا</span></h3><ul><li><a href="https://assa.saao.ac.za/astronomy-in-south-africa/ethnoastronomy/" target="_blank" rel="noopener">Astronomical Society of Southern Africa, &#x27;African Ethnoastronomy&#x27;</a></li><li><a href="https://assa.saao.ac.za/wp-content/uploads/sites/23/2014/08/Venus-Rising-2014-P-G-Alcock.pdf" target="_blank" rel="noopener">P. G. Alcock, Venus Rising: South African Astronomical Beliefs, Customs and Observations (2014, free PDF)</a></li><li><a href="https://www.rmg.co.uk/stories/space-astronomy/south-african-star-myths" target="_blank" rel="noopener">Royal Museums Greenwich, &#x27;South African star myths&#x27;</a></li><li><a href="https://lloydbleekcollection.cs.uct.ac.za/" target="_blank" rel="noopener">The Lloyd and Bleek Collection, University of Cape Town (the /Xam notebooks)</a></li></ul></section>
+        <section><h3>Star charts and science <span lang="ar">خرائط النجوم والعلم</span></h3><ul><li><a href="https://esawebb.org/copyright" target="_blank" rel="noopener">James Webb Space Telescope pictures of deep-sky objects: ESA/Webb, NASA and CSA, CC BY 4.0 (each picture shows its own credit line)</a></li><li><a href="https://github.com/ofrohn/d3-celestial" target="_blank" rel="noopener">d3-celestial star and constellation data (star charts)</a></li><li><a href="https://github.com/astronexus/HYG-Database" target="_blank" rel="noopener">HYG star catalogue 4.1 (distances, brightness, colour)</a></li><li><a href="https://github.com/brettonw/YaleBrightStarCatalog" target="_blank" rel="noopener">Yale Bright Star Catalogue (star types and double stars)</a></li><li><a href="https://github.com/mattiaverga/OpenNGC" target="_blank" rel="noopener">OpenNGC (galaxies, clusters and nebulae)</a></li><li><a href="https://exoplanetarchive.ipac.caltech.edu/" target="_blank" rel="noopener">NASA Exoplanet Archive (planets around other stars)</a></li><li><a href="https://github.com/OpenExoplanetCatalogue/oec_gzip" target="_blank" rel="noopener">Open Exoplanet Catalogue (the copy of the NASA list used here)</a></li><li><a href="https://nssdc.gsfc.nasa.gov/planetary/planetfact.html" target="_blank" rel="noopener">NASA planetary fact sheets</a></li><li><a href="https://solarsystem.nasa.gov/moons/overview/" target="_blank" rel="noopener">NASA, Moons of the Solar System</a></li><li><a href="https://minorplanetcenter.org/iau/NatSats/NaturalSatellites.html" target="_blank" rel="noopener">IAU Minor Planet Center, natural satellites (moon counts)</a></li><li><a href="https://solarsystem.nasa.gov/" target="_blank" rel="noopener">NASA Solar System Exploration (planet facts)</a></li><li><a href="https://arxiv.org/abs/1008.3913" target="_blank" rel="noopener">G. Torres (2010), bolometric corrections used for star sizes</a></li><li><a href="https://en.wikipedia.org/wiki/IAU_designated_constellations" target="_blank" rel="noopener">IAU designated constellations</a></li></ul></section>
+        <section><h3>Deep-sky objects <span lang="ar">الأجرام السماوية العميقة</span></h3><ul><li><a href="https://science.nasa.gov/mission/hubble/science/explore-the-night-sky/hubble-messier-catalog/" target="_blank" rel="noopener">NASA, Hubble's Messier Catalog</a></li><li><a href="https://science.nasa.gov/mission/hubble/science/explore-the-night-sky/hubble-caldwell-catalog/" target="_blank" rel="noopener">NASA, Hubble's Caldwell Catalog</a></li><li><a href="https://esahubble.org/" target="_blank" rel="noopener">ESA/Hubble</a></li><li><a href="https://www.eso.org/public/news/eso0905/" target="_blank" rel="noopener">ESO, the Carina Nebula (eso0905)</a></li><li><a href="https://noirlab.edu/public/" target="_blank" rel="noopener">NOIRLab</a></li><li><a href="https://eventhorizontelescope.org/" target="_blank" rel="noopener">Event Horizon Telescope (the M87 black hole)</a></li><li><a href="https://en.wikipedia.org/wiki/Abd_al-Rahman_al-Sufi" target="_blank" rel="noopener">Al-Sufi and the Andromeda Galaxy (964)</a></li><li><a href="https://en.wikipedia.org/wiki/Brocchi%27s_Cluster" target="_blank" rel="noopener">Brocchi's Cluster (the Coathanger)</a></li><li><a href="https://en.wikipedia.org/wiki/IC_2391" target="_blank" rel="noopener">IC 2391 (Omicron Velorum Cluster)</a></li><li><a href="https://commons.wikimedia.org/" target="_blank" rel="noopener">Wikimedia Commons (the photos; each has its own author and licence)</a></li><li><a href="https://alasky.cds.unistra.fr/hips-image-services/hips2fits" target="_blank" rel="noopener">CDS hips2fits, Strasbourg (sky-survey pictures)</a></li><li><a href="https://archive.stsci.edu/dss/acknowledging.html" target="_blank" rel="noopener">Digitized Sky Survey (DSS2), STScI: acknowledgement</a></li><li><a href="https://github.com/mattiaverga/OpenNGC" target="_blank" rel="noopener">OpenNGC (positions and sizes of the objects)</a></li></ul></section>
+        <section><h3>Sky calendar and tour planner <span lang="ar">تقويم السماء ومخطط الجولة</span></h3><ul><li><a href="https://ssd.jpl.nasa.gov/planets/approx_pos.html" target="_blank" rel="noopener">NASA JPL, approximate positions of the planets</a></li><li><a href="https://scilit.com/publications/51fd7a0c8a0349e0fc83a6c83259052f" target="_blank" rel="noopener">K. Krisciunas and B. Schaefer (1991), a model of the brightness of moonlight</a></li><li><a href="https://unihedron.com/forum/index.php?topic=40.0" target="_blank" rel="noopener">Sky quality meter readings to faintest visible star (Unihedron)</a></li><li><a href="https://darksky.org/" target="_blank" rel="noopener">DarkSky International, certified dark-sky places</a></li><li><a href="https://darksky.org/news/alula-manara-and-algharameel-nature-reserves-officially-named-as-saudi-arabias-and-gccs-first-ever-dark-sky-park-in-boost-to-astronomy-and-astrotourism-ambitions/" target="_blank" rel="noopener">AlUla dark-sky reserves (DarkSky International)</a></li></ul></section>
+      </div>
+    </div>
+  </section>
+  <section class="srcs" id="feedback" hidden><div class="srcbody" id="fbbox"></div></section>
+  <section class="srcs" id="privacy" hidden><div class="srcbody privacy">
+    <div class="pv" lang="en">
+      <h3>Privacy</h3>
+      <p><b>No accounts, no ads, no tracking, no cookies.</b> Sky Guide never asks for your location, camera, contacts or files.</p>
+      <p><b>What stays on your device:</b> your saved lists, Plan a night, the place and date you chose, your quiz scores, and your settings (language, screen colour, kids mode, app icon). They are kept only in your browser or app. Nobody else, including the site's maker, can see them. Clearing the site's data or removing the app deletes them.</p>
+      <p><b>When something goes online:</b></p>
+      <ul>
+        <li><b>Opening the site:</b> GitHub Pages, which hosts it, receives the usual connection details any website gets, such as your IP address.</li>
+        <li><b>Deep-sky pictures:</b> when you open a catalogue, pictures are loaded from Wikipedia/Wikimedia Commons and, if needed, the CDS sky-survey service (Strasbourg) or STScI. They receive the usual connection details and which picture is requested.</li>
+        <li><b>View in Stellarium Web</b> (only when you tap it): Stellarium's site receives the object, the date, and the city you picked from the list (not your real location).</li>
+        <li><b>Feedback</b> (only when you send it): what you type (name, type, message, and email if you choose to give it), plus the city and language you picked, goes to the site maker's Google Form.</li>
+      </ul>
+      <p><b>The app:</b> installing Sky Guide adds a small web app to your phone. It has no permissions and runs nothing in the background. It keeps a copy of the site so it works offline.</p>
+    </div>
+    <div class="pv" lang="ar" dir="rtl">
+      <h3>الخصوصية</h3>
+      <p><b>لا حسابات ولا إعلانات ولا تتبّع ولا ملفات تعريف ارتباط.</b> لا يطلب Sky Guide موقعك ولا الكاميرا ولا جهات الاتصال ولا ملفاتك.</p>
+      <p><b>ما يبقى على جهازك:</b> قوائمك المحفوظة، وخطة «خطّط لليلتك»، والمكان والتاريخ اللذان اخترتهما، ونتائج الاختبار، وإعداداتك (اللغة ولون الشاشة ووضع الأطفال وأيقونة التطبيق). تُحفظ في متصفحك أو التطبيق فقط، ولا يستطيع أحد غيرك رؤيتها، ولا حتى معدّ الموقع. ويحذفها مسح بيانات الموقع أو حذف التطبيق.</p>
+      <p><b>متى يتصل الموقع بالإنترنت:</b></p>
+      <ul>
+        <li><b>عند فتح الموقع:</b> يتلقى GitHub Pages الذي يستضيفه بيانات الاتصال المعتادة التي يتلقاها أي موقع، مثل عنوان IP.</li>
+        <li><b>صور الأجرام العميقة:</b> عند فتح فهرس تُحمَّل الصور من ويكيبيديا وويكيميديا كومنز، وعند الحاجة من خدمة مسح السماء في مركز CDS بستراسبورغ أو STScI، فتتلقى بيانات الاتصال المعتادة واسم الصورة المطلوبة.</li>
+        <li><b>«اعرضه في Stellarium Web»</b> (عند الضغط عليه فقط): يتلقى موقع Stellarium الجرم والتاريخ والمدينة التي اخترتها من القائمة، لا موقعك الحقيقي.</li>
+        <li><b>الملاحظات</b> (عند الإرسال فقط): ما تكتبه (الاسم والنوع والرسالة، والبريد إن اخترت كتابته)، مع المدينة واللغة اللتين اخترتهما، يُرسل إلى نموذج Google الخاص بمعدّ الموقع.</li>
+      </ul>
+      <p><b>التطبيق:</b> تثبيت Sky Guide يضيف تطبيق ويب صغيرًا إلى هاتفك، بلا أي صلاحيات، ولا يعمل في الخلفية، ويحتفظ بنسخة من الموقع ليعمل دون إنترنت.</p>
+    </div>
+  </div></section>
+  <section class="srcs" id="credits" hidden>
+    <div class="srcbody">
+      <footer class="credit">
+        <span class="en" lang="en">Made by <strong>Yousef Abdulfattah</strong>, Astronomy-Specialist, from Saudi Arabia. This page was generated with AI (Claude, by Anthropic). Stories and translations may contain mistakes, so check the sources shown under each story.</span>
+        <span class="ar" lang="ar">إعداد <strong>يوسف عبد الفتاح</strong>، أخصائي فلك، من المملكة العربية السعودية. أُنشئت هذه الصفحة بالذكاء الاصطناعي، وقد تحتوي القصص والترجمات على أخطاء، فارجع إلى المصادر المذكورة.</span>
+      </footer>
+    </div>
+  </section>
+</div>
+
