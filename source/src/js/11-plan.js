@@ -55,6 +55,7 @@ const PLAN = (() => {
     return {cons, pls};
   }
   const pickId = x => x.t + ':' + (x.key || x.ref);
+  let whatsUpKeys = new Set();   // constellations above the horizon during the tour (set when the Pick step is drawn)
   function pickName(x, ar) { if (x.t === 'planet') { const b = DATA.sci.SOL.bodies.find(y => y.id === x.ref); return b ? (ar ? b.ar : b.en) : x.ref; } const c = byKey[x.key]; return c ? (ar ? c.ar : c.latin) : x.key; }
   function stepsOrder() { return P.order === 'sto' ? ['sto', 'sci'] : ['sci', 'sto']; }
   function stepBar(t, ar) {
@@ -82,9 +83,53 @@ const PLAN = (() => {
     h += WX.box(N.pl, N.Y, N.M, N.D, 'mini');
     return h;
   }
+  // connected stories (data in STORY_LINKS)
+  const LT = {
+    en: {h: 'Connected stories tonight', intro: 'Constellations whose stories belong together. Tap one to pick the ones that are up.', all: 'All cultures', pick: 'Pick these', picked: 'Picked',
+         below: 'below the horizon', apart: n => `${n} is below the horizon tonight: in the story, they can never meet.`, down: (n, many) => `${n} ${many ? 'are' : 'is'} below the horizon tonight, but you can still tell ${many ? 'their' : 'its'} part of the story.`,
+         more: n => `Show all ${n}`, less: 'Show fewer', con: 'Connected story', next: n => `This story continues in ${n}.`, inPlan: 'in your plan', notPlan: 'not in your plan'},
+    ar: {h: 'قصص مترابطة الليلة', intro: 'كوكبات تجمعها قصة واحدة. اضغط على إحداها لاختيار ما هو فوق الأفق منها.', all: 'كل الثقافات', pick: 'اختر هذه', picked: 'تم الاختيار',
+         below: 'تحت الأفق', apart: n => `${n} تحت الأفق الليلة: في القصة لا يلتقيان أبدًا.`, down: n => `${n} تحت الأفق الليلة، وما زال بإمكانك أن تروي هذا الجزء من القصة.`,
+         more: n => `اعرض الكل (${n})`, less: 'اعرض أقل', con: 'قصة مترابطة', next: n => `تكمل القصة في ${n}.`, inPlan: 'في خطتك', notPlan: 'خارج خطتك'}
+  };
+  const conName = (k, ar) => byKey[k] ? (ar ? byKey[k].ar : byKey[k].latin) : k;
+  const listNames = (ks, ar) => ks.map(k => conName(k, ar)).join(ar ? ' و' : ' and ');
+  function linksBox(ar, W, on) {
+    const L = LT[ar ? 'ar' : 'en'], up = new Set(W.cons.map(c => c.k));
+    const groups = STORY_LINKS.filter(g => g.keys.some(k => up.has(k)));
+    if (!groups.length) return '';
+    const order = CULTURES.map(c => c.id), culs = CULTURES.filter(c => groups.some(g => g.cul === c.id));
+    const f = culs.some(c => c.id === P.lcul) ? P.lcul : 'all';
+    const shown = groups.filter(g => f === 'all' || g.cul === f).sort((a, b) => b.keys.filter(k => up.has(k)).length - a.keys.filter(k => up.has(k)).length || order.indexOf(a.cul) - order.indexOf(b.cul));
+    let h = `<details class="dsofold plinks"${P.lopen ? ' open' : ''}><summary><span class="pd-ar" aria-hidden="true">▸</span><span class="df-t">${L.h} <span class="plk-cnt">(${groups.length})</span></span><span class="df-h" data-o="${ar ? 'اضغط لعرضها' : 'Tap to show'}" data-c="${ar ? 'اضغط لطيّها' : 'Tap to fold'}"></span></summary><div class="plk-in"><p class="muted">${L.intro}</p>`;
+    h += `<div class="ppicks plf">${[['all', L.all], ...culs.map(c => [c.id, culLbl(c)])].map(([id, l]) => `<button type="button" class="ppick" data-lcul="${id}" aria-pressed="${id === f}"${id === 'all' ? '' : ` style="--cc:var(--c-${id})"`}>${esc(l)}</button>`).join('')}</div><div class="plcards">`;
+    const cut = f === 'all' && !P.lmore && shown.length > 6;
+    (cut ? shown.slice(0, 6) : shown).forEach(g => {
+      const T2 = ar ? g.ar : g.en, vis = g.keys.filter(k => up.has(k)), dn = g.keys.filter(k => !up.has(k)), cu = CULTURES.find(c => c.id === g.cul);
+      const all = vis.length && vis.every(k => on.has('con:' + k));
+      h += `<article class="plk" style="--cc:var(--c-${g.cul})"><div class="plk-c"><span class="dot"></span>${esc(culLbl(cu))}</div><h4>${esc(T2[0])}</h4><p>${esc(T2[1])}</p>`;
+      h += `<p class="plk-m">${g.keys.map(k => up.has(k) ? `<b>${esc(conName(k, ar))}</b>` : `<span class="plk-d">${esc(conName(k, ar))} (${L.below})</span>`).join(ar ? '، ' : ', ')}</p>`;
+      if (dn.length) h += `<p class="plk-n">${esc((g.apart ? L.apart : L.down)(listNames(dn, ar), dn.length > 1))}</p>`;
+      h += `<button type="button" class="ppick" data-link="${g.id}" aria-pressed="${!!all}">${all ? L.picked : L.pick}</button></article>`;
+    });
+    h += `</div>`;
+    if (f === 'all' && shown.length > 6) h += `<button type="button" class="pbtn plmore" data-lmore>${P.lmore ? L.less : L.more(shown.length)}</button>`;
+    return h + `</div></details>`;
+  }
+  function linksNote(x, cul, ar) {
+    const L = LT[ar ? 'ar' : 'en'], gs = STORY_LINKS.filter(g => g.cul === cul && g.keys.includes(x.key));
+    if (!gs.length) return '';
+    const nx = P.picks[P.cur + 1], inPlan = new Set(P.picks.map(pickId));
+    return gs.map(g => {
+      const T2 = ar ? g.ar : g.en, others = g.keys.filter(k => k !== x.key);
+      const cont = nx && nx.t === 'con' && others.includes(nx.key) ? ` <b>${esc(L.next(conName(nx.key, ar)))}</b>` : '';
+      return `<div class="plk plk-s" style="--cc:var(--c-${cul})"><h4>${L.con}: ${esc(T2[0])}</h4><p>${esc(T2[1])}${cont}</p><p class="plk-m">${others.map(k => `${esc(conName(k, ar))} <span class="plk-d">(${inPlan.has('con:' + k) ? L.inPlan : L.notPlan})</span>`).join(ar ? '، ' : ', ')}</p></div>`;
+    }).join('');
+  }
   function step2(t, ar, N) {
     const W = whatsUp(N), on = new Set(P.picks.map(pickId));
-    let h = `<p class="muted">${t.pickIntro}</p>`;
+    whatsUpKeys = new Set(W.cons.map(c => c.k));
+    let h = `<p class="muted">${t.pickIntro}</p>` + linksBox(ar, W, on);
     h += `<h3 class="psub">${t.cons}</h3><div class="ppicks">${W.cons.length ? W.cons.map(c => { const x = {t: 'con', key: c.k}, id = pickId(x);
       return `<button type="button" class="ppick" data-pick='${JSON.stringify(x)}' aria-pressed="${on.has(id)}">${esc(ar ? byKey[c.k].ar : byKey[c.k].latin)}${ar ? '' : ` <span lang="ar">${esc(byKey[c.k].ar)}</span>`}${c.easy ? `<span class="peasy">${t.easy}</span>` : ''}</button>`; }).join('') : `<p class="muted">${t.nothingUp}</p>`}</div>`;
     if (W.pls.length) h += `<h3 class="psub">${t.planets}</h3><div class="ppicks">${W.pls.map(I => { const x = {t: 'planet', ref: I.p}, id = pickId(x); return `<button type="button" class="ppick" data-pick='${JSON.stringify(x)}' aria-pressed="${on.has(id)}">${esc(pickName(x, ar))}</button>`; }).join('')}</div>`;
@@ -112,8 +157,9 @@ const PLAN = (() => {
     if (x.t !== 'con') return `<p class="muted">${t.noStory}</p>`;
     const lo = DATA.lore[x.key] || {}, avail = CULTURES.filter(c => lo[c.id]);
     if (!avail.length) return `<p class="muted">${ar ? 'لا توجد قصص لهذه الكوكبة في الثقافات السبع هنا.' : 'There are no stories for this constellation in the seven cultures here.'}</p>`;
-    const cul = avail.some(c => c.id === P.cul) ? P.cul : avail[0].id;
+    const pref = x.cul || P.cul, cul = avail.some(c => c.id === pref) ? pref : avail[0].id;
     let h = `<p class="psub2">${t.storyFor}</p><div class="ppicks">${avail.map(c => `<button type="button" class="ppick" data-pcul="${c.id}" aria-pressed="${c.id === cul}" style="--cc:var(--c-${c.id})">${esc(c.name)} <span lang="${c.natLang || 'ar'}">${esc(c.nat)}</span></button>`).join('')}</div>`;
+    h += linksNote(x, cul, ar);
     const pos = (POS.pos[x.key] || {})[cul];
     h += `<div class="pstory" style="--cc:var(--c-${cul})"><div style="text-align:end">${AG.btn({t: 'con', key: x.key, cul}, lang, true)}</div>${AG.chart(x.key, pos && pos.face === 'N' && !pos.never)}${AG.lore(x.key, cul, lang)}</div>`;
     return h;
@@ -168,7 +214,18 @@ const PLAN = (() => {
       const m = card.querySelector('.pnav .pmsg'); if (m) m.textContent = '';
     }));
     card.querySelectorAll('[data-pcur]').forEach(b => b.addEventListener('click', () => { P.cur = +b.dataset.pcur; PLANrender(); top(); }));
-    card.querySelectorAll('[data-pcul]').forEach(b => b.addEventListener('click', () => { P.cul = b.dataset.pcul; PLANrender(); }));
+    card.querySelectorAll('[data-pcul]').forEach(b => b.addEventListener('click', () => { P.cul = b.dataset.pcul; if (P.picks[P.cur]) P.picks[P.cur].cul = P.cul; PLANrender(); }));
+    card.querySelectorAll('[data-lcul]').forEach(b => b.addEventListener('click', () => { P.lcul = b.dataset.lcul; PLANrender(); }));
+    card.querySelectorAll('details.plinks').forEach(d => d.addEventListener('toggle', () => { P.lopen = d.open; keep(); }));
+    card.querySelectorAll('[data-lmore]').forEach(b => b.addEventListener('click', () => { P.lmore = !P.lmore; PLANrender(); }));
+    card.querySelectorAll('[data-link]').forEach(b => b.addEventListener('click', () => {
+      const g = STORY_LINKS.find(x => x.id === b.dataset.link); if (!g) return;
+      const vis = g.keys.filter(k => whatsUpKeys.has(k));
+      const have = k => P.picks.findIndex(x => x.t === 'con' && x.key === k);
+      if (vis.length && vis.every(k => have(k) >= 0)) vis.forEach(k => P.picks.splice(have(k), 1));
+      else vis.forEach(k => { const i = have(k); if (i >= 0) P.picks[i].cul = g.cul; else P.picks.push({t: 'con', key: k, cul: g.cul}); });
+      P.cur = 0; PLANrender();
+    }));
     card.querySelectorAll('[data-pstep]').forEach(b => b.addEventListener('click', () => { const n = +b.dataset.pstep; if (n >= 3 && !P.picks.length) return; P.done = false; P.step = n; PLANrender(); top(); }));
     card.querySelectorAll('[data-pact]').forEach(b => b.addEventListener('click', () => {
       const a = b.dataset.pact;
