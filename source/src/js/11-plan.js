@@ -164,16 +164,108 @@ const PLAN = (() => {
     h += `<div class="pstory" style="--cc:var(--c-${cul})"><div style="text-align:end">${AG.btn({t: 'con', key: x.key, cul}, lang, true)}</div>${AG.chart(x.key, pos && pos.face === 'N' && !pos.never)}${AG.lore(x.key, cul, lang)}</div>`;
     return h;
   }
+  // printable plan: built into #printout, then the device's own print window (where "Save as PDF" lives)
+  const PT = {
+    en: {btn: 'Download PDF', short: 'PDF', how: 'In the window that opens, choose “Save as PDF”. On iPhone, tap the Share button at the top of the print screen, then “Save to Files”.',
+         title: 'Night plan', tour: 'Tour', sunrise: 'Sunrise', sky: 'Sky darkness', wx: 'Weather', list: 'Your picks', con: 'Constellation', planet: 'Planet',
+         sci: 'Science', sto: 'Story', where: 'Where to look', low: 'Below the horizon during your tour.', made: 'Made with Sky Guide',
+         hi: (tm, alt, dir) => `Highest at ${tm}, about ${alt}° up toward the ${dir}.`, at: (tm, alt, dir) => `At ${tm}: about ${alt}° up in the ${dir}.`, below: tm => `At ${tm}: below the horizon.`,
+         bn: ['', 'excellent dark site', 'truly dark site', 'rural sky', 'rural/suburban edge', 'suburban', 'bright suburban', 'suburban/urban edge', 'city', 'inner city'],
+         dirs: ['north', 'north-east', 'east', 'south-east', 'south', 'south-west', 'west', 'north-west']},
+    ar: {btn: 'تنزيل PDF', short: 'PDF', how: 'في النافذة التي تظهر اختر «حفظ بتنسيق PDF». في الآيفون اضغط زر المشاركة أعلى شاشة الطباعة ثم «حفظ في الملفات».',
+         title: 'خطة الليلة', tour: 'الجولة', sunrise: 'الشروق', sky: 'ظلمة السماء', wx: 'الطقس', list: 'اختياراتك', con: 'كوكبة', planet: 'كوكب',
+         sci: 'العلم', sto: 'القصة', where: 'أين تنظر', low: 'تحت الأفق في أثناء جولتك.', made: 'من دليل السماء',
+         hi: (tm, alt, dir) => `أعلى ارتفاع عند <bdi dir="ltr">${tm}</bdi>، نحو ${alt}° جهة ${dir}.`, at: (tm, alt, dir) => `عند <bdi dir="ltr">${tm}</bdi>: نحو ${alt}° جهة ${dir}.`, below: tm => `عند <bdi dir="ltr">${tm}</bdi>: تحت الأفق.`,
+         bn: ['', 'موقع مظلم ممتاز', 'موقع مظلم حقًا', 'سماء ريفية', 'حافة الريف والضواحي', 'ضواحي', 'ضواحي ساطعة', 'حافة الضواحي والمدينة', 'مدينة', 'وسط المدينة'],
+         dirs: ['الشمال', 'الشمال الشرقي', 'الشرق', 'الجنوب الشرقي', 'الجنوب', 'الجنوب الغربي', 'الغرب', 'الشمال الغربي']}
+  };
+  let CEN = null;   // rough centre (ra, dec) of every constellation, from the boundary grid
+  function centre(key) {
+    if (!CEN) {
+      const acc = {};
+      for (let dec = -89; dec <= 89; dec += 2) {
+        const step = Math.min(30, 2 / Math.max(0.03, Math.cos(dec * RAD)));
+        for (let ra = 0; ra < 360; ra += step) {
+          const c = conAt(ra, dec); if (!c || !CAL.iau[c.ab]) continue;
+          const k = CAL.iau[c.ab].key, a = acc[k] || (acc[k] = [0, 0, 0]), cd = Math.cos(dec * RAD);
+          a[0] += cd * Math.cos(ra * RAD); a[1] += cd * Math.sin(ra * RAD); a[2] += Math.sin(dec * RAD);
+        }
+      }
+      CEN = {}; Object.keys(acc).forEach(k => { const [x, y, z] = acc[k]; CEN[k] = {ra: (Math.atan2(y, x) / RAD + 360) % 360, dec: Math.asin(z / Math.hypot(x, y, z)) / RAD}; });
+    }
+    return CEN[key];
+  }
+  function whereText(x, N, L) {
+    const hh = u => { const d = new Date(u + N.pl.tz * 36e5); return String(d.getUTCHours()).padStart(2, '0') + ':' + String(d.getUTCMinutes()).padStart(2, '0'); };
+    const pos = t => { if (x.t === 'planet') { const q = SKY.planet(x.ref, t); return SKY.altaz(q.ra, q.dec, t, N.pl.lat, N.pl.lon); } const c = centre(x.key); return c ? SKY.altaz(c.ra, c.dec, t, N.pl.lat, N.pl.lon) : null; };
+    const dir = az => L.dirs[Math.round((((az % 360) + 360) % 360) / 45) % 8];
+    let best = null;
+    for (let t = N.t0; t <= N.t1 + 1; t += 10 * 6e4) { const a = pos(t); if (a && (!best || a.alt > best.alt)) best = {t, alt: a.alt, az: a.az}; }
+    if (!best) return '';
+    if (best.alt < 0) return L.low;
+    const s = pos(N.t0), out = [];
+    if (Math.abs(best.t - N.t0) > 15 * 6e4) out.push(s.alt > 0 ? L.at(hh(N.t0), Math.round(s.alt), dir(s.az)) : L.below(hh(N.t0)));
+    out.push(L.hi(hh(best.t), Math.round(best.alt), dir(best.az)));
+    return out.join(' ');
+  }
+  function printHTML() {
+    const N = night(), ar = state.lang === 'ar', lang = ar ? 'ar' : 'en', t = TX[lang], L = PT[lang], st = N.st;
+    const hh = u => { const d = new Date(u + N.pl.tz * 36e5); return String(d.getUTCHours()).padStart(2, '0') + ':' + String(d.getUTCMinutes()).padStart(2, '0'); };
+    const tm = (N.t0 + N.t1) / 2, m = SKY.moon(tm), malt = SKY.altaz(m.ra, m.dec, tm, N.pl.lat, N.pl.lon).alt, se = sunEvents(N.Y, N.M, N.D, N.pl);
+    const date = fmtD(Date.UTC(N.Y, N.M, N.D), lang, {weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'});
+    const sep = ar ? '، ' : ', ';
+    let h = `<div class="pr-doc${ar ? ' rtl' : ''}"${ar ? ' dir="rtl" lang="ar"' : ''}>`;
+    h += `<header class="pr-head"><div class="pr-brand">Sky Guide · <span lang="ar">دليل السماء</span></div><h1>${L.title}</h1><p class="pr-sub"><b>${esc(date)}</b> · ${esc(ar ? N.pl.ar : N.pl.en)}</p></header>`;
+    h += `<div class="pr-night">${moonIcon(m.illum, m.waxing, N.pl.lat < 0, 40)}<dl>`;
+    h += `<dt>${L.tour}</dt><dd><bdi dir="ltr">${esc(st.tourStart)}–${esc(st.tourEnd)}</bdi></dd>`;
+    if (se.set) h += `<dt>${t.sunset}</dt><dd><bdi dir="ltr">${hh(se.set)}</bdi></dd>`;
+    if (se.rise) h += `<dt>${L.sunrise}</dt><dd><bdi dir="ltr">${hh(se.rise)}</bdi></dd>`;
+    h += `<dt>${t.moon}</dt><dd>${Math.round(m.illum * 100)}% ${t.lit}${sep}${malt > 0 ? t.up : t.down}</dd>`;
+    if (st.bortle) h += `<dt>${L.sky}</dt><dd>${ar ? 'بورتل' : 'Bortle'} ${+st.bortle} · ${L.bn[+st.bortle] || ''}</dd>`;
+    h += `</dl></div><h2 class="pr-h2">${L.wx}</h2>${WX.box(N.pl, N.Y, N.M, N.D, 'mini')}`;
+    h += `<h2 class="pr-h2">${L.list}</h2><ol class="pr-toc">${P.picks.map(x => `<li><b>${esc(pickName(x, ar))}</b> <span class="muted">· ${x.t === 'planet' ? L.planet : L.con}</span><br><span class="pr-w">${whereText(x, N, L)}</span></li>`).join('')}</ol>`;
+    const keepCur = P.cur;
+    P.picks.forEach((x, i) => {
+      P.cur = i;
+      const sub = x.t === 'con' ? (ar ? byKey[x.key].latin : byKey[x.key].ar) : '';
+      h += `<section class="pr-obj"><h2 class="pr-name">${esc(pickName(x, ar))}${sub ? ` <span class="arn2"${ar ? '' : ' lang="ar"'}>${esc(sub)}</span>` : ''}</h2>`;
+      h += `<p class="pr-where"><b>${L.where}:</b> ${whereText(x, N, L)}</p>`;
+      h += `<h3 class="pr-h3">${L.sci}</h3>${sciView(x, lang)}`;
+      if (x.t === 'con') {
+        const lo = DATA.lore[x.key] || {}, avail = CULTURES.filter(c => lo[c.id]);
+        if (avail.length) {
+          const pref = x.cul || P.cul, cul = avail.some(c => c.id === pref) ? pref : avail[0].id, cu = CULTURES.find(c => c.id === cul);
+          h += `<h3 class="pr-h3" style="--cc:var(--c-${cul})">${L.sto} · ${esc(culLbl(cu))}</h3>${linksNote(x, cul, ar)}<div class="pstory" style="--cc:var(--c-${cul})">${AG.lore(x.key, cul, lang)}</div>`;
+        }
+      }
+      h += `</section>`;
+    });
+    P.cur = keepCur;
+    return h + `<footer class="pr-foot">${L.made} · <bdi dir="ltr">yousef-ay12.github.io/SkyGuide</bdi></footer></div>`;
+  }
+  let printing = false;
+  function printPlan() {
+    if (printing || !P.picks.length) return; printing = true;
+    let el = document.getElementById('printout');
+    if (!el) { el = document.createElement('div'); el.id = 'printout'; document.body.appendChild(el); }
+    try { el.innerHTML = printHTML(); } catch (e) { printing = false; throw e; }
+    el.querySelectorAll('button, select, input, .kidbtn, .swbtn, .retpill').forEach(b => b.remove());
+    el.querySelectorAll('details').forEach(d => { d.open = true; });
+    const root = document.documentElement, done = () => { root.classList.remove('printing'); printing = false; removeEventListener('afterprint', done); };
+    const go = () => { root.classList.add('printing'); addEventListener('afterprint', done); setTimeout(() => { window.print(); if (!('onafterprint' in window)) setTimeout(done, 1000); }, 60); };
+    // give the forecast (saved or fresh) up to 4 seconds to arrive before the print window opens
+    Promise.race([WX.fill(el).catch(() => {}), new Promise(r => setTimeout(r, 4000))]).then(go, go);
+  }
   function render() {
     document.querySelectorAll('#cultures input').forEach(i => { i.checked = i.value === 'plan'; i.closest('.chip').classList.remove('none'); });
     const card = document.getElementById('card'), ar = state.lang === 'ar', lang = ar ? 'ar' : 'en', t = TX[lang];
     card.style.setProperty('--cc', 'var(--c-cal)');
     const N = night();
     let h = `<div class="card-head"><div><div class="eyebrow"${ar ? ' lang="ar" style="letter-spacing:0;text-transform:none;font-family:var(--f-ar);font-size:15px"' : ''}><span class="dot"></span>${t.eyebrow}</div><h2${ar ? ' lang="ar" style="font-family:var(--f-ar)"' : ''}>${t.title}</h2></div></div>`;
-    h += `<div class="sci-tools"><div class="langs" role="group" aria-label="Language">${[['en', 'English'], ['ar', 'العربية']].map(([id, l]) => `<button type="button" data-lang="${id}" aria-pressed="${lang === id}"${id === 'ar' ? ' lang="ar"' : ''}>${l}</button>`).join('')}</div>${!P.done && P.step >= 3 && stepsOrder()[P.step - 3] === 'sci' ? kidBtn(ar) : ''}</div>`;
+    h += `<div class="sci-tools"><div class="langs" role="group" aria-label="Language">${[['en', 'English'], ['ar', 'العربية']].map(([id, l]) => `<button type="button" data-lang="${id}" aria-pressed="${lang === id}"${id === 'ar' ? ' lang="ar"' : ''}>${l}</button>`).join('')}</div>${!P.done && P.step >= 3 && stepsOrder()[P.step - 3] === 'sci' ? kidBtn(ar) : ''}${P.picks.length && !P.done ? `<button type="button" class="pbtn prbtn" data-pprint${ar ? ' dir="rtl" lang="ar"' : ''}>⤓ ${PT[lang].btn}</button>` : ''}</div>`;
     h += `<div class="plan${ar ? ' rtl' : ''}" id="plan"${ar ? ' dir="rtl" lang="ar"' : ''}>` + stepBar(t, ar);
     if (P.done) {
-      h += `<div class="pdone"><h3>${t.doneT}</h3><p>${t.doneP}</p><div class="pbtns"><button type="button" class="pbtn main" data-pact="save">${t.saveAll}</button><button type="button" class="pbtn" data-pact="again">${t.again}</button></div><p class="pmsg" role="status"></p></div>`;
+      h += `<div class="pdone"><h3>${t.doneT}</h3><p>${t.doneP}</p><div class="pbtns"><button type="button" class="pbtn main" data-pact="save">${t.saveAll}</button><button type="button" class="pbtn main" data-pprint>⤓ ${PT[lang].btn}</button><button type="button" class="pbtn" data-pact="again">${t.again}</button></div><p class="pmsg" role="status"></p><p class="muted ptip">${PT[lang].how}</p></div>`;
     } else if (P.step === 1) h += step1(t, ar, N);
     else if (P.step === 2) h += step2(t, ar, N);
     else {
@@ -206,6 +298,7 @@ const PLAN = (() => {
       else if (k === 'other' && v) { if (!P.picks.some(x => x.t === 'con' && x.key === v)) P.picks.push({t: 'con', key: v}); }
       calSave(); PLANrender();
     }));
+    card.querySelectorAll('[data-pprint]').forEach(b => b.addEventListener('click', printPlan));
     card.querySelectorAll('input[name=porder]').forEach(r => r.addEventListener('change', () => { P.order = r.value; keep(); }));
     card.querySelectorAll('[data-pick]').forEach(b => b.addEventListener('click', () => {
       const x = JSON.parse(b.dataset.pick), id = pickId(x), i = P.picks.findIndex(y => pickId(y) === id);

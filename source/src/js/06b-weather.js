@@ -90,7 +90,7 @@ const WX = (() => {
     if (days < -1.2) { box.innerHTML = head + `<p class="muted">${t.past}</p>`; return; }
     if (days > DAYS - 1) { box.innerHTML = head + `<p class="muted">${t.far}</p>` + credit; return; }
     box.innerHTML = head + `<p class="muted">${t.load}</p>`;
-    get(lat, lon).then(rec => {
+    return get(lat, lon).then(rec => {
       if (!box.isConnected) return;
       const N = nightHours(rec, pl, +Y, +M, +D);
       if (N.polar) { box.innerHTML = head + `<p class="muted">${t.polar}</p>` + credit; return; }
@@ -111,7 +111,7 @@ const WX = (() => {
       box.innerHTML = h + credit;
     }).catch(() => { if (box.isConnected) box.innerHTML = head + `<p class="muted">${navigator.onLine === false ? t.off : t.fail}</p>` + credit; });
   }
-  function scan(root) { (root || document).querySelectorAll('.wx[data-wx]:not([data-wxdone])').forEach(b => { b.dataset.wxdone = '1'; fillBox(b); }); }
+  function scan(root) { return Promise.all([...(root || document).querySelectorAll('.wx[data-wx]:not([data-wxdone])')].map(b => { b.dataset.wxdone = '1'; return fillBox(b); })); }
   addEventListener('DOMContentLoaded', () => {
     const card = document.getElementById('card'); if (!card) return;
     new MutationObserver(() => scan(card)).observe(card, {childList: true, subtree: true});
@@ -120,5 +120,5 @@ const WX = (() => {
   addEventListener('online', () => { document.querySelectorAll('.wx[data-wx]').forEach(b => { delete b.dataset.wxdone; }); scan(); });
   // the box a page puts where the weather should go
   const box = (pl, Y, M, D, mode) => `<div class="wx${mode === 'mini' ? ' wx-mini' : ''}" data-wx="${pl.lat},${pl.lon},${pl.tz},${Y},${M},${D},${mode || 'full'}"></div>`;
-  return {box, get};
+  return {box, get, fill: scan};
 })();
