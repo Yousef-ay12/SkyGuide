@@ -126,3 +126,6 @@ html.gs-open { overflow: hidden; }
 .picsave .ps-bar i { display: block; height: 100%; width: 0; background: var(--accent, #e3b35a); transition: width .2s; }
 .picsave .ps-msg:empty { display: none; }
 @media (max-width: 350px) { .brandbtn .b-en { font-size: 19px; } .brandbtn { gap: 5px; } .hdtools { gap: 5px; } .setbtn { padding: 6px 8px; } .hlang button { padding: 6px 7px; } }
+.picsave .ps-miss { margin: 4px 0 8px; font-size: 14px; }
+.picsave .ps-miss summary { cursor: pointer; color: var(--muted); }
+.picsave .ps-miss p { margin: 6px 0 0; color: var(--muted); }

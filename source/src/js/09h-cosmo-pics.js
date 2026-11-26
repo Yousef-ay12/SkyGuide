@@ -58,8 +58,8 @@ const COS_PIC = (() => {
       img.onerror = () => { if (srcs.length > 1) put(srcs.slice(1), alt, credit); else fail(); };
       img.src = srcs[0]; };
     const alt = (fig.querySelector('figcaption') || {}).textContent || '';
-    if (p[0] === 'c') { const f = encodeURIComponent(p[1].replace(/ /g, '_')), fp = 'https://commons.wikimedia.org/wiki/Special:FilePath/' + f;
-      put([fp + '?width=960', fp + '?width=500', fp], alt, `<a class="dcr" href="https://commons.wikimedia.org/wiki/File:${f}" target="_blank" rel="noopener">${p[4] ? esc(p[4]) + ' · ' : ''}${ar ? 'المصدر والترخيص: ويكيميديا كومنز' : 'Source and licence: Wikimedia Commons'}</a>`); return; }
+    if (p[0] === 'c') { const f = encodeURIComponent(p[1].replace(/ /g, '_'));
+      put(wmFile(p[1], [960, 500]), alt, `<a class="dcr" href="https://commons.wikimedia.org/wiki/File:${f}" target="_blank" rel="noopener">${p[4] ? esc(p[4]) + ' · ' : ''}${ar ? 'المصدر والترخيص: ويكيميديا كومنز' : 'Source and licence: Wikimedia Commons'}</a>`); return; }
     if (p[0] === 'webb') { put([`https://cdn.esawebb.org/archives/images/screen/${p[1]}.jpg`], alt, `<a class="dcr wcr" href="https://esawebb.org/images/${p[1]}/" target="_blank" rel="noopener"><b>${ar ? 'تلسكوب جيمس ويب' : 'James Webb'}</b> · ${esc(p[2])} · CC BY 4.0</a>`, null); return; }
     const w = await wiki(p[1]); if (!w) return fail();
     put([w.big, w.small], alt, `<a class="dcr" href="https://commons.wikimedia.org/wiki/File:${encodeURIComponent(w.file)}" target="_blank" rel="noopener">${ar ? 'المصدر والترخيص: ويكيميديا كومنز' : 'Source and licence: Wikimedia Commons'}</a>`);

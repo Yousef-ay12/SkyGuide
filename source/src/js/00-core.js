@@ -42,6 +42,31 @@ const culLbl = cu => state.lang === 'ar' ? CUL_NAME_AR[cu.id] : cu.name;
 // Wikimedia only serves pictures at its standard widths (others are refused with error 429), so round a thumbnail address up to one
 const WM_STEPS = [20, 40, 60, 120, 250, 330, 500, 960, 1280, 1920, 3840];
 const wmStd = u => String(u || '').replace(/\/(\d+)px-([^/]+)$/, (m, n, f) => '/' + (WM_STEPS.find(x => x >= +n) || 3840) + 'px-' + f);
+// the direct address of a Wikimedia Commons file, which (unlike Special:FilePath) answers with CORS, so the offline store can keep it:
+// a standard-width thumbnail for each width given, then the original file (a thumbnail wider than the original does not exist)
+const md5 = str => {
+  const b = unescape(encodeURIComponent(str)), n = b.length, w = [], K = [], S = [7, 12, 17, 22, 5, 9, 14, 20, 4, 11, 16, 23, 6, 10, 15, 21];
+  for (let i = 0; i < 64; i++) K[i] = Math.floor(Math.abs(Math.sin(i + 1)) * 4294967296) | 0;
+  for (let i = 0; i < n; i++) w[i >> 2] |= b.charCodeAt(i) << ((i % 4) * 8);
+  w[n >> 2] |= 0x80 << ((n % 4) * 8); const L = (((n + 8) >> 6) + 1) * 16; w[L - 2] = n * 8; for (let i = 0; i < L; i++) w[i] |= 0;
+  let h0 = 0x67452301, h1 = 0xefcdab89 | 0, h2 = 0x98badcfe | 0, h3 = 0x10325476;
+  for (let o = 0; o < L; o += 16) {
+    let A = h0, B = h1, C = h2, D = h3;
+    for (let i = 0; i < 64; i++) {
+      const r = i >> 4; let f, g;
+      if (r === 0) { f = (B & C) | (~B & D); g = i; } else if (r === 1) { f = (D & B) | (~D & C); g = (5 * i + 1) % 16; }
+      else if (r === 2) { f = B ^ C ^ D; g = (3 * i + 5) % 16; } else { f = C ^ (B | ~D); g = (7 * i) % 16; }
+      const t = D; D = C; C = B; const x = (A + f + K[i] + w[o + g]) | 0, sh = S[r * 4 + (i % 4)]; B = (B + ((x << sh) | (x >>> (32 - sh)))) | 0; A = t;
+    }
+    h0 = (h0 + A) | 0; h1 = (h1 + B) | 0; h2 = (h2 + C) | 0; h3 = (h3 + D) | 0;
+  }
+  return [h0, h1, h2, h3].map(v => { let s = ''; for (let i = 0; i < 4; i++) s += ((v >>> (i * 8)) & 255).toString(16).padStart(2, '0'); return s; }).join('');
+};
+const wmFile = (file, widths) => {
+  const f = String(file).replace(/ /g, '_'), h = md5(f), dir = h[0] + '/' + h.slice(0, 2) + '/', e = encodeURIComponent(f);
+  const thumb = W => 'https://upload.wikimedia.org/wikipedia/commons/thumb/' + dir + e + '/' + W + 'px-' + e + (/\.svg$/i.test(f) ? '.png' : /\.tiff?$/i.test(f) ? '.jpg' : '');
+  return widths.map(thumb).concat(/\.(svg|tiff?)$/i.test(f) ? [] : ['https://upload.wikimedia.org/wikipedia/commons/' + dir + e]);
+};
 function readHash() {
   const h = decodeURIComponent(location.hash.slice(1));
   if (h === 'calendar') { state.cul = 'calendar'; return true; }

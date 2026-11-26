@@ -405,8 +405,10 @@ const PL_WIKI = {sun: 'Sun', mercury: 'Mercury_(planet)', venus: 'Venus', earth:
       box.dataset.tried = '1'; const img = new Image(); img.alt = (ar ? 'صورة ' : 'Picture of ') + box.dataset.wiki.replace(/_.*$/, '');
       img.onload = () => { if (ph) ph.remove(); box.classList.add('ok'); box.prepend(img);
         box.insertAdjacentHTML('beforeend', `<a class="dcr" href="https://commons.wikimedia.org/wiki/File:${encodeURIComponent(file.replace(/ /g, '_'))}" target="_blank" rel="noopener">${ar ? 'المصدر: ويكيميديا كومنز' : 'Source: Wikimedia Commons'}</a>`); };
-      img.onerror = () => { delete box.dataset.done; load(box); };
-      img.src = `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(file)}?width=500`; return;
+      // the 500-pixel copy, else the original file; if neither loads, the photo from the body's Wikipedia article
+      const srcs = wmFile(file, [500]); let k = 0;
+      img.onerror = () => { if (++k < srcs.length) img.src = srcs[k]; else { delete box.dataset.done; load(box); } };
+      img.src = srcs[0]; return;
     }
     const fail = () => { delete box.dataset.done; if (ph) ph.textContent = navigator.onLine === false ? (ar ? 'الصورة تحتاج إلى اتصال بالإنترنت' : 'The picture needs an internet connection') : (ar ? 'تعذّر تحميل الصورة' : 'The picture could not load'); };
     try {
