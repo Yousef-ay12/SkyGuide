@@ -416,7 +416,7 @@ const PL_WIKI = {sun: 'Sun', mercury: 'Mercury_(planet)', venus: 'Venus', earth:
       const img = new Image(); img.alt = (ar ? 'صورة ' : 'Picture of ') + (j.title || '');
       img.onload = () => { if (ph) ph.remove(); box.classList.add('ok'); box.prepend(img);
         const a = document.createElement('a'); a.className = 'dcr'; a.target = '_blank'; a.rel = 'noopener'; a.href = (j.content_urls && j.content_urls.desktop && j.content_urls.desktop.page) || '#'; a.textContent = ar ? 'المصدر: ويكيبيديا / ويكيميديا كومنز' : 'Source: Wikipedia / Wikimedia Commons'; box.appendChild(a); };
-      img.onerror = fail; img.src = t.source;
+      img.onerror = fail; img.src = t === j.thumbnail ? wmStd(t.source) : t.source;
     } catch (e) { fail(); }
   }
   document.addEventListener('toggle', ev => { const d = ev.target; if (!d.matches || !d.matches('.plfold') || !d.open) return; const b = d.querySelector('.plimg[data-wiki]'); if (b && b.dataset.wiki) load(b); }, true);
@@ -450,7 +450,7 @@ const DSO_IMG = (() => {
     if (!title) return null; if (title in cache) return cache[title];
     try { const ctl = 'AbortController' in window ? new AbortController() : null; if (ctl) setTimeout(() => ctl.abort(), 8000);
       const r = await fetch('https://en.wikipedia.org/api/rest_v1/page/summary/' + encodeURIComponent(title).replace(/%2F/g, '/'), ctl ? {signal: ctl.signal} : {});
-      if (!r.ok) return (cache[title] = null); const j = await r.json(); const t = j.thumbnail && j.thumbnail.source;
+      if (!r.ok) return (cache[title] = null); const j = await r.json(); const t = wmStd(j.thumbnail && j.thumbnail.source);
       if (!t || /\.svg/i.test(t)) return (cache[title] = null);
       const file = decodeURIComponent((t.split('/').slice(-2, -1)[0] || ''));
       return (cache[title] = {src: t, file, page: j.content_urls && j.content_urls.desktop && j.content_urls.desktop.page});

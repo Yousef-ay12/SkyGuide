@@ -39,6 +39,9 @@ try { const l = localStorage.getItem('osms-lang'); if (l === 'af' || l === 'en' 
 const CUL_NAME_AR = {arab: 'العرب', greek: 'الإغريق', egypt: 'مصر القديمة', china: 'الصين', japan: 'اليابان', india: 'الهند', safrica: 'جنوب أفريقيا'};
 const CUL_AR_SKY = {arab: 'سماء العرب', greek: 'سماء الإغريق', egypt: 'سماء مصر القديمة', china: 'سماء الصين', japan: 'سماء اليابان', india: 'سماء الهند', safrica: 'سماء جنوب أفريقيا'};
 const culLbl = cu => state.lang === 'ar' ? CUL_NAME_AR[cu.id] : cu.name;
+// Wikimedia only serves pictures at its standard widths (others are refused with error 429), so round a thumbnail address up to one
+const WM_STEPS = [20, 40, 60, 120, 250, 330, 500, 960, 1280, 1920, 3840];
+const wmStd = u => String(u || '').replace(/\/(\d+)px-([^/]+)$/, (m, n, f) => '/' + (WM_STEPS.find(x => x >= +n) || 3840) + 'px-' + f);
 function readHash() {
   const h = decodeURIComponent(location.hash.slice(1));
   if (h === 'calendar') { state.cul = 'calendar'; return true; }

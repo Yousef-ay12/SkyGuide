@@ -1,13 +1,17 @@
 /* ---------- Cosmology pictures: real photographs and maps, loaded when a topic is opened ---------- */
-// by topic title: ['c', a Wikimedia Commons file], ['w', a Wikipedia article about one object, whose main picture is that object] or ['webb', ESA/Webb image id, credit],
+// by topic title: ['c', a Wikimedia Commons file, ..., and a credit line where its licence asks for one], ['w', a Wikipedia article about one object, whose main picture is that object] or ['webb', ESA/Webb image id, credit],
 // then the caption in English and Arabic. A picture that cannot be found is left out.
 const COS_PICS = {
+  'How a redshift survey works': ['c', '2dfgrs.png', 'The 2dF Galaxy Redshift Survey: each dot is a galaxy, placed by its direction and its redshift distance. Earth is at the centre.', 'مسح 2dF للانزياح نحو الأحمر: كل نقطة مجرة، وُضعت حسب اتجاهها وبعدها المقيس بالانزياح. الأرض في المركز.'],
+  'Dark matter halos': ['c', 'Dark matter halo.png', 'A dark matter halo from a computer simulation. The visible galaxy would sit in the bright centre.', 'هالة من المادة المظلمة من محاكاة حاسوبية. تقع المجرة المرئية في المركز الساطع.'],
+  'Dark energy, dark matter and normal matter': ['c', "Comparison of normal matter and dark matter's large scale structure (heic0701c).jpg", 'Hubble mapped where normal matter is (left) and where dark matter is (right) in the same patch of sky: the dark matter forms the frame that normal matter follows.', 'رسم هابل خريطة لمكان المادة العادية (يسارًا) والمادة المظلمة (يمينًا) في الرقعة نفسها من السماء: المادة المظلمة تصنع الهيكل الذي تتبعه المادة العادية.', 'NASA, ESA and R. Massey (Caltech)'],
+  'The Local Group and the Local Volume': ['c', 'Local Group Galaxies Comparison.png', 'The galaxies of the Local Group compared by size.', 'مجرات المجموعة المحلية مقارنة بأحجامها.'],
+  'The Local Bubble': ['c', 'Local bubble.jpg', 'A NASA map of the Local Bubble: the Sun sits in a hollow of thin, hot gas about 300 light-years across.', 'خريطة من ناسا للفقاعة المحلية: تقع الشمس في تجويف من غاز رقيق حار عرضه نحو 300 سنة ضوئية.'],
   'The Local Group: held together by gravity': ['w', 'Andromeda Galaxy', 'The Andromeda Galaxy, the largest member of the Local Group, 2.5 million light-years away.', 'مجرة المرأة المسلسلة، أكبر أعضاء المجموعة المحلية، على بعد 2.5 مليون سنة ضوئية.'],
-  'The Local Supercluster': ['c', 'ESO-M87.jpg', 'A deep photograph of part of the Virgo Cluster, the heart of our Local Supercluster. The big galaxy at lower left is M87.', 'صورة عميقة لجزء من عنقود العذراء، قلب عنقودنا المجري الفائق المحلي. المجرة الكبيرة أسفل اليسار هي M87.'],
-  'Laniakea, our home supercluster': ['c', 'Laniakea.gif', 'Superclusters and voids within a billion light-years of the Milky Way. Laniakea is marked in yellow.', 'العناقيد الفائقة والفراغات في حدود مليار سنة ضوئية من درب التبانة. لانياكيا مُعلَّمة بالأصفر.'],
-  'The cosmic microwave background': ['c', 'Planck CMB.jpg', 'The whole sky in microwaves, mapped by the Planck satellite. The colours show differences of about one part in 100,000.', 'السماء كلها بالموجات الميكروية كما رسمها قمر بلانك. تُظهر الألوان فروقًا بنحو جزء من 100 ألف.'],
-  'From ripples to a web: non-linear collapse': ['c', 'AstroMSseqF 063aL (18135101).jpg', 'A slice of the Millennium Simulation (2005), a supercomputer model of how matter gathers into the cosmic web.', 'شريحة من «محاكاة الألفية» (2005)، نموذج حاسوبي عملاق لتجمّع المادة في الشبكة الكونية.'],
-  'The cosmic web': ['c', 'Structure of the Universe.jpg', 'Great filaments, made largely of dark matter, stretch through the space between galaxies.', 'خيوط عظيمة، معظمها من المادة المظلمة، تمتد في الفضاء بين المجرات.'],
+  'The Local Supercluster': ['c', 'Markarian.jpg', "Markarian's Chain, a curved line of galaxies at the heart of the Virgo Cluster, the centre of our Local Supercluster.", 'سلسلة ماركاريان، صف منحنٍ من المجرات في قلب عنقود العذراء، مركز عنقودنا الفائق المحلي.'],
+  'Laniakea, our home supercluster': ['w', 'Laniakea Supercluster', 'A map of Laniakea and the flow of its galaxies.', 'خريطة لانياكيا وانسياق مجراتها.'],
+  'The cosmic microwave background': ['c', 'Cosmic Microwave Background (CMB).jpeg', 'The whole sky in microwaves, mapped by the Planck satellite. The colours show differences of about one part in 100,000.', 'السماء كلها بالموجات الميكروية كما رسمها قمر بلانك. تُظهر الألوان فروقًا بنحو جزء من 100 ألف.', 'ESA and the Planck Collaboration'],
+  'The cosmic web': ['c', 'Map of the Cosmic Web Generated from Slime Mould Algorithm.jpg', 'A 3D map of the cosmic web (purple) traced through real galaxies with a method borrowed from slime moulds.', 'خريطة ثلاثية الأبعاد للشبكة الكونية (بالبنفسجي) رُسمت عبر مجرات حقيقية بطريقة مستوحاة من فطر الوحل.', 'NASA, ESA, J. Burchett and O. Elek (UC Santa Cruz)'],
   'Distance in an expanding universe': ['w', "Webb's First Deep Field", "Webb's First Deep Field (2022): thousands of galaxies, some seen as they were more than 13 billion years ago.", 'أول حقل عميق لتلسكوب جيمس ويب (2022): آلاف المجرات، بعضها كما كان قبل أكثر من 13 مليار سنة.'],
   'SN 1987A: the first multi-messenger detection': ['w', 'SN 1987A', 'The remains of SN 1987A, with rings of gas lit up by the explosion.', 'بقايا المستعر الأعظم SN 1987A، مع حلقات من الغاز أضاءها الانفجار.'],
   'How gravitational-wave detectors work': ['c', 'Aerial View Of LIGO Hanford.jpg', 'LIGO Hanford from the air: its two 4-km arms meet at a right angle.', 'مرصد LIGO في هانفورد من الجو: ذراعاه، طول كل منهما 4 كم، تلتقيان بزاوية قائمة.'],
@@ -36,7 +40,7 @@ const COS_PIC = (() => {
       if (!r.ok) return (cache[title] = null);
       const j = await r.json(), t = j.thumbnail && j.thumbnail.source; if (!t) return (cache[title] = null);
       const file = decodeURIComponent((t.split('/').slice(-2, -1)[0] || ''));
-      return (cache[title] = {small: t, big: /\.svg/i.test(file) ? t : t.replace(/\/\d+px-/, '/960px-'), file});
+      return (cache[title] = {small: wmStd(t), big: /\.svg/i.test(file) ? t : t.replace(/\/\d+px-/, '/960px-'), file});
     } catch (e) { return null; }
   }
   function html(title, ar) {
@@ -55,7 +59,7 @@ const COS_PIC = (() => {
       img.src = srcs[0]; };
     const alt = (fig.querySelector('figcaption') || {}).textContent || '';
     if (p[0] === 'c') { const f = encodeURIComponent(p[1].replace(/ /g, '_')), fp = 'https://commons.wikimedia.org/wiki/Special:FilePath/' + f;
-      put([fp + '?width=960', fp + '?width=640', fp], alt, `<a class="dcr" href="https://commons.wikimedia.org/wiki/File:${f}" target="_blank" rel="noopener">${ar ? 'المصدر والترخيص: ويكيميديا كومنز' : 'Source and licence: Wikimedia Commons'}</a>`); return; }
+      put([fp + '?width=960', fp + '?width=500', fp], alt, `<a class="dcr" href="https://commons.wikimedia.org/wiki/File:${f}" target="_blank" rel="noopener">${p[4] ? esc(p[4]) + ' · ' : ''}${ar ? 'المصدر والترخيص: ويكيميديا كومنز' : 'Source and licence: Wikimedia Commons'}</a>`); return; }
     if (p[0] === 'webb') { put([`https://cdn.esawebb.org/archives/images/screen/${p[1]}.jpg`], alt, `<a class="dcr wcr" href="https://esawebb.org/images/${p[1]}/" target="_blank" rel="noopener"><b>${ar ? 'تلسكوب جيمس ويب' : 'James Webb'}</b> · ${esc(p[2])} · CC BY 4.0</a>`, null); return; }
     const w = await wiki(p[1]); if (!w) return fail();
     put([w.big, w.small], alt, `<a class="dcr" href="https://commons.wikimedia.org/wiki/File:${encodeURIComponent(w.file)}" target="_blank" rel="noopener">${ar ? 'المصدر والترخيص: ويكيميديا كومنز' : 'Source and licence: Wikimedia Commons'}</a>`);

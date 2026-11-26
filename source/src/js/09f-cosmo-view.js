@@ -20,20 +20,6 @@ const COS_FIG = {
     s += `<text x="12" y="66" class="cf-t">68% ${parts[0][1]}</text><text x="${(10 + 68 * 6.2 + 4).toFixed(1)}" y="66" class="cf-t">27% ${parts[1][1]}</text><text x="630" y="86" text-anchor="end" class="cf-t">5% ${parts[2][1]}</text>`;
     return s + `</svg>`;
   },
-  // a patch of cosmic web: clusters joined by filaments, with empty voids between
-  web(ar) {
-    let seed = 7; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
-    const N = [[80, 60], [230, 40], [380, 90], [540, 50], [130, 190], [300, 210], [470, 200], [600, 170], [60, 300], [250, 320], [420, 310], [580, 300]];
-    const E = [[0, 1], [1, 2], [2, 3], [0, 4], [1, 5], [2, 5], [2, 6], [3, 7], [4, 5], [5, 6], [6, 7], [4, 8], [4, 9], [5, 9], [6, 10], [9, 10], [10, 11], [7, 11]];
-    let s = `<svg class="cosfig" viewBox="0 0 640 340" role="img" aria-label="${ar ? 'الشبكة الكونية: عناقيد تصلها خيوط من المجرات، وبينها فراغات' : 'The cosmic web: clusters joined by filaments of galaxies, with voids between'}" dir="ltr"><rect x="0" y="0" width="640" height="340" rx="12" class="cf-sky"/>`;
-    E.forEach(([a, b]) => { const [x1, y1] = N[a], [x2, y2] = N[b];
-      for (let i = 0; i < 26; i++) { const t = rnd(), j = (rnd() - 0.5) * 16; const dx = x2 - x1, dy = y2 - y1, L = Math.hypot(dx, dy);
-        s += `<circle cx="${(x1 + dx * t - dy / L * j).toFixed(1)}" cy="${(y1 + dy * t + dx / L * j).toFixed(1)}" r="${(0.9 + rnd() * 1.1).toFixed(1)}" class="cf-gx"/>`; } });
-    N.forEach(([x, y]) => { for (let i = 0; i < 22; i++) { const r = rnd() * 11, a = rnd() * 6.283; s += `<circle cx="${(x + r * Math.cos(a)).toFixed(1)}" cy="${(y + r * Math.sin(a)).toFixed(1)}" r="1.4" class="cf-gx"/>`; } s += `<circle cx="${x}" cy="${y}" r="15" class="cf-halo"/>`; });
-    s += `<text x="300" y="134" class="cf-lb" text-anchor="middle">${ar ? 'فراغ' : 'void'}</text><text x="300" y="262" class="cf-lb" text-anchor="middle">${ar ? 'فراغ' : 'void'}</text>`;
-    s += `<text x="${N[5][0] + 20}" y="${N[5][1] + 4}" class="cf-lb">${ar ? 'عنقود' : 'cluster'}</text><text x="440" y="66" class="cf-lb">${ar ? 'خيط' : 'filament'}</text>`;
-    return s + `</svg><p class="cf-cap">${ar ? 'رسم توضيحي، لا خريطة حقيقية. كل نقطة مجرة.' : 'A sketch, not a real map. Each dot is a galaxy.'}</p>`;
-  },
   // an L-shaped laser interferometer
   ifo(ar) {
     const T = ar ? {laser: 'ليزر', split: 'مقسّم الشعاع', m: 'مرآة', det: 'الكاشف', arm: 'ذراع 4 كم'} : {laser: 'laser', split: 'beam splitter', m: 'mirror', det: 'detector', arm: '4 km arm'};
@@ -95,6 +81,93 @@ const COS_FIG = {
       <path d="M250 60 Q 320 110 390 60 L 390 110 Q 320 160 250 110 Z" class="cf-surf"/><path d="M270 80 Q 320 95 365 78 Q 335 100 320 128 Q 300 100 270 80 Z" class="cf-tri"/><text x="320" y="185" text-anchor="middle" class="cf-t">${T[1]}</text>
       <path d="M470 120 L 510 55 L 620 55 L 580 120 Z" class="cf-surf"/><path d="M505 108 L 545 64 L 575 108 Z" class="cf-tri"/><text x="545" y="185" text-anchor="middle" class="cf-t">${T[2]}</text>
     </svg><p class="cf-cap">${ar ? 'القياسات تقول إن كوننا مسطح.' : 'Measurements say our universe is flat.'}</p>`;
+  },
+  // Lambda-CDM: the history of the universe as a widening shape, from the Big Bang to today's speeding-up expansion
+  lcdm(ar) {
+    let seed = 5; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+    const st = ar ? ['الانفجار العظيم', 'الخلفية الميكروية', 'أول النجوم', 'المجرات', 'تسارع التمدد'] : ['Big Bang', 'Microwave glow', 'First stars', 'Galaxies', 'Speeding up'];
+    const xs = [30, 150, 290, 430, 590], half = x => 8 + Math.pow((x - 20) / 600, 0.6) * 118 + (x > 470 ? (x - 470) * 0.25 : 0);
+    let top = '', bot = ''; for (let x = 20; x <= 620; x += 10) { top += (x === 20 ? 'M' : ' L') + x + ' ' + (170 - half(x)).toFixed(1); bot = ' L' + x + ' ' + (170 + half(x)).toFixed(1) + bot; }
+    let s = `<svg class="cosfig cfz" viewBox="0 0 640 360" role="img" aria-label="${ar ? 'تاريخ الكون في النموذج القياسي، من الانفجار العظيم إلى التمدد المتسارع اليوم' : 'The history of the universe in the standard model, from the Big Bang to today\'s speeding-up expansion'}" dir="ltr"><rect x="0" y="0" width="640" height="360" rx="12" class="cf-sky"/>`;
+    s += `<path d="${top}${bot} Z" class="cf-halo"/>`;
+    for (let i = 0; i < 70; i++) { const x = 300 + rnd() * 310, h = half(x) * 0.9; s += `<circle cx="${x.toFixed(1)}" cy="${(170 + (rnd() * 2 - 1) * h).toFixed(1)}" r="${(0.9 + rnd() * 1.3).toFixed(1)}" class="cf-gx"/>`; }
+    for (let i = 0; i < 40; i++) { const x = 130 + rnd() * 40, h = half(x) * 0.95; s += `<circle cx="${x.toFixed(1)}" cy="${(170 + (rnd() * 2 - 1) * h).toFixed(1)}" r="1.8" class="${i % 2 ? 'cf-dm' : 'cf-nm'}" opacity=".7"/>`; }
+    s += `<circle cx="22" cy="170" r="6" class="cf-nm"/>`;
+    xs.forEach((x, i) => { const up = i % 2 === 0; s += `<line x1="${x}" y1="${up ? 34 : 306}" x2="${x}" y2="${(170 + (up ? -1 : 1) * (half(x) + 2)).toFixed(1)}" class="cf-ax" stroke-dasharray="2 4"/><text x="${x}" y="${up ? 26 : 324}" text-anchor="${i === 0 ? 'start' : i === 4 ? 'end' : 'middle'}" class="cf-t">${st[i]}</text>`; });
+    s += `<line x1="20" y1="345" x2="612" y2="345" class="cf-ax"/><path d="M620 345 l-9 -5 v10 z" class="cf-nm"/>`;
+    return s + `</svg><p class="cf-cap">${ar ? 'رسم توضيحي لـ13.8 مليار سنة من اليسار إلى اليمين: اتساع الشكل يمثّل حجم الكون. التمدد تباطأ أولًا بالجاذبية، ثم بدأ يتسارع قبل نحو 5 مليارات سنة بسبب الطاقة المظلمة.' : 'A sketch of 13.8 billion years, from left to right: the width stands for the size of the universe. Gravity slowed the expansion at first; about 5 billion years ago dark energy made it speed up.'}</p>`;
+  },
+  // baryon acoustic oscillations: a faint ring of extra galaxies about 490 million light-years from any galaxy
+  bao(ar) {
+    let seed = 3; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+    const cx = 320, cy = 175, R = 120;
+    let s = `<svg class="cosfig cfz" viewBox="0 0 640 350" role="img" aria-label="${ar ? 'حلقة باهتة من المجرات حول مجرة، قطرها نحو 490 مليون سنة ضوئية' : 'A faint ring of galaxies around a galaxy, about 490 million light-years out'}" dir="ltr"><rect x="0" y="0" width="640" height="350" rx="12" class="cf-sky"/>`;
+    for (let i = 0; i < 260; i++) s += `<circle cx="${(10 + rnd() * 620).toFixed(1)}" cy="${(10 + rnd() * 330).toFixed(1)}" r="${(0.8 + rnd()).toFixed(1)}" class="cf-gx" opacity=".55"/>`;
+    s += `<circle cx="${cx}" cy="${cy}" r="${R}" class="cf-halo2" style="fill:none"/>`;
+    for (let i = 0; i < 70; i++) { const a = rnd() * 6.283, d = R + (rnd() - 0.5) * 16; s += `<circle cx="${(cx + Math.cos(a) * d).toFixed(1)}" cy="${(cy + Math.sin(a) * d).toFixed(1)}" r="${(1.6 + rnd() * 1.2).toFixed(1)}" class="cf-nm"/>`; }
+    s += `<circle cx="${cx}" cy="${cy}" r="6" class="cf-nm"/><line x1="${cx}" y1="${cy}" x2="${cx + R}" y2="${cy}" class="cf-ax"/><text x="${cx + R / 2}" y="${cy - 8}" text-anchor="middle" class="cf-t">${ar ? '490 مليون سنة ضوئية' : '490 million light-years'}</text>`;
+    return s + `</svg><p class="cf-cap">${ar ? 'رسم توضيحي، والحلقة مبالغ فيها كثيرًا: في السماء الحقيقية لا تظهر إلا بقياس ملايين المجرات.' : 'A sketch, with the ring greatly exaggerated: in the real sky it only shows up when millions of galaxies are measured.'}</p>`;
+  },
+  // from ripples to a web: nearly smooth matter, then clumps, then filaments and voids
+  ripples(ar) {
+    let seed = 9; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+    const T = ar ? ['شبه متجانس', 'تنمو التكتلات', 'الشبكة الكونية'] : ['Almost smooth', 'Clumps grow', 'The cosmic web'];
+    const K = [[40, 60], [150, 45], [100, 150], [35, 230], [160, 250], [110, 300]];
+    let s = `<svg class="cosfig cfz" viewBox="0 0 640 380" role="img" aria-label="${ar ? 'ثلاث مراحل: مادة شبه متجانسة، ثم تكتلات، ثم شبكة من الخيوط والفراغات' : 'Three stages: almost smooth matter, then clumps, then a web of filaments and voids'}" dir="ltr">`;
+    [0, 1, 2].forEach(k => { const x0 = 10 + k * 210;
+      s += `<rect x="${x0}" y="10" width="200" height="330" rx="12" class="cf-sky"/><text x="${x0 + 100}" y="366" text-anchor="middle" class="cf-s">${T[k]}</text>`;
+      const P = K.map(([x, y]) => [x0 + 10 + x, 10 + y]);
+      if (k === 2) [[0, 1], [0, 2], [1, 2], [2, 3], [2, 4], [3, 4], [4, 5], [3, 5]].forEach(([a, b]) => { const [x1, y1] = P[a], [x2, y2] = P[b];
+        for (let i = 0; i < 22; i++) { const t = rnd(), j = (rnd() - 0.5) * 8; s += `<circle cx="${(x1 + (x2 - x1) * t + j).toFixed(1)}" cy="${(y1 + (y2 - y1) * t + j).toFixed(1)}" r="1.1" class="cf-gx"/>`; } });
+      for (let i = 0; i < 240; i++) { let x, y;
+        if (k === 0) { x = x0 + 8 + rnd() * 184; y = 18 + rnd() * 314; }
+        else { const n = P[i % 6], sp = k === 1 ? 30 : 12; x = n[0] + (rnd() - 0.5) * sp * 2; y = n[1] + (rnd() - 0.5) * sp * 2; }
+        s += `<circle cx="${Math.min(x0 + 196, Math.max(x0 + 4, x)).toFixed(1)}" cy="${Math.min(336, Math.max(14, y)).toFixed(1)}" r="1" class="cf-gx" opacity="${k === 0 ? 0.6 : 0.85}"/>`; }
+      if (k === 2) P.forEach(([x, y]) => { s += `<circle cx="${x}" cy="${y}" r="13" class="cf-halo"/>`; });
+      if (k < 2) s += `<text x="${x0 + 205}" y="180" text-anchor="middle" class="cf-t">›</text>`; });
+    return s + `</svg><p class="cf-cap">${ar ? 'رسم توضيحي: الجاذبية تجعل المناطق الأكثف قليلًا تجذب مادة أكثر، فتتحول التموجات الصغيرة إلى عناقيد وخيوط وفراغات.' : 'A sketch: gravity lets slightly denser places pull in more matter, so tiny ripples become clusters, filaments and voids.'}</p>`;
+  },
+  // redshift: light from a far galaxy is stretched on its way, so it arrives redder
+  redshift(ar) {
+    let p = 'M548 140'; for (let x = 548; x >= 86; x -= 2) { const t = (548 - x) / 462, lam = 22 + t * 52; p += ` L${x} ${(140 + Math.sin((548 - x) / lam * 6.283) * (22 - t * 6)).toFixed(1)}`; }
+    let s = `<svg class="cosfig cfz" viewBox="0 0 640 270" role="img" aria-label="${ar ? 'موجة ضوء تتمدد وتحمرّ في طريقها من مجرة بعيدة' : 'A light wave stretching and turning redder on its way from a far galaxy'}" dir="ltr"><defs><linearGradient id="cfrs" x1="0" x2="1" y1="0" y2="0"><stop offset="0" stop-color="#e2553f"/><stop offset=".45" stop-color="#e6c26a"/><stop offset="1" stop-color="#6f9bff"/></linearGradient></defs><rect x="0" y="0" width="640" height="270" rx="12" class="cf-sky"/>`;
+    s += `<ellipse cx="575" cy="140" rx="30" ry="12" class="cf-gx"/><circle cx="50" cy="140" r="12" class="cf-nm"/><path d="${p}" fill="none" stroke="url(#cfrs)" stroke-width="3"/>`;
+    s += `<text x="575" y="180" text-anchor="middle" class="cf-t">${ar ? 'مجرة بعيدة' : 'far galaxy'}</text><text x="50" y="180" text-anchor="middle" class="cf-t">${ar ? 'نحن' : 'us'}</text>`;
+    s += `<text x="320" y="70" text-anchor="middle" class="cf-s">${ar ? 'يتمدد الفضاء أثناء رحلة الضوء، فتطول موجته ويحمرّ لونه' : 'space stretches while the light travels, so its waves get longer and redder'}</text>`;
+    s += `<line x1="60" y1="225" x2="580" y2="225" class="cf-ax"/><path d="M580 225 l-8 -5 v10 z" class="cf-nm"/><text x="320" y="250" text-anchor="middle" class="cf-t">${ar ? 'كلما بعدت المجرة، ابتعدت عنا أسرع وازداد احمرار ضوئها' : 'the farther the galaxy, the faster it moves away and the redder its light'}</text>`;
+    return s + `</svg>`;
+  },
+  // turning a map into numbers: a spotty map is broken into spots of each size, giving the power spectrum's row of peaks
+  powerspec(ar) {
+    let seed = 13; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+    let s = `<svg class="cosfig cfz" viewBox="0 0 640 330" role="img" aria-label="${ar ? 'خريطة مبقعة تتحول إلى منحنى فيه صف من القمم: طيف القدرة' : 'A spotty map turned into a curve with a row of peaks: the power spectrum'}" dir="ltr">`;
+    s += `<rect x="10" y="10" width="220" height="250" rx="12" class="cf-sky"/>`;
+    for (let i = 0; i < 150; i++) s += `<circle cx="${(22 + rnd() * 196).toFixed(1)}" cy="${(22 + rnd() * 226).toFixed(1)}" r="${(3 + rnd() * 9).toFixed(1)}" class="${rnd() < 0.5 ? 'cf-dm' : 'cf-nm'}" opacity=".45"/>`;
+    s += `<text x="120" y="290" text-anchor="middle" class="cf-t">${ar ? 'الخريطة' : 'the map'}</text><text x="252" y="140" text-anchor="middle" class="cf-t">›</text>`;
+    const X0 = 290, X1 = 625, Y0 = 250, H = 210; let d = '';
+    for (let i = 0; i <= 160; i++) { const x = i / 160, y = Math.exp(-2.1 * x) * Math.pow(Math.cos(Math.PI * (x * 3.4 - 0.5)), 2) * 0.92 + 0.08 * Math.exp(-3 * x);
+      d += (i ? ' L' : 'M') + (X0 + x * (X1 - X0)).toFixed(1) + ' ' + (Y0 - y * H).toFixed(1); }
+    s += `<line x1="${X0}" y1="${Y0}" x2="${X1}" y2="${Y0}" class="cf-ax"/><line x1="${X0}" y1="${Y0}" x2="${X0}" y2="20" class="cf-ax"/><path d="${d}" fill="none" stroke-width="3" class="cf-wave"/>`;
+    s += `<text x="${X0 + 8}" y="34" class="cf-s">${ar ? 'قوة البقع' : 'how strong'}</text><text x="${X1}" y="${Y0 + 22}" text-anchor="end" class="cf-s">${ar ? 'بقع أصغر →' : 'smaller spots →'}</text>`;
+    s += `<text x="${(X0 + X1) / 2}" y="290" text-anchor="middle" class="cf-t">${ar ? 'طيف القدرة' : 'the power spectrum'}</text>`;
+    return s + `</svg><p class="cf-cap">${ar ? 'رسم توضيحي: تُحلَّل الخريطة إلى بقع من كل حجم، وتُقاس قوة كل حجم. موضع القمم وارتفاعها يكشفان مكونات الكون وشكل الفضاء.' : 'A sketch: the map is broken into spots of each size, and how strong each size is gets measured. Where the peaks sit and how tall they are tell us what the universe is made of and the shape of space.'}</p>`;
+  },
+  // gravity against expansion: space carries everything apart, but a dense region pulls itself together
+  gravity(ar) {
+    const head = (x, y, a, c) => { const p = (r, t) => `${(x + Math.cos(a + t) * r).toFixed(1)},${(y + Math.sin(a + t) * r).toFixed(1)}`; return `<polygon points="${p(6, 0)} ${p(6, 2.5)} ${p(6, -2.5)}" class="${c}"/>`; };
+    let seed = 21; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+    const cx = 320, cy = 160;
+    let s = `<svg class="cosfig cfz" viewBox="0 0 640 330" role="img" aria-label="${ar ? 'الفضاء يتمدد حول منطقة كثيفة تنهار على نفسها' : 'Space expanding around a dense region that collapses on itself'}" dir="ltr"><rect x="0" y="0" width="640" height="300" rx="12" class="cf-sky"/>`;
+    for (let i = 0; i < 26; i++) { const a = rnd() * 6.283, r = 160 + rnd() * 130, x = cx + Math.cos(a) * r * 1.15, y = cy + Math.sin(a) * r * 0.55;
+      if (x < 20 || x > 620 || y < 18 || y > 282) continue;
+      const ex = x + Math.cos(a) * 22, ey = y + Math.sin(a) * 11;
+      s += `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="2.2" class="cf-gx"/><line x1="${(x + Math.cos(a) * 5).toFixed(1)}" y1="${(y + Math.sin(a) * 3).toFixed(1)}" x2="${ex.toFixed(1)}" y2="${ey.toFixed(1)}" class="cf-ax"/>` + head(ex, ey, Math.atan2(ey - y, ex - x), 'cf-mir'); }
+    s += `<circle cx="${cx}" cy="${cy}" r="78" class="cf-halo2" style="fill:none"/>`;
+    for (let i = 0; i < 60; i++) { const a = rnd() * 6.283, r = Math.pow(rnd(), 1.8) * 40; s += `<circle cx="${(cx + Math.cos(a) * r).toFixed(1)}" cy="${(cy + Math.sin(a) * r).toFixed(1)}" r="${(1.2 + rnd() * 1.4).toFixed(1)}" class="cf-nm"/>`; }
+    for (let k = 0; k < 8; k++) { const a = k / 8 * 6.283 + 0.3, x1 = cx + Math.cos(a) * 74, y1 = cy + Math.sin(a) * 74, x2 = cx + Math.cos(a) * 52, y2 = cy + Math.sin(a) * 52;
+      s += `<line x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}" stroke-width="2.5" class="cf-wave"/>` + head(x2, y2, a + Math.PI, 'cf-dm'); }
+    s += `<text x="${cx}" y="322" text-anchor="middle" class="cf-t">${ar ? 'في الداخل تغلب الجاذبية، وفي الخارج يغلب التمدد' : 'gravity wins inside, expansion wins outside'}</text>`;
+    return s + `</svg><p class="cf-cap">${ar ? 'رسم توضيحي: المنطقة الأكثف قليلًا تجذب المادة إليها حتى تتوقف عن التمدد وتنهار إلى مجرة أو عنقود، بينما يباعد التمدد ما حولها.' : 'A sketch: a slightly denser region pulls matter in until it stops expanding and collapses into a galaxy or cluster, while the expansion carries everything around it apart.'}</p>`;
   }
 };
 function cosHTML(lang) {

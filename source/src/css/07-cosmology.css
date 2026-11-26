@@ -108,3 +108,5 @@
 .glo-row p { margin: 6px 0 0; color: var(--muted); font-size: 15.5px; line-height: 1.45; }
 .sci.rtl .glo-t b { font-family: var(--f-ar); }
 @media (max-width: 760px) { .glo { grid-template-columns: minmax(0, 1fr); } }
+/* the newer drawings keep their labels readable on phones */
+@media (max-width: 600px) { .cosfig.cfz .cf-t { font-size: 25px; } .cosfig.cfz .cf-s { font-size: 21px; } }

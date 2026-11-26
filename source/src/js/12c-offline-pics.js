@@ -1,7 +1,7 @@
 /* ---------- Save pictures for offline: downloads every deep-sky, planet and Cosmology picture once,
    into a store the offline helper (sw.js) reads first, so they show with no internet ---------- */
 const PICSAVE = (() => {
-  const STORE = 'skyguide-offline-pics';   // sw.js reads this store first and never trims it
+  const STORE = 'skyguide-offline-pics-v2';   // sw.js reads this store first and never trims it
   let busy = false, stop = false;
   const T = () => state.lang === 'ar' ? {
     btn: 'احفظ الصور للاستخدام دون إنترنت', title: 'حفظ الصور دون إنترنت',
@@ -27,7 +27,7 @@ const PICSAVE = (() => {
   function jobs() {
     const out = [], seen = new Set(), add = j => { const k = j.url; if (!seen.has(k)) { seen.add(k); out.push(j); } };
     allDsos().forEach(({d}) => { const w = DSO_WEBB[d.id], p = DSO_POS[d.id];
-      if (w) add({url: webb(w[0])}); else if (p && p[3]) add({url: sumDso(p[3]), then: j => { const t = j.thumbnail && j.thumbnail.source; return t && !/\.svg/i.test(t) ? [t] : []; }}); });
+      if (w) add({url: webb(w[0])}); else if (p && p[3]) add({url: sumDso(p[3]), then: j => { const t = j.thumbnail && j.thumbnail.source; return t && !/\.svg/i.test(t) ? [wmStd(t)] : []; }}); });
     Object.keys(PL_FILE).forEach(k => add({url: `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(PL_FILE[k])}?width=500`}));
     Object.keys(COS_PICS).forEach(k => { const p = COS_PICS[k];
       if (p[0] === 'c') add({url: 'https://commons.wikimedia.org/wiki/Special:FilePath/' + encodeURIComponent(p[1].replace(/ /g, '_')) + '?width=960'});
@@ -40,6 +40,7 @@ const PICSAVE = (() => {
     if (await c.match(url)) return true;
     let r = null;
     try { r = await fetch(url, {mode: 'cors', cache: 'no-store'}); if (!r.ok) r = null; } catch (e) { r = null; }
+    if (!r && /^https:\/\/[^/]*(wikipedia|wikimedia)\.org\//.test(url)) return false;   // refused by Wikimedia: do not keep an empty copy
     if (!r) { try { r = await fetch(url, {mode: 'no-cors', cache: 'no-store'}); } catch (e) { return false; } if (!r || (!r.ok && r.type !== 'opaque')) return false; }
     try { await c.put(url, r.clone()); } catch (e) { return false; }
     return r;

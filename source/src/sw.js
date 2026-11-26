@@ -6,9 +6,9 @@
    "Save pictures for offline" in Settings stores all of them in a separate store that is never trimmed. */
 const VERSION = '__VERSION__';
 const CACHE = 'skyguide-' + VERSION;
-const PICS = 'skyguide-pictures-v1';   // Wikipedia and Webb photos
+const PICS = 'skyguide-pictures-v2';   // Wikipedia and Webb photos
 const SKY = 'skyguide-sky-v1';         // sky-survey photos (take more room, so keep fewer)
-const SAVED = 'skyguide-offline-pics'; // pictures saved with "Save pictures for offline" (never trimmed)
+const SAVED = 'skyguide-offline-pics-v2'; // pictures saved with "Save pictures for offline" (never trimmed)
 const MAX_PICS = 300, MAX_SKY = 40;
 const FILES = __FILES__;
 const PIC_HOSTS = /(^|\.)(esawebb\.org|wikipedia\.org|wikimedia\.org|alasky\.cds\.unistra\.fr|archive\.stsci\.edu)$/;
@@ -23,11 +23,16 @@ async function trim(name, max) {
   const c = await caches.open(name), keys = await c.keys();
   for (let i = 0; i < keys.length - max; i++) await c.delete(keys[i]);
 }
+// Wikipedia and Wikimedia answer with CORS, so the real status is visible and a refused picture (for example error 429) is never kept;
+// other hosts are kept as they come
+const CORS_HOSTS = /(^|\.)(wikipedia\.org|wikimedia\.org)$/;
 function keepPicture(req, name, max) {
-  return caches.open(name).then(c => c.match(req).then(hit => hit || fetch(req).then(res => {
-    if (res.ok || res.type === 'opaque') c.put(req, res.clone()).then(() => trim(name, max)).catch(() => {});
-    return res;
-  })));
+  const keep = (c, res) => { c.put(req, res.clone()).then(() => trim(name, max)).catch(() => {}); return res; };
+  return caches.open(name).then(c => c.match(req).then(hit => {
+    if (hit) return hit;
+    if (CORS_HOSTS.test(new URL(req.url).hostname)) return fetch(req.url, {mode: 'cors', credentials: 'omit'}).then(res => res.ok ? keep(c, res) : res, () => fetch(req));
+    return fetch(req).then(res => (res.ok || res.type === 'opaque') ? keep(c, res) : res);
+  }));
 }
 function page(req) {
   const saved = () => caches.match('./').then(r => r || caches.match(req, {ignoreSearch: true}));
