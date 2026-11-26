@@ -252,7 +252,7 @@ const AG = (() => {
   }
 
   // ---- the AstroGuide page ----
-  let cmp = new Set(), renaming = false, confirmDel = false, openSet = new Set();
+  let cmp = new Set(), renaming = false, confirmDel = false, openSet = new Set(), pasting = null;   // pasting: null, or the text in the paste box
   function guideHTML(lang) {
     const ar = lang === 'ar', l = active();
     let h = `<div class="agw${ar ? ' rtl' : ''}"${ar ? ' dir="rtl" lang="ar"' : ''}>`;
@@ -265,8 +265,10 @@ const AG = (() => {
     else h += `<button type="button" data-aact="rename">${ar ? 'إعادة التسمية' : 'Rename'}</button>`;
     if (navigator.share && l.items.length) h += `<button type="button" data-aact="share">${ar ? 'شارك القائمة' : 'Share list'}</button>`;
     h += `<button type="button" data-aact="copy">${ar ? 'انسخ رابط القائمة' : 'Copy list link'}</button>`;
+    h += `<button type="button" data-aact="paste" aria-expanded="${pasting !== null}">${ar ? 'الصق قائمة مُشارَكة' : 'Paste a shared list'}</button>`;
     if (S.lists.length > 1 || l.items.length) h += `<button type="button" data-aact="del" class="${confirmDel ? 'danger' : ''}">${confirmDel ? (ar ? 'اضغط مجددًا للحذف' : 'Tap again to delete') : (ar ? 'حذف القائمة' : 'Delete list')}</button>`;
     h += `</div>`;
+    if (pasting !== null) h += `<div class="agpaste"><label for="agpaste">${ar ? 'الصق رابط القائمة' : 'Paste list link'}</label><div class="agpaste-row"><input id="agpaste" type="text" inputmode="url" autocomplete="off" dir="ltr" value="${esc(pasting)}" placeholder="https://…#ag=…"><button type="button" data-aact="pdo" class="pbtn main">${ar ? 'أضف القائمة' : 'Add the list'}</button><button type="button" data-aact="pno">${ar ? 'إلغاء' : 'Cancel'}</button></div><p class="agpaste-err" id="agpaste-err" role="alert" hidden>${ar ? 'هذا ليس رابط قائمة من Sky Guide. انسخ الرابط كاملًا وحاول مرة أخرى.' : 'That is not a Sky Guide list link. Copy the whole link and try again.'}</p></div>`;
     if (!l.items.length) {
       h += `<div class="agempty"><p><b>${ar ? 'القائمة فارغة' : 'This list is empty'}</b></p><p>${ar ? 'افتح أي كوكبة أو نجم أو كوكب واضغط «+ ليلتي» ليظهر هنا.' : 'Open any constellation, star or planet and tap + My night to add it here.'}</p></div>`;
     } else {
@@ -284,7 +286,7 @@ const AG = (() => {
       h += `<div class="agbar"><button type="button" data-aact="start" class="agstart">${ar ? 'ابدأ العرض من الأول' : 'Start presenting from item 1'}</button>${l.items.some(it => it.t === 'star') ? `<span class="muted" style="font-size:15px">${nc.length >= 2 ? (ar ? `المقارنة: ${nc.length} نجوم` : `Comparing ${nc.length} stars`) : (ar ? 'اختر نجمين أو أكثر بخانة «قارن» لمقارنتها.' : 'Tick Compare on two or more stars to compare them.')}</span>` : ''}</div>`;
       if (nc.length >= 2) h += compareHTML(nc, lang);
     }
-    h += `<p class="vref" style="white-space:normal;margin-top:16px">${ar ? 'تُحفظ قوائمك في هذا المتصفح على جهازك فقط. لنقلها إلى جهاز آخر استعمل «انسخ رابط القائمة» وافتح الرابط هناك.' : 'Your lists are kept in this browser on this device only. To move a list to another device, use Copy list link and open the link there.'}</p>`;
+    h += `<p class="vref" style="white-space:normal;margin-top:16px">${ar ? 'تُحفظ قوائمك في هذا المتصفح على جهازك فقط. لنقلها إلى جهاز آخر استعمل «انسخ رابط القائمة»، ثم افتح الرابط هناك أو استعمل «الصق قائمة مُشارَكة».' : 'Your lists are kept in this browser on this device only. To move a list to another device, use Copy list link, then open the link there or use Paste a shared list.'}</p>`;
     return h + `</div>`;
   }
   function shareLink(l) {
@@ -292,17 +294,31 @@ const AG = (() => {
     const b64 = btoa(unescape(encodeURIComponent(JSON.stringify(data)))).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
     return location.href.split('#')[0] + '#ag=' + b64;
   }
-  function importFromHash() {
-    const h = location.hash; if (!h.startsWith('#ag=')) return false;
+  // a shared list: the part after #ag= in a list link. Adds it as a new list and makes it the open one; null if the code is not a list
+  function importCode(code) {
     try {
-      let b = h.slice(4).replace(/-/g, '+').replace(/_/g, '/'); while (b.length % 4) b += '=';
+      let b = String(code).replace(/-/g, '+').replace(/_/g, '/'); while (b.length % 4) b += '=';
       const d = JSON.parse(decodeURIComponent(escape(atob(b))));
       const items = (d.i || []).filter(it => it && TYPES[it.t] && typeof it.key === 'string').slice(0, 200).map(it => ({t: it.t, key: it.key, ref: it.ref || '', cul: it.cul || '', note: String(it.note || '').slice(0, 2000)}));
       const l = {id: uid(), name: (String(d.n || '').slice(0, 40) || (state.lang === 'ar' ? 'ليلتي' : 'My night')) + (state.lang === 'ar' ? ' (مشاركة)' : ' (shared)'), items};
-      S.lists.push(l); S.active = l.id; save(); state.cul = 'guide';
-      try { history.replaceState(null, '', '#guide'); } catch (e) {}
-      return true;
-    } catch (e) { return false; }
+      if (!items.length) return null;
+      // the same list again: open the copy that is already here
+      const same = JSON.stringify(items), had = S.lists.find(x => x.name === l.name && JSON.stringify(x.items.map(({t, key, ref, cul, note}) => ({t, key, ref: ref || '', cul: cul || '', note: String(note || '')}))) === same);
+      if (had) { S.active = had.id; save(); had.again = true; return had; }
+      S.lists.push(l); S.active = l.id; save();
+      return l;
+    } catch (e) { return null; }
+  }
+  function importFromHash() {
+    const h = location.hash, nl = h.startsWith('#ag=') && importCode(h.slice(4)); if (!nl) return false; delete nl.again;
+    state.cul = 'guide';
+    try { history.replaceState(null, '', '#guide'); } catch (e) {}
+    return true;
+  }
+  // the paste box takes a whole link, or only the code after #ag=
+  function importPasted(text) {
+    const t = String(text || '').trim(), m = t.match(/#ag=([A-Za-z0-9_-]+)/) || t.match(/^([A-Za-z0-9_-]{8,})$/);
+    return m ? importCode(m[1]) : null;
   }
   function bindGuide(card) {
     const l = active(), ar = state.lang === 'ar', re = () => render();
@@ -313,11 +329,26 @@ const AG = (() => {
       if (a === 'rename') { renaming = true; re(); const i = document.getElementById('agname'); if (i) i.focus(); }
       else if (a === 'rsave') { l.name = (document.getElementById('agname').value || '').trim().slice(0, 40); renaming = false; save(); re(); }
       else if (a === 'del') { if (!confirmDel) { confirmDel = true; re(); return; } confirmDel = false; S.lists = S.lists.filter(x => x.id !== l.id); if (!S.lists.length) S.lists = [{id: uid(), name: '', items: []}]; S.active = S.lists[0].id; save(); re(); }
+      else if (a === 'paste') {
+        if (pasting !== null) { pasting = null; re(); return; }
+        pasting = ''; re(); const box = document.getElementById('agpaste'); if (box) box.focus();
+        // fill the box from the clipboard where the browser allows it, and only with a list link
+        try { if (navigator.clipboard && navigator.clipboard.readText) navigator.clipboard.readText().then(t => { const b = document.getElementById('agpaste'); if (b && !b.value && /#ag=/.test(t || '')) { b.value = t.trim(); pasting = b.value; } }, () => {}); } catch (e) {}
+      }
+      else if (a === 'pno') { pasting = null; re(); }
+      else if (a === 'pdo') {
+        const box = document.getElementById('agpaste'), nl = importPasted(box && box.value);
+        if (!nl) { const e = document.getElementById('agpaste-err'); if (e) e.hidden = false; if (box) box.focus(); return; }
+        pasting = null; cmp.clear(); openSet.clear(); pres = null; re(); window.scrollTo({top: 0});
+        if (nl.again) { delete nl.again; toast(ar ? `لديك هذه القائمة من قبل: «${listName(nl, true)}»` : `You already have this list: "${listName(nl, false)}"`); }
+        else toast(ar ? `أُضيفت «${listName(nl, true)}» (${nl.items.length})` : `Added "${listName(nl, false)}" (${nl.items.length} ${nl.items.length === 1 ? 'item' : 'items'})`);
+      }
       else if (a === 'share') SHARE.go(l.name || (ar ? 'ليلتي' : 'My night'), shareLink(l));
       else if (a === 'copy') { const link = shareLink(l); (navigator.clipboard && navigator.clipboard.writeText ? navigator.clipboard.writeText(link) : Promise.reject()).then(() => toast(ar ? 'نُسخ الرابط' : 'Link copied'), () => { prompt(ar ? 'انسخ هذا الرابط' : 'Copy this link', link); }); }
       else if (a === 'plan') { PLAN.seed(plannable()); setCulture('plan'); window.scrollTo({top: 0}); }
       else if (a === 'start' && l.items.length) { pres = {list: l.id, i: 0}; re(); presTop(); }
     }));
+    const pb = document.getElementById('agpaste'); if (pb) { pb.addEventListener('input', () => { pasting = pb.value; const e = document.getElementById('agpaste-err'); if (e) e.hidden = true; }); pb.addEventListener('keydown', ev => { if (ev.key === 'Enter') { ev.preventDefault(); card.querySelector('[data-aact="pdo"]').click(); } }); }
     const ni = document.getElementById('agname'); if (ni) ni.addEventListener('keydown', ev => { if (ev.key === 'Enter') { l.name = ni.value.trim().slice(0, 40); renaming = false; save(); re(); } });
     card.querySelectorAll('[data-aopen]').forEach(b => b.addEventListener('click', () => { const i = +b.dataset.aopen; pres = null; open(l.items[i], l.id, i); }));
     card.querySelectorAll('[data-adet]').forEach(b => b.addEventListener('click', () => { const it = l.items[+b.dataset.adet], id = idOf(it), was = openSet.has(id); if (was) openSet.delete(id); else openSet.add(id); re(); const li = card.querySelectorAll('.agi')[+b.dataset.adet]; if (li && was && li.getBoundingClientRect().top < 0) li.scrollIntoView({block: 'start'}); }));
