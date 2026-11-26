@@ -48,14 +48,29 @@ const TOUR = (() => {
     let left = Math.min(Math.max(12, r.left), innerWidth - tw - 12);
     Object.assign(tip.style, {left: left + 'px', top: top + 'px', width: tw + 'px'});
   }
+  // scroll so the part being explained sits in the free space between the top bar and the tip (or the bottom bar)
+  function reveal(el) {
+    if (!el || el.closest('header.top, .mainnav')) return;
+    const r = el.getBoundingClientRect(), hd = document.querySelector('header.top'), phone = innerWidth < 640;
+    const top = (hd ? hd.getBoundingClientRect().bottom : 0) + 10;
+    let bottom = innerHeight - 10;
+    if (phone && tip && tip.classList.contains('sheet') && !tip.classList.contains('top')) bottom = Math.min(bottom, tip.getBoundingClientRect().top - 10);
+    else { const nav = document.querySelector('.mainnav'); if (nav && getComputedStyle(nav).position === 'fixed') bottom = Math.min(bottom, nav.getBoundingClientRect().top - 10); }
+    const room = Math.max(80, bottom - top);
+    if (r.top >= top && r.top + Math.min(r.height, room) <= bottom) return;
+    const want = r.height >= room ? top : top + (room - r.height) / 2;
+    window.scrollTo(0, Math.max(0, scrollY + r.top - want));
+  }
+  let seq = 0;
   function show(n) {
     i = Math.max(0, Math.min(STEPS.length - 1, n));
     const st = STEPS[i]; prep(st);
-    const el = target(st);
-    if (el) el.scrollIntoView({block: innerWidth < 640 || el.getBoundingClientRect().height > innerHeight * 0.5 ? 'start' : 'center', behavior: 'instant'});
-    if (el && innerWidth >= 640 && el.getBoundingClientRect().height > innerHeight * 0.5) window.scrollBy(0, -20);
-    if (el && innerWidth < 640) window.scrollBy(0, -16);
-    requestAnimationFrame(() => { place(); setTimeout(place, 60); });
+    const el = target(st), my = ++seq;
+    place(); reveal(el);
+    // the page can still move as pictures and fonts arrive, so check again a moment later
+    const again = () => { if (my !== seq || !root) return; const e = target(st); reveal(e); place(); };
+    requestAnimationFrame(() => { place(); reveal(target(st)); place(); });
+    setTimeout(again, 250); setTimeout(again, 800);
     const b = tip.querySelector('[data-t=next]'); if (b) b.focus({preventScroll: true});
   }
   function start() {

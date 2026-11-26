@@ -71,7 +71,7 @@ def main():
     f_app = emit('app', 'js', minify(js, 'js'))
 
     html = ('<!doctype html>\n<html lang="en">\n<head>\n<meta charset="utf-8">\n'
-            '<meta name="viewport" content="width=device-width, initial-scale=1">\n'
+            '<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">\n'
             + read('src/head.html') + f'<link rel="stylesheet" href="{f_css}">\n' + read('src/font-fallback.html')
             + '</head>\n<body>\n' + read('src/body.html')
             + '<script>\n' + read('src/error-handler.js') + '</script>\n'
