@@ -8,7 +8,7 @@ The site at https://yousef-ay12.github.io/SkyGuide/ is built from these files.
 - `src/js/`: the code, one file per part of the site, joined in name order:
   core, tour, quiz, install, navigation (three sections and their pages), welcome doors, search, sky engine, visibility,
   weather, calendar, science, deep-sky, moons, Cosmology (three text files, the page with its drawings, the Science
-  overview, the pictures, extra quiz questions, the glossary), Stellarium links, connected stories, Plan a night,
+  overview, the pictures, extra quiz questions, the glossary, the kids versions), Stellarium links, connected stories, Plan a night,
   My night (saved lists), the Culture and AstroGuide overviews, Save pictures for offline, sharing, feedback,
   For guides, render and start-up
 - `src/sw.js`: the offline helper (the build fills in the file list); it also serves the pictures saved with

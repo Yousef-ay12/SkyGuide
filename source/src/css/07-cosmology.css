@@ -110,3 +110,6 @@
 @media (max-width: 760px) { .glo { grid-template-columns: minmax(0, 1fr); } }
 /* the newer drawings keep their labels readable on phones */
 @media (max-width: 600px) { .cosfig.cfz .cf-t { font-size: 25px; } .cosfig.cfz .cf-s { font-size: 21px; } }
+/* kids mode: the simple version of a topic */
+.cos-kid { font-size: 1.08em; line-height: 1.7; }
+.kidtag { display: inline-block; font-size: .82em; padding: 1px 9px; margin-inline-end: 4px; border-radius: 99px; background: var(--accent-soft); color: var(--ink); white-space: nowrap; }

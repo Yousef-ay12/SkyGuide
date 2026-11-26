@@ -177,12 +177,13 @@ function cosHTML(lang) {
   h += `<div class="cos-parts" role="group" aria-label="${ar ? 'أجزاء علم الكون' : 'Parts of cosmology'}">${COS_PARTS.map((p, i) => `<button type="button" class="sn${p.id === part.id ? ' on' : ''}" data-cospart="${p.id}" aria-pressed="${p.id === part.id}" style="--cc:var(--c-science)"><span class="cos-n">${i + 1}</span>${ar ? p.ar : p.en}</button>`).join('')}<button type="button" class="sn${glo ? ' on' : ''}" data-cospart="glo" aria-pressed="${glo}" style="--cc:var(--c-science)"><span class="cos-n">Aa</span>${ar ? 'المسرد' : 'Glossary'}</button></div>`;
   if (glo) return h + cosGlossaryHTML(ar) + `<p class="cos-next"><button type="button" class="pbtn" data-cospart="${COS_PARTS[0].id}">${ar ? `ابدأ من: ${COS_PARTS[0].ar} ←` : `Start with: ${COS_PARTS[0].en} →`}</button></p>`;
   let nTopic = 0;
-  h += `<h3 class="cos-h">${ar ? part.ar : part.en}</h3><p class="cos-in">${ar ? part.intro[1] : part.intro[0]}</p>`;
+  h += `<h3 class="cos-h">${ar ? part.ar : part.en}</h3><p class="cos-in">${KIDS && COS_KIDS_INTRO[part.id] ? `<span class="kidtag">${ar ? '🧒 للأطفال' : '🧒 For kids'}</span> ` + COS_KIDS_INTRO[part.id][ar ? 1 : 0] : ar ? part.intro[1] : part.intro[0]}</p>`;
   part.groups.forEach(g => {
     h += `<h4 class="cos-g">${ar ? g.ar : g.en}</h4>`;
     if (g.fig && COS_FIG[g.fig]) h += `<figure class="cos-fig">${COS_FIG[g.fig](ar)}</figure>`;
     g.items.forEach(it => {
-      let body = COS_PIC.html(it.en, ar) + (ar ? it.a : it.t);
+      const kid = KIDS && cosKid(it, g);
+      let body = COS_PIC.html(it.en, ar) + (kid ? `<p class="cos-kid">${esc(kid[ar ? 1 : 0])}</p>` : ar ? it.a : it.t);
       if (it.fig && COS_FIG[it.fig]) body += `<figure class="cos-fig">${COS_FIG[it.fig](ar)}</figure>`;
       if (it.ex) { const ex = it.ex.map(([k, id]) => { const x = {t: 'dso', key: k, ref: id}, inf = AG.info(x, lang); return inf ? `<span class="cos-ex"><button type="button" class="cos-exn" data-con="${k}">${esc(inf.title)}${inf.sub ? ` <span class="muted">${esc(inf.sub)}</span>` : ''}</button>${AG.btn(x, lang, true)}</span>` : ''; }).join('');
         if (ex) body += `<div class="cos-exs"><span class="sect-lbl">${ar ? 'ابحث عنها في السماء' : 'Find them in the sky'}</span>${ex}</div>`; }
