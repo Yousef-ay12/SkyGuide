@@ -61,7 +61,7 @@ const QUIZ = (() => {
     const seen = new Set(), stars = [], homes = {};
     Object.keys(DATA.sci).forEach(k => { if (k === 'SOL') return; (DATA.sci[k].parts || []).forEach(sc =>
       (sc.stars || []).forEach(s => { if (s.name) (homes[s.name] = homes[s.name] || new Set()).add(k); if (!s.name || GREEK.test(s.name) || /\d|^(HD|HR|HIP|Gliese|GJ)\b/.test(s.name) || seen.has(s.name)) return; seen.add(s.name); stars.push(Object.assign({con: k, R: starRadius(s)}, s)); })); });
-    const cons = DATA.constellations.filter(c => DATA.sci[c.key] && c.key !== 'SOL' && c.key !== 'DSO' && c.key !== 'STAR').map(c => c.key);
+    const cons = DATA.constellations.filter(c => DATA.sci[c.key] && !c.sciOnly && c.key !== 'SOL').map(c => c.key);
     const charts = Object.keys(DATA.charts).filter(k => DATA.sci[k] && /class="ln"/.test(DATA.charts[k]));
     const stories = [];
     Object.keys(DATA.lore).forEach(k => Object.keys(DATA.lore[k]).forEach(cul => { const e = DATA.lore[k][cul]; if (!CULTURES.find(c => c.id === cul)) return;
@@ -246,7 +246,6 @@ const QUIZ = (() => {
   }
 
   function render() {
-    document.querySelectorAll('#cultures input').forEach(i => { i.checked = i.value === 'quiz'; i.closest('.chip').classList.remove('none'); });
     const card = document.getElementById('card'), ar = state.lang === 'ar', lang = ar ? 'ar' : 'en', t = TX[lang];
     if (G && G.lang !== state.lang && G.picked == null && !G.end) G = null;   // language changed: start again in the new language
     card.style.setProperty('--cc', '#8b7cf6');

@@ -1,10 +1,14 @@
 
-<div class="wrap">
-  <header class="top">
-    <div>
-      <h1>One Sky, Many Stories</h1>
-      <p class="lede">Choose a culture and a group of stars, and read what that culture saw there: the story, the poem, and where it was recorded. Or open Science for the facts, and the Sky calendar for what to see tonight.</p>
+<header class="top" id="top"><div class="hd-in">
+    <h1 class="brand"><button type="button" id="brandbtn" class="brandbtn"><span class="b-star" aria-hidden="true">✦</span><span class="b-en">Sky Guide</span><span class="b-ar" lang="ar">دليل السماء</span></button></h1>
+    <nav class="mainnav" id="mainnav" aria-label="Sections"></nav>
+    <div class="hdtools">
+      <div class="hlang" role="group" aria-label="Language"><button type="button" data-hlang="en" aria-pressed="true">EN</button><button type="button" data-hlang="ar" lang="ar" aria-pressed="false">عربي</button></div>
+      <button type="button" class="setbtn" id="setbtn" aria-expanded="false" aria-controls="setpanel"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/></svg><span class="setlbl">Settings</span></button>
     </div>
+</div></header>
+<div class="wrap">
+  <div class="setpanel" id="setpanel" hidden>
     <div class="topmeta">
       <label class="skins" for="bgsel">Background
         <select id="bgsel">
@@ -37,11 +41,10 @@
       <button type="button" class="tourbtn" id="iconbtn" hidden aria-label="Change the Sky Guide app icon"><span aria-hidden="true">◐</span> Change icon</button></div>
       <div class="count" id="count"></div>
     </div>
-  </header>
+  </div>
 
   <div class="qzpromo" id="qzpromo" role="region" aria-label="Quiz" hidden></div>
-  <nav class="mainnav" id="mainnav" aria-label="Sections"></nav>
-  <fieldset class="cultures" id="cultures" hidden><legend>Choose a culture</legend></fieldset>
+  <nav class="subnav" id="subnav" aria-label="Pages in this section"></nav>
 
   <div class="layout">
     <details class="index" id="index" open>
@@ -80,7 +83,7 @@
       <p><b>When something goes online:</b></p>
       <ul>
         <li><b>Opening the site:</b> GitHub Pages, which hosts it, receives the usual connection details any website gets, such as your IP address.</li>
-        <li><b>Deep-sky pictures:</b> when you open a catalogue, pictures are loaded from Wikipedia/Wikimedia Commons and, if needed, the CDS sky-survey service (Strasbourg) or STScI. They receive the usual connection details and which picture is requested.</li>
+        <li><b>Deep-sky and Cosmology pictures:</b> when you open a catalogue or a Cosmology topic, pictures are loaded from Wikipedia/Wikimedia Commons and, if needed, the CDS sky-survey service (Strasbourg) or STScI. They receive the usual connection details and which picture is requested.</li>
         <li><b>View in Stellarium Web</b> (only when you tap it): Stellarium's site receives the object, the date, and the city you picked from the list (not your real location).</li>
         <li><b>Weather</b> (when you open the Sky calendar or Plan a night): Open-Meteo, the weather service, receives the position of the city you picked from the list (not your real location) and the usual connection details.</li>
         <li><b>Feedback</b> (only when you send it): what you type (name, type, message, and email if you choose to give it), plus the city and language you picked, goes to the site maker's Google Form.</li>
@@ -94,7 +97,7 @@
       <p><b>متى يتصل الموقع بالإنترنت:</b></p>
       <ul>
         <li><b>عند فتح الموقع:</b> يتلقى GitHub Pages الذي يستضيفه بيانات الاتصال المعتادة التي يتلقاها أي موقع، مثل عنوان IP.</li>
-        <li><b>صور الأجرام العميقة:</b> عند فتح فهرس تُحمَّل الصور من ويكيبيديا وويكيميديا كومنز، وعند الحاجة من خدمة مسح السماء في مركز CDS بستراسبورغ أو STScI، فتتلقى بيانات الاتصال المعتادة واسم الصورة المطلوبة.</li>
+        <li><b>صور الأجرام العميقة وعلم الكون:</b> عند فتح فهرس أو موضوع في «علم الكون» تُحمَّل الصور من ويكيبيديا وويكيميديا كومنز، وعند الحاجة من خدمة مسح السماء في مركز CDS بستراسبورغ أو STScI، فتتلقى بيانات الاتصال المعتادة واسم الصورة المطلوبة.</li>
         <li><b>«اعرضه في Stellarium Web»</b> (عند الضغط عليه فقط): يتلقى موقع Stellarium الجرم والتاريخ والمدينة التي اخترتها من القائمة، لا موقعك الحقيقي.</li>
         <li><b>الطقس</b> (عند فتح تقويم السماء أو «خطّط لليلتك»): تتلقى خدمة الطقس Open-Meteo موقع المدينة التي اخترتها من القائمة، لا موقعك الحقيقي، مع بيانات الاتصال المعتادة.</li>
         <li><b>الملاحظات</b> (عند الإرسال فقط): ما تكتبه (الاسم والنوع والرسالة، والبريد إن اخترت كتابته)، مع المدينة واللغة اللتين اخترتهما، يُرسل إلى نموذج Google الخاص بمعدّ الموقع.</li>

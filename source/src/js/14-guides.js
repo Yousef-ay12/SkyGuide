@@ -355,7 +355,6 @@ ${ask(ar, '"What\'s the hardest question anyone has asked you?" Practise the hon
     return h + `</div>`;
   }
   function draw() {
-    document.querySelectorAll('#cultures input').forEach(i => { i.checked = false; });
     const card = document.getElementById('card'), ar = state.lang === 'ar';
     card.style.setProperty('--cc', 'var(--c-guides, #2f9e7a)');
     let h = `<div class="card-head"><div><div class="eyebrow"><span class="dot"></span>${ar ? 'للمرشدين' : 'For guides'}</div><h2${ar ? ' lang="ar" style="font-family:var(--f-ar)"' : ''}>${ar ? 'أدوات المرشد' : 'A guide\'s toolkit'}</h2></div></div>`;

@@ -1,17 +1,48 @@
-/* ---------- main navigation: five section tabs, and a culture menu under Stories ---------- */
-let lastCul = 'arab';
-const NAVTABS = [['stories', 'Stories', 'القصص'], ['science', 'Science', 'العلم'], ['calendar', 'Sky calendar', 'تقويم السماء'], ['plan', 'Plan a night', 'خطّط لليلتك'], ['quiz', 'Quiz', 'اختبر معلوماتك'], ['guide', 'Saved lists', 'القوائم المحفوظة'], ['learn', 'For guides', 'للمرشدين']];
+/* ---------- main navigation: three sections (Heritage & Culture, Science, AstroGuide), each with its own row of pages ---------- */
+let lastCul = 'arab', lastAstro = 'astro', lastSciCon = 'Ori';
+const SECTIONS = [['culture', 'Heritage & Culture', 'التراث والثقافة'], ['science', 'Science', 'العلم'], ['astro', 'AstroGuide', 'المرشد الفلكي']];
+const SEC_ICON = {
+  culture: '<path d="M4 19V9a8 8 0 0 1 16 0v10"/><path d="M2 19h20"/><path d="M9 19v-5a3 3 0 0 1 6 0v5"/>',
+  science: '<circle cx="12" cy="12" r="3"/><ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(-25 12 12)"/>',
+  astro: '<circle cx="12" cy="12" r="9"/><path d="M15.5 8.5l-2 5-5 2 2-5z"/>'};
+// AstroGuide's pages, and Science's special pages (the rest of Science is the constellations)
+const ASTRO_PAGES = [['astro', 'Overview', 'نظرة عامة'], ['guide', 'My night', 'ليلتي'], ['plan', 'Plan a night', 'خطّط لليلتك'], ['calendar', 'Sky calendar', 'تقويم السماء'], ['quiz', 'Quiz', 'اختبر معلوماتك'], ['learn', 'For guides', 'للمرشدين']];
+const SCI_PAGES = [['SCI', 'Overview', 'نظرة عامة'], ['', 'Constellations', 'الكوكبات'], ['SOL', 'Solar System', 'المجموعة الشمسية'], ['STAR', 'Why stars shine', 'لماذا تضيء النجوم'], ['DSO', 'Deep sky', 'الأجرام العميقة'], ['COS', 'Cosmology', 'علم الكون']];
+const SCI_SPECIAL = new Set(SCI_PAGES.map(x => x[0]).filter(Boolean));
+const CUL_AR_SHORT = {arab: 'العرب', greek: 'الإغريق', egypt: 'مصر القديمة', china: 'الصين', japan: 'اليابان', india: 'الهند', safrica: 'جنوب أفريقيا'};
+function secOf(cul) { return cul === 'science' ? 'science' : TOOL_TABS.has(cul) ? 'astro' : 'culture'; }
 function tabOf(cul) { return cul === 'science' || TOOL_TABS.has(cul) ? cul : 'stories'; }
+function goSection(sec) {
+  // each section opens on its overview
+  if (sec === 'culture') { state.con = 'CUL'; setCulture(secOf(state.cul) === 'culture' ? state.cul : lastCul); }
+  else if (sec === 'science') { state.con = 'SCI'; setCulture('science'); }
+  else setCulture('astro');
+}
 function buildNav() {
   const nav = document.getElementById('mainnav'); if (!nav) return;
-  nav.innerHTML = `<div class="ntabs" role="tablist">${NAVTABS.map(([id, en]) => `<button type="button" role="tab" class="ntab" data-tab="${id}" aria-selected="false">${en}${id === 'guide' ? ' <span class="agbadge" id="agcount"></span>' : ''}</button>`).join('')}</div>
-    <div class="nsub" id="nsub"><label for="culsel">Culture</label><select id="culsel">${CULTURES.map(c => `<option value="${c.id}">${esc(c.name)} · ${esc(c.nat)}</option>`).join('')}</select></div>`;
-  nav.querySelectorAll('.ntab').forEach(b => b.addEventListener('click', () => {
-    const id = b.dataset.tab;
-    if (id === 'stories') { let c = tabOf(state.cul) === 'stories' ? state.cul : lastCul; if (!hasLore(state.con, c) || !byKey[state.con]) { const any = CULTURES.find(x => hasLore(state.con, x.id)); if (any) c = any.id; } setCulture(c); }
-    else setCulture(id);
-  }));
-  nav.querySelector('#culsel').addEventListener('change', ev => setCulture(ev.target.value));
+  nav.innerHTML = `<div class="ntabs">${SECTIONS.map(([id, en]) => `<button type="button" class="ntab" data-sec="${id}" aria-pressed="false" style="--sc:var(--s-${id})"><svg class="n-ic" aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">${SEC_ICON[id]}</svg><span class="n-t">${en}</span>${id === 'astro' ? '<span class="agbadge" id="agcount"></span>' : ''}</button>`).join('')}</div>`;
+  nav.querySelectorAll('.ntab').forEach(b => b.addEventListener('click', () => { goSection(b.dataset.sec); window.scrollTo({top: 0}); }));
+  const sub = document.getElementById('subnav');
+  sub.addEventListener('click', ev => {
+    const b = ev.target.closest('[data-go]'); if (!b) return;
+    const [kind, v] = b.dataset.go.split(':');
+    if (kind === 'cul') setCulture(v);
+    else if (kind === 'culov') { state.con = 'CUL'; render(); }
+    else if (kind === 'astro') setCulture(v);
+    else if (kind === 'sci') { state.con = v || (byKey[lastSciCon] && !SCI_SPECIAL.has(lastSciCon) ? lastSciCon : 'Ori'); if (state.cul !== 'science') setCulture('science'); else { buildList(document.getElementById('q').value); render(); } }
+  });
+  document.querySelectorAll('[data-hlang]').forEach(b => b.addEventListener('click', () => { state.lang = b.dataset.hlang; try { localStorage.setItem('osms-lang', state.lang); } catch (e) {} buildList(document.getElementById('q').value); render(); }));
+  const sb = document.getElementById('setbtn'), sp = document.getElementById('setpanel');
+  sb.addEventListener('click', () => { sp.hidden = !sp.hidden; sb.setAttribute('aria-expanded', !sp.hidden); });
+  document.getElementById('brandbtn').addEventListener('click', () => { if (typeof WELCOME !== 'undefined') WELCOME.show(); else window.scrollTo({top: 0, behavior: 'smooth'}); });
+}
+function subnavHTML(sec, ar) {
+  const lbl = (en, a) => ar ? a : en;
+  if (sec === 'culture') return `<button type="button" class="sn${state.con === 'CUL' ? ' on' : ''}" data-go="culov:" aria-pressed="${state.con === 'CUL'}" style="--cc:var(--s-culture)">${lbl('Overview', 'نظرة عامة')}</button>` + CULTURES.map(c => { const on = state.cul === c.id, has = byKey[state.con] && hasLore(state.con, c.id);
+    return `<button type="button" class="sn${on ? ' on' : ''}${has ? '' : ' none'}" data-go="cul:${c.id}" aria-pressed="${on}" style="--cc:var(--c-${c.id})" title="${has ? '' : (ar ? 'لا قصة لهذه النجوم' : 'No story for these stars')}"><span class="dot"></span>${ar ? CUL_AR_SHORT[c.id] : esc(c.name)}</button>`; }).join('');
+  if (sec === 'science') { const cur = SCI_SPECIAL.has(state.con) ? state.con : '';
+    return SCI_PAGES.map(([k, en, a]) => `<button type="button" class="sn${cur === k ? ' on' : ''}" data-go="sci:${k}" aria-pressed="${cur === k}" style="--cc:var(--c-science)">${lbl(en, a)}</button>`).join(''); }
+  return ASTRO_PAGES.map(([k, en, a]) => `<button type="button" class="sn${state.cul === k ? ' on' : ''}" data-go="astro:${k}" aria-pressed="${state.cul === k}" style="--cc:var(--s-astro)">${k === 'guide' ? '✦ ' : ''}${lbl(en, a)}</button>`).join('');
 }
 function qzPromo() {
   const el = document.getElementById('qzpromo'); if (!el) return;
@@ -26,8 +57,8 @@ function qzPromo() {
 }
 // the page's frame (header, tabs, list) follows the chosen language too
 const CHROME = {
-  en: {h1: 'One Sky, Many Stories', lede: 'Choose a culture and a group of stars, and read what that culture saw there: the story, the poem, and where it was recorded. Or open Science for the facts, and the Sky calendar for what to see tonight.', screen: 'Screen', skins: ['Automatic', 'Light', 'Dark', 'Black', 'Sepia', 'Night red (for stargazing)'], bgl: 'Background', bgs: ['Plain', 'Starfield', 'Milky Way glow', 'Desert night', 'Twilight', 'Star-chart paper', 'Aurora', 'Nebula', 'Moonlit night', 'Constellation map', 'Arabian night', 'Dawn'], tour: 'How to use', install: 'Install app', icon: 'Change icon', culture: 'Culture', cons: 'Constellations', search: 'Search'},
-  ar: {h1: 'سماء واحدة، حكايات كثيرة', lede: 'اختر ثقافة ومجموعة من النجوم، واقرأ ما رآه أهلها فيها: القصة والشعر وأين دُوّنت. أو افتح «العلم» للحقائق، و«تقويم السماء» لما تستطيع رؤيته الليلة.', screen: 'الشاشة', skins: ['تلقائي', 'فاتح', 'داكن', 'أسود', 'بنّي فاتح', 'أحمر ليلي (للرصد)'], bgl: 'الخلفية', bgs: ['بسيطة', 'سماء مرصّعة بالنجوم', 'وهج درب التبانة', 'ليل الصحراء', 'الشفق', 'ورق خريطة النجوم', 'الشفق القطبي', 'السديم', 'ليلة مقمرة', 'خريطة الكوكبات', 'ليلة عربية', 'الفجر'], tour: 'طريقة الاستخدام', install: 'ثبّت التطبيق', icon: 'غيّر الأيقونة', culture: 'الثقافة', cons: 'الكوكبات', search: 'البحث'}};
+  en: {screen: 'Screen', skins: ['Automatic', 'Light', 'Dark', 'Black', 'Sepia', 'Night red (for stargazing)'], bgl: 'Background', bgs: ['Plain', 'Starfield', 'Milky Way glow', 'Desert night', 'Twilight', 'Star-chart paper', 'Aurora', 'Nebula', 'Moonlit night', 'Constellation map', 'Arabian night', 'Dawn'], settings: 'Settings', tour: 'How to use', install: 'Install app', icon: 'Change icon', cons: 'Constellations', search: 'Search'},
+  ar: {screen: 'الشاشة', skins: ['تلقائي', 'فاتح', 'داكن', 'أسود', 'بنّي فاتح', 'أحمر ليلي (للرصد)'], bgl: 'الخلفية', bgs: ['بسيطة', 'سماء مرصّعة بالنجوم', 'وهج درب التبانة', 'ليل الصحراء', 'الشفق', 'ورق خريطة النجوم', 'الشفق القطبي', 'السديم', 'ليلة مقمرة', 'خريطة الكوكبات', 'ليلة عربية', 'الفجر'], settings: 'الإعدادات', tour: 'طريقة الاستخدام', install: 'ثبّت التطبيق', icon: 'غيّر الأيقونة', cons: 'الكوكبات', search: 'البحث'}};
 let chromeLang = null;
 // list section titles follow the page language
 function regionName(r) { return (state.lang === 'ar' && REGIONS_AR[r]) || REGIONS[r]; }
@@ -36,7 +67,6 @@ function applyChrome() {
   const hd = document.querySelector('header.top'); if (hd) { hd.setAttribute('dir', ar ? 'rtl' : 'ltr'); hd.setAttribute('lang', L); hd.classList.toggle('rtl', ar); }
   document.body.classList.toggle('chrome-ar', ar);
   const set = (sel, txt) => { const e = document.querySelector(sel); if (e) e.textContent = txt; };
-  set('header.top h1', t.h1); set('header.top .lede', t.lede);
   const sk = document.querySelector('label.skins'); if (sk && sk.firstChild && sk.firstChild.nodeType === 3) sk.firstChild.textContent = t.screen + '\n        ';
   document.querySelectorAll('#list .grp[data-r]').forEach(g => { g.textContent = regionName(g.dataset.r); });
   document.querySelectorAll('#skin option').forEach((o, i) => { if (t.skins[i]) o.textContent = t.skins[i]; });
@@ -45,54 +75,23 @@ function applyChrome() {
   const tb = document.getElementById('tourbtn'); if (tb) { tb.lastChild.textContent = ' ' + t.tour; }
   const ib = document.getElementById('installbtn'); if (ib) { ib.lastChild.textContent = ' ' + t.install; }
   const cb = document.getElementById('iconbtn'); if (cb) { cb.lastChild.textContent = ' ' + t.icon; }
-  document.querySelectorAll('.ntab').forEach(b => { const n = NAVTABS.find(x => x[0] === b.dataset.tab); if (n && b.firstChild && b.firstChild.nodeType === 3) b.firstChild.textContent = ar ? n[2] : n[1]; });
-  set('#nsub label', t.culture); set('#index > summary > span:first-child', t.cons); set('.search .sect-lbl', t.search);
+  document.querySelectorAll('.ntab').forEach(b => { const n = SECTIONS.find(x => x[0] === b.dataset.sec), tx = b.querySelector('.n-t'); if (n && tx) tx.textContent = ar ? n[2] : n[1]; });
+  set('#setbtn .setlbl', t.settings); const hd2 = document.getElementById('setpanel'); if (hd2) { hd2.setAttribute('dir', ar ? 'rtl' : 'ltr'); hd2.classList.toggle('rtl', ar); } set('#index > summary > span:first-child', t.cons); set('.search .sect-lbl', t.search);
   const cnt = document.getElementById('count'); if (cnt && cnt.dataset[L]) cnt.textContent = cnt.dataset[L];
 }
 function syncNav() {
   try { qzPromo(); } catch (e) {}
   try { applyChrome(); } catch (e) {}
   const nav = document.getElementById('mainnav'); if (!nav) return;
-  const tab = tabOf(state.cul); if (tab === 'stories') lastCul = state.cul;
-  nav.querySelectorAll('.ntab').forEach(b => { const on = b.dataset.tab === tab; b.setAttribute('aria-selected', on); b.classList.toggle('on', on); });
-  const sub = nav.querySelector('#nsub'), sel = nav.querySelector('#culsel');
-  sub.hidden = tab !== 'stories';
-  if (tab === 'stories') {
-    sel.value = state.cul;
-    [...sel.options].forEach(o => { const c = CULTURES.find(x => x.id === o.value), has = byKey[state.con] && hasLore(state.con, o.value); o.disabled = false; o.textContent = `${c.name} · ${c.nat}${has ? '' : ' (no story)'}`; });
-    sub.style.setProperty('--cc', `var(--c-${state.cul})`);
-  }
-}
-
-function buildCultures() {
-  const fs = document.getElementById('cultures');
-  CULTURES.forEach(c => {
-    const d = document.createElement('div'); d.className = 'chip'; d.style.setProperty('--cc', `var(--c-${c.id})`);
-    d.innerHTML = `<input type="radio" name="cul" id="cul-${c.id}" value="${c.id}"><label for="cul-${c.id}"><span class="dot"></span>${c.name} <span class="nat"${c.natLang ? ` lang="${c.natLang}"` : ''}>${c.nat}</span></label>`;
-    d.querySelector('input').addEventListener('change', () => setCulture(c.id));
-    fs.appendChild(d);
-  });
-  const sep = document.createElement('span'); sep.className = 'chip-sep'; sep.setAttribute('aria-hidden', 'true'); fs.appendChild(sep);
-  const d = document.createElement('div'); d.className = 'chip sci'; d.style.setProperty('--cc', 'var(--c-science)');
-  d.innerHTML = `<input type="radio" name="cul" id="cul-science" value="science"><label for="cul-science"><span class="dot"></span>Science <span class="nat" lang="ar">العلم</span></label>`;
-  d.querySelector('input').addEventListener('change', () => setCulture('science'));
-  fs.appendChild(d);
-  const d2 = document.createElement('div'); d2.className = 'chip sci'; d2.style.setProperty('--cc', 'var(--c-cal)');
-  d2.innerHTML = `<input type="radio" name="cul" id="cul-calendar" value="calendar"><label for="cul-calendar"><span class="dot"></span>Sky calendar <span class="nat" lang="ar">تقويم السماء</span></label>`;
-  d2.querySelector('input').addEventListener('change', () => setCulture('calendar'));
-  fs.appendChild(d2);
-  const d3 = document.createElement('div'); d3.className = 'chip sci'; d3.style.setProperty('--cc', '#e9a23b');
-  d3.innerHTML = `<input type="radio" name="cul" id="cul-guide" value="guide"><label for="cul-guide"><span class="dot"></span>★ Saved lists <span class="agbadge" id="agcount-old"></span></label>`;
-  d3.querySelector('input').addEventListener('change', () => setCulture('guide'));
-  fs.appendChild(d3);
-  const d4 = document.createElement('div'); d4.className = 'chip sci plan'; d4.style.setProperty('--cc', 'var(--c-cal)');
-  d4.innerHTML = `<input type="radio" name="cul" id="cul-plan" value="plan"><label for="cul-plan"><span class="dot"></span>Plan a night, step by step <span class="nat" lang="ar">خطّط لليلتك خطوة بخطوة</span></label>`;
-  d4.querySelector('input').addEventListener('change', () => setCulture('plan'));
-  fs.appendChild(d4);
-  const d5 = document.createElement('div'); d5.className = 'chip sci'; d5.style.setProperty('--cc', '#8b7cf6');
-  d5.innerHTML = `<input type="radio" name="cul" id="cul-quiz" value="quiz"><label for="cul-quiz"><span class="dot"></span>Quiz <span class="nat" lang="ar">اختبر معلوماتك</span></label>`;
-  d5.querySelector('input').addEventListener('change', () => setCulture('quiz'));
-  fs.appendChild(d5);
+  const sec = secOf(state.cul), ar = state.lang === 'ar';
+  if (sec === 'culture') lastCul = state.cul; else if (sec === 'astro') lastAstro = state.cul;
+  if (byKey[state.con] && !SCI_SPECIAL.has(state.con) && !byKey[state.con].hidden && state.con !== 'QUR') lastSciCon = state.con;
+  document.documentElement.dataset.sec = sec;
+  nav.querySelectorAll('.ntab').forEach(b => { const on = b.dataset.sec === sec; b.setAttribute('aria-pressed', on); b.classList.toggle('on', on); if (on) b.setAttribute('aria-current', 'page'); else b.removeAttribute('aria-current'); });
+  const sub = document.getElementById('subnav'); sub.innerHTML = `<div class="sn-row">${subnavHTML(sec, ar)}</div>`; sub.dataset.sec = sec;
+  sub.setAttribute('dir', ar ? 'rtl' : 'ltr');
+  const on = sub.querySelector('.sn.on'); if (on && on.scrollIntoView) { const r = sub.querySelector('.sn-row'); if (r.scrollWidth > r.clientWidth) on.scrollIntoView({block: 'nearest', inline: 'center'}); }
+  document.querySelectorAll('[data-hlang]').forEach(b => b.setAttribute('aria-pressed', (ar ? 'ar' : 'en') === b.dataset.hlang));
 }
 
 function buildList(filter = '') {
@@ -101,7 +100,7 @@ function buildList(filter = '') {
   const f = filter.trim().toLowerCase();
   let shown = 0;
   Object.keys(REGIONS).forEach(r => {
-    const items = DATA.constellations.filter(c => c.region === r && inList(c.key, state.cul) && (!f || (c.latin + ' ' + c.gloss + ' ' + c.ar + ' ' + c.key).toLowerCase().includes(f) || searchLore(c.key, f)));
+    const items = DATA.constellations.filter(c => c.region === r && !c.hidden && inList(c.key, state.cul) && (!f || (c.latin + ' ' + c.gloss + ' ' + c.ar + ' ' + c.key).toLowerCase().includes(f) || searchLore(c.key, f)));
     if (!items.length) return;
     const g = document.createElement('div'); g.className = 'grp'; g.dataset.r = r; g.textContent = regionName(r); list.appendChild(g);
     items.forEach(c => {
@@ -126,12 +125,13 @@ function searchLore(key, f) {
   if (state.cul === 'science') return false;
   return Object.values(lo).some(e => (e.seen + ' ' + e.stories.map(s => s.title + ' ' + s.text).join(' ')).toLowerCase().includes(f));
 }
-function hasLore(con, cul) { if (TOOL_TABS.has(cul)) return true; return cul === 'science' ? !!DATA.sci[con] : !!(DATA.lore[con] || {})[cul]; }
+function hasLore(con, cul) { if (TOOL_TABS.has(cul)) return true; if (con === 'CUL') return cul !== 'science'; return cul === 'science' ? !!DATA.sci[con] : !!(DATA.lore[con] || {})[cul]; }
 // which entries a culture's list shows: everything, except sections that belong to one place
-function inList(con, cul) { if (cul === 'science') return !!DATA.sci[con]; if (con === 'SOL' || con === 'DSO' || con === 'STAR') return false; if (con === 'QUR') return cul === 'arab'; return !!byKey[con]; }
+function inList(con, cul) { if (cul === 'science') return !!DATA.sci[con]; if (con === 'SOL' || (byKey[con] && byKey[con].sciOnly)) return false; if (con === 'QUR') return cul === 'arab'; return !!byKey[con]; }
 function firstFor(cul) { const c = DATA.constellations.find(x => x.key !== 'QUR' && hasLore(x.key, cul)); return c ? c.key : 'Ori'; }
 function setCulture(id) {
   const wasCal = TOOL_TABS.has(state.cul);
+  if (id === 'plan' && state.cul !== 'plan') try { PLAN.enter(); } catch (e) {}
   state.cul = id;
   if (TOOL_TABS.has(id)) { render(); return; }
   if (wasCal && !byKey[state.con]) state.con = 'Ori';

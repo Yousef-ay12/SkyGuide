@@ -203,7 +203,7 @@ function planetHTML(b, lang, inFold) {
     let h = `<section class="planet${inFold ? ' infold' : ''}" data-planet="${b.id}" style="--pc:${b.color}">${inFold ? '' : `<h3>${inFold ? '' : `<span class="pd" aria-hidden="true"></span>${esc(ar ? b.ar : b.en)}${ar ? '' : ` <span class="arn2" lang="ar">${esc(b.ar)}</span>`}`}${AG.btn({t: 'planet', key: 'SOL', ref: b.id}, lang, true)}${b.id === 'earth' ? '' : swBtn(b.id[0].toUpperCase() + b.id.slice(1), b.id === 'sun' ? 8 : 4, lang)}</h3>`}`;
     h += `<dl class="ftable">${rows.map(r => `<dt>${esc(r[0])}</dt><dd>${esc(r[1])}</dd>`).join('')}</dl>`;
     if (KIDS) h += `<div class="kidbox"><span class="sect-lbl">${ar ? '🧒 للأطفال' : '🧒 For kids'}</span>${b.kid_en ? `<p style="margin:0 0 6px">${esc(ar ? b.kid_ar : b.kid_en)}</p>` : ''}<p style="margin:0">${esc(kidPlanet(b, lang))}</p></div>`;
-    h += `<ul class="facts">${(ar ? b.facts_ar : b.facts_en).map(f => `<li>${esc(f)}</li>`).join('')}</ul></section>`;
+    h += `<ul class="facts">${(ar ? b.facts_ar : b.facts_en).map(f => `<li>${esc(f)}</li>`).join('')}</ul>${moonsHTML(b.id, lang)}</section>`;
     return h;
 }
 function solarHTML(bodies, lang) {
@@ -489,11 +489,12 @@ function sciHTML(key, lang) {
   if (sc.special === 'sol') h += solarHTML(sc.bodies, lang);
   else if (sc.special === 'dso') h += dsoSectionHTML(lang);
   else if (sc.special === 'shine') h += shineHTML(lang);
+  else if (sc.special === 'cos') h += cosHTML(lang);
   else if (sc.special) {
     h += factTable(sc.facts, ar) + `<ul class="facts">${(ar ? sc.ar : sc.en).map(f => `<li>${esc(f)}</li>`).join('')}</ul>`;
     if (sc.dsos) h += dsoFold(T[lang].dso.split(' في ')[0].replace(' in this constellation', ''), sc.dsos, lang);
   } else sc.parts.forEach(p => { h += partHTML(p, lang, sc.parts.length > 1); });
-  h += `<p class="vref" style="white-space:normal;margin-top:18px">${linkText(ar ? 'المصادر: فهرس نجوم HYG 4.1 (هيباركوس وغيره) للمسافات والأنواع؛ OpenNGC لأجرام السماء العميقة؛ أرشيف ناسا للكواكب الخارجية (نسخة أكتوبر 2026) للكواكب. الحرارة مقدّرة من الطيف، والمسافات تقريبية.' : 'Sources: HYG star catalogue 4.1 (Hipparcos and others) for distances and types; OpenNGC for deep-sky objects; NASA Exoplanet Archive (October 2026 copy) for planets. Temperatures are estimated from each star\'s spectrum, and distances are approximate.')}</p>`;
+  if (sc.special !== 'cos') h += `<p class="vref" style="white-space:normal;margin-top:18px">${linkText(ar ? 'المصادر: فهرس نجوم HYG 4.1 (هيباركوس وغيره) للمسافات والأنواع؛ OpenNGC لأجرام السماء العميقة؛ أرشيف ناسا للكواكب الخارجية (نسخة أكتوبر 2026) للكواكب. الحرارة مقدّرة من الطيف، والمسافات تقريبية.' : 'Sources: HYG star catalogue 4.1 (Hipparcos and others) for distances and types; OpenNGC for deep-sky objects; NASA Exoplanet Archive (October 2026 copy) for planets. Temperatures are estimated from each star\'s spectrum, and distances are approximate.')}</p>`;
   return h + `</div>`;
 }
 

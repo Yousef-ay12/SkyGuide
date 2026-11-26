@@ -11,7 +11,7 @@ const PLAN = (() => {
          pickIntro: 'These are above the horizon during your tour. Tap one or more, then press Next.', easy: 'easy for guests', cons: 'Constellations', planets: 'Planets',
          other: 'Something else? Add any constellation', choose: 'Choose…', none: 'Pick at least one thing to continue.', nothingUp: 'Nothing listed: try another time or date.',
          noStory: 'Planets have no constellation stories here. Press Next to continue.', storyFor: 'Choose a culture', of: 'of',
-         doneT: 'All done', doneP: 'You have looked at everything you picked for this night.', saveAll: 'Save this night as a list', saved: 'Saved as a new list.', again: 'Plan another night', openAG: 'Open Saved lists',
+         doneT: 'All done', doneP: 'You have looked at everything you picked for this night.', saveAll: 'Save this night as a list', saved: 'Saved as a new list.', again: 'Plan another night', openAG: 'Open My night',
          hintCert: 'Set from this certified dark-sky place.', hintEst: 'Estimated from the size of the city; change it if you will be somewhere darker.', hintOwn: 'Your own choice.', nextPick: 'Next: ', leave: 'You can leave the steps at any time with the tabs above; your choices are kept.'},
     ar: {eyebrow: 'خطّط لليلتك', title: 'خطوة بخطوة', s1: 'المكان والليلة', s2: 'اختر', sci: 'العلم', sto: 'القصص', back: 'السابق', next: 'التالي', finish: 'إنهاء',
          place: 'المكان', date: 'التاريخ', from: 'بداية الجولة', to: 'نهاية الجولة', sky: 'ظلمة السماء', order: 'اعرض أولًا', sciFirst: 'العلم أولًا', stoFirst: 'القصص أولًا',
@@ -19,7 +19,7 @@ const PLAN = (() => {
          pickIntro: 'هذه فوق الأفق في أثناء جولتك. اختر واحدًا أو أكثر، ثم اضغط «التالي».', easy: 'سهل على الزوار', cons: 'الكوكبات', planets: 'الكواكب',
          other: 'شيء آخر؟ أضف أي كوكبة', choose: 'اختر…', none: 'اختر شيئًا واحدًا على الأقل للمتابعة.', nothingUp: 'لا شيء هنا: جرّب وقتًا أو تاريخًا آخر.',
          noStory: 'لا توجد هنا قصص كوكبات للكواكب. اضغط «التالي» للمتابعة.', storyFor: 'اختر ثقافة', of: 'من',
-         doneT: 'انتهيت', doneP: 'اطّلعت على كل ما اخترته لهذه الليلة.', saveAll: 'احفظ هذه الليلة قائمةً', saved: 'حُفظت قائمةً جديدة.', again: 'خطّط لليلة أخرى', openAG: 'افتح القوائم المحفوظة',
+         doneT: 'انتهيت', doneP: 'اطّلعت على كل ما اخترته لهذه الليلة.', saveAll: 'احفظ هذه الليلة قائمةً', saved: 'حُفظت قائمةً جديدة.', again: 'خطّط لليلة أخرى', openAG: 'افتح ليلتي',
          hintCert: 'مأخوذة من هذا الموقع المعتمد للسماء المظلمة.', hintEst: 'تقدير بحسب حجم المدينة؛ غيّرها إن كنت ستذهب إلى مكان أظلم.', hintOwn: 'اختيارك أنت.', nextPick: 'التالي: ', leave: 'يمكنك ترك الخطوات في أي وقت من الأزرار في الأعلى، وتبقى اختياراتك محفوظة.'}
   };
   const hm = s => { const [h, m] = String(s || '0:0').split(':').map(Number); return h + (m || 0) / 60; };
@@ -129,13 +129,17 @@ const PLAN = (() => {
   function step2(t, ar, N) {
     const W = whatsUp(N), on = new Set(P.picks.map(pickId));
     whatsUpKeys = new Set(W.cons.map(c => c.k));
-    let h = `<p class="muted">${t.pickIntro}</p>` + linksBox(ar, W, on);
+    let h = `<p class="muted">${t.pickIntro}</p>`;
+    const fromNight = AG.plannable().filter(x => !on.has(pickId(x)));
+    if (fromNight.length) h += `<p class="pfromn"><button type="button" class="pbtn" data-pnight>${ar ? `+ أضف من «ليلتي» (${fromNight.length})` : `+ Add from My night (${fromNight.length})`}</button></p>`;
+    h += linksBox(ar, W, on);
     h += `<h3 class="psub">${t.cons}</h3><div class="ppicks">${W.cons.length ? W.cons.map(c => { const x = {t: 'con', key: c.k}, id = pickId(x);
       return `<button type="button" class="ppick" data-pick='${JSON.stringify(x)}' aria-pressed="${on.has(id)}">${esc(ar ? byKey[c.k].ar : byKey[c.k].latin)}${ar ? '' : ` <span lang="ar">${esc(byKey[c.k].ar)}</span>`}${c.easy ? `<span class="peasy">${t.easy}</span>` : ''}</button>`; }).join('') : `<p class="muted">${t.nothingUp}</p>`}</div>`;
     if (W.pls.length) h += `<h3 class="psub">${t.planets}</h3><div class="ppicks">${W.pls.map(I => { const x = {t: 'planet', ref: I.p}, id = pickId(x); return `<button type="button" class="ppick" data-pick='${JSON.stringify(x)}' aria-pressed="${on.has(id)}">${esc(pickName(x, ar))}</button>`; }).join('')}</div>`;
     const all = DATA.constellations.filter(c => DATA.sci[c.key] && DATA.sci[c.key].parts && c.key !== 'QUR').sort((a, b) => a.latin.localeCompare(b.latin));
     h += `<label class="pother">${t.other}<select data-p="other"><option value="">${t.choose}</option>${all.map(c => `<option value="${c.key}">${esc(ar ? c.ar + ' · ' + c.latin : c.latin)}</option>`).join('')}</select></label>`;
-    if (P.picks.some(x => x.t === 'con' && !W.cons.some(c => c.k === x.key))) h += `<div class="ppicks">${P.picks.filter(x => x.t === 'con' && !W.cons.some(c => c.k === x.key)).map(x => `<button type="button" class="ppick" data-pick='${JSON.stringify(x)}' aria-pressed="true">${esc(pickName(x, ar))}</button>`).join('')}</div>`;
+    const notUp = x => x.t === 'con' ? !W.cons.some(c => c.k === x.key) : !W.pls.some(I => I.p === x.ref);
+    if (P.picks.some(notUp)) h += `<div class="ppicks">${P.picks.filter(notUp).map(x => `<button type="button" class="ppick" data-pick='${JSON.stringify(x)}' aria-pressed="true">${esc(pickName(x, ar))}</button>`).join('')}</div>`;
     return h;
   }
   function pickBar(t, ar) {
@@ -165,7 +169,6 @@ const PLAN = (() => {
     return h;
   }
   function render() {
-    document.querySelectorAll('#cultures input').forEach(i => { i.checked = i.value === 'plan'; i.closest('.chip').classList.remove('none'); });
     const card = document.getElementById('card'), ar = state.lang === 'ar', lang = ar ? 'ar' : 'en', t = TX[lang];
     card.style.setProperty('--cc', 'var(--c-cal)');
     const N = night();
@@ -207,6 +210,7 @@ const PLAN = (() => {
       calSave(); PLANrender();
     }));
     card.querySelectorAll('input[name=porder]').forEach(r => r.addEventListener('change', () => { P.order = r.value; keep(); }));
+    const pn = card.querySelector('[data-pnight]'); if (pn) pn.addEventListener('click', () => { const have = new Set(P.picks.map(pickId)); AG.plannable().forEach(x => { if (!have.has(pickId(x))) P.picks.push(x); }); P.cur = 0; keep(); PLANrender(); });
     card.querySelectorAll('[data-pick]').forEach(b => b.addEventListener('click', () => {
       const x = JSON.parse(b.dataset.pick), id = pickId(x), i = P.picks.findIndex(y => pickId(y) === id);
       if (i >= 0) P.picks.splice(i, 1); else P.picks.push(x);
@@ -249,6 +253,9 @@ const PLAN = (() => {
       PLANrender(); top();
     }));
   }
-  return {render};
+  // My night feeds the planner: replace the picks with the list's (from My night), or fill empty picks when the planner opens
+  function seed(items) { P.picks = items.slice(); P.cur = 0; P.done = false; P.step = 2; keep(); }
+  function enter() { if (!P.picks.length) { const it = AG.plannable(); if (it.length) { P.picks = it; P.cur = 0; keep(); } } }
+  return {render, seed, enter};
 })();
 

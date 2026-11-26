@@ -3,17 +3,17 @@
    The page itself: newest version from the internet first (waits up to 3 seconds), the saved copy when offline.
    Code, styling and data files have a fingerprint in their name, so the saved copy is used straight away.
    Deep-sky pictures: kept after you have seen them (up to 150), so they also show offline. */
-const VERSION = '66eaea41';
+const VERSION = 'e0ce3fbf';
 const CACHE = 'skyguide-' + VERSION;
 const PICS = 'skyguide-pictures-v1';   // Wikipedia and Webb photos
 const SKY = 'skyguide-sky-v1';         // sky-survey photos (take more room, so keep fewer)
 const MAX_PICS = 150, MAX_SKY = 40;
 const FILES = [
  "./",
- "assets/site.8adea43e.css",
+ "assets/site.55c922f0.css",
  "assets/stories.567ac1f2.js",
  "assets/sky.0de37187.js",
- "assets/app.c1abe1cf.js",
+ "assets/app.33b201d5.js",
  "manifest-arch.webmanifest",
  "manifest-astrolabe.webmanifest",
  "manifest-compass.webmanifest",

@@ -1,0 +1,99 @@
+/* ---------- Science: the main moons of the planets, Cosmology and its pictures ---------- */
+
+/* the main moons, under each planet */
+.moons { margin: 16px 0 4px; max-width: 72ch; }
+.moons > .sect-lbl { margin-bottom: 8px; }
+.moonf { border: 1px solid var(--line); border-radius: 12px; margin: 0 0 8px; background: color-mix(in srgb, var(--pc, var(--accent)) 4%, var(--panel)); }
+.moonf > summary { list-style: none; cursor: pointer; display: flex; align-items: center; gap: 10px; padding: 8px 12px; min-height: 44px; }
+.moonf > summary::-webkit-details-marker { display: none; }
+.moonf .mdot { flex: none; }
+.moonf .mdot circle { fill: color-mix(in srgb, var(--muted) 55%, var(--ink)); }
+.moonf .m-n { flex: 1; font-weight: 600; }
+.moonf .m-n [lang=ar] { font-family: var(--f-ar); font-weight: 400; color: var(--muted); margin-inline-start: 6px; }
+.moonf .m-s { font-family: var(--f-mono); font-size: 13px; color: var(--muted); }
+
+.moonf .m-ar { color: var(--accent); transition: transform .2s; }
+
+.moonf[open] .m-ar { transform: rotate(90deg); }
+[dir=rtl] .moonf:not([open]) .m-ar { transform: scaleX(-1); }
+.moonf .m-in { padding: 2px 14px 12px; }
+.moonf .ftable { margin-top: 0; }
+
+/* Cosmology */
+.cos-parts { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0 6px; scroll-margin-top: calc(var(--hdh) + 12px); }
+.cos-parts .cos-n { display: inline-grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; background: color-mix(in srgb, var(--cc) 22%, transparent); font-size: 13px; font-family: var(--f-mono); }
+.cos-h { font: 400 30px/1.2 var(--f-display); margin: 18px 0 4px; }
+.cos-in { color: var(--muted); max-width: 68ch; margin: 0 0 8px; }
+.cos-g { font: 600 13px/1.3 var(--f-mono); letter-spacing: .1em; text-transform: uppercase; color: var(--c-science); margin: 26px 0 4px; }
+.cosfold { margin: 10px 0; }
+.cos-b { padding: 0 16px 12px; max-width: 70ch; }
+.cos-b p { margin: 0 0 10px; }
+.cos-fig { margin: 12px 0 16px; max-width: 72ch; }
+.cosfig { width: 100%; height: auto; display: block; font-family: var(--f-body); direction: ltr; unicode-bidi: isolate; }
+.sci.rtl .cosfig text { font-family: var(--f-ar); }
+.cf-cap { font-size: 14px; color: var(--muted); margin: 4px 0 0; }
+.cosfig .cf-t { font-size: 14px; fill: var(--ink); }
+.cosfig .cf-s { font-size: 12.5px; fill: var(--muted); }
+.cosfig .cf-lb { font-size: 13px; fill: var(--sky-label); font-style: italic; }
+.cosfig .cf-ax { stroke: var(--muted); stroke-width: 1; fill: none; }
+.cosfig .cf-bar { fill: var(--c-science); }
+.cosfig .cf-de { fill: color-mix(in srgb, var(--c-science) 55%, var(--panel)); }
+.cosfig .cf-dm { fill: var(--c-cal); }
+.cosfig .cf-nm { fill: var(--accent); }
+.cosfig .cf-sky { fill: var(--sky); }
+.cosfig .cf-gx { fill: var(--sky-star); }
+.cosfig .cf-halo { fill: color-mix(in srgb, var(--sky-line) 30%, transparent); }
+.cosfig .cf-halo2 { fill: color-mix(in srgb, var(--c-cal) 18%, transparent); stroke: var(--c-cal); stroke-dasharray: 3 4; }
+.cosfig .cf-box { fill: var(--panel); stroke: var(--muted); }
+.cosfig .cf-beam { stroke: #e0574a; stroke-width: 2.5; }
+.cosfig .cf-split { fill: color-mix(in srgb, var(--c-science) 40%, transparent); stroke: var(--c-science); }
+.cosfig .cf-mir { fill: var(--muted); }
+.cosfig .cf-wave, .cosfig .cf-spin, .cosfig .cf-tail { fill: none; stroke: var(--c-cal); stroke-width: 2; }
+.cosfig .cf-tail { stroke: var(--muted); stroke-dasharray: 2 4; }
+.cosfig .cf-arr { stroke: var(--ink); stroke-width: 2; fill: none; }
+.cosfig .cf-st-hot { stop-color: #e07a4a; }
+.cosfig .cf-st-cold { stop-color: #7fb4ef; }
+.cosfig .cf-core { fill: #f4d58d; }
+.cosfig .cf-ell, .cosfig .cf-ellg { fill: color-mix(in srgb, #f0b36a 55%, var(--panel)); stroke: none; }
+.cosfig .cf-arm { fill: none; stroke: #7fb4ef; stroke-width: 2; }
+.cosfig .cf-barl { stroke: #f4d58d; stroke-width: 5; stroke-linecap: round; }
+.cosfig .cf-disk { fill: color-mix(in srgb, #7fb4ef 60%, var(--panel)); }
+.cosfig .cf-ray { fill: none; stroke: var(--accent); stroke-width: 2; }
+.cosfig .cf-dash { fill: none; stroke: var(--muted); stroke-dasharray: 4 5; }
+.cosfig .cf-earth { fill: #4f8fd6; }
+.cosfig .cf-surf { fill: color-mix(in srgb, var(--c-science) 16%, transparent); stroke: var(--c-science); }
+.cosfig .cf-tri { fill: none; stroke: var(--accent); stroke-width: 2.2; }
+.cos-exs { margin: 6px 0 4px; display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.cos-exs .sect-lbl { width: 100%; }
+.cos-ex { display: inline-flex; align-items: center; gap: 4px; border: 1px solid var(--line); border-radius: 999px; padding: 2px 4px 2px 2px; }
+.cos-exn { font: inherit; font-size: 15px; background: none; border: 0; color: var(--ink); cursor: pointer; padding: 4px 8px; }
+.cos-exn:hover { color: var(--accent); }
+.cos-next { margin-top: 22px; }
+.sci.rtl :is(.cos-h, .cos-g) { font-family: var(--f-ar); letter-spacing: 0; text-transform: none; }
+:root[data-skin=red] .cosfig :is(.cf-beam, .cf-earth, .cf-core) { fill: var(--accent); stroke: var(--accent); }
+:root[data-skin=red] .cosfig :is(.cf-st-hot, .cf-st-cold) { stop-color: var(--accent); }
+:root[data-skin=red] .cosfig :is(.cf-arm, .cf-barl) { stroke: var(--accent); }
+:root[data-skin=red] .cosfig :is(.cf-ell, .cf-ellg, .cf-disk) { fill: color-mix(in srgb, var(--accent) 40%, var(--panel)); }
+
+
+/* Cosmology pictures */
+.cos-pic { margin: 2px 0 14px; }
+.cp-box { position: relative; min-height: 160px; border-radius: 12px; overflow: hidden; background: var(--sky); display: grid; place-items: center; }
+.cp-box img { display: block; width: 100%; height: auto; max-height: 460px; object-fit: contain; background: #000; }
+.cp-box.ok { min-height: 0; display: block; }
+.cp-box .dph { color: var(--sky-label); font-size: 14px; padding: 20px; text-align: center; }
+.cos-pic figcaption { font-size: 14.5px; color: var(--muted); margin-top: 6px; }
+:root[data-skin=red] .cp-box img { filter: grayscale(1) sepia(1) hue-rotate(-50deg) saturate(4) brightness(.75); }
+.cp-box .dcr { position: absolute; right: 8px; bottom: 8px; font: 12px/1.3 var(--f-body); color: #e9edf7; background: rgba(0,0,0,.6); border-radius: 6px; padding: 3px 8px; text-decoration: none; max-width: calc(100% - 16px); }
+.cp-box .dcr.wcr b { color: #ffd28a; font-weight: 600; }
+.sci.rtl .cp-box .dcr { font-family: var(--f-ar); }
+
+/* star cards: keep names and tables readable on very narrow phones */
+.starc h4 { flex-wrap: wrap; }
+.starc h4 > bdi { flex: 1 1 8ch; }
+@media (max-width: 380px) {
+  .starc dl { grid-template-columns: minmax(0, 1fr); gap: 0; }
+  .starc dd { margin-bottom: 6px; }
+  .starfold > .sf-in { padding: 0 8px 10px; }
+  .starc { padding: 10px; }
+}

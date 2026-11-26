@@ -14,7 +14,7 @@ const FBT = {
 };
 let fbLast = 0, fbDone = false;
 function fbPlace() {
-  if (state.cul === 'guide') return 'Saved lists'; if (state.cul === 'calendar') return 'Sky calendar'; if (state.cul === 'plan') return 'Plan a night'; if (state.cul === 'quiz') return 'Quiz'; if (state.cul === 'learn') return 'For guides · ' + GUIDES.page;
+  if (state.cul === 'astro') return 'AstroGuide'; if (state.cul === 'guide') return 'My night'; if (state.cul === 'calendar') return 'Sky calendar'; if (state.cul === 'plan') return 'Plan a night'; if (state.cul === 'quiz') return 'Quiz'; if (state.cul === 'learn') return 'For guides · ' + GUIDES.page;
   const c = byKey[state.con]; return (c ? c.latin : state.con) + ' · ' + cname(state.cul);
 }
 function fbRender() {

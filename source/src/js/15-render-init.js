@@ -2,15 +2,17 @@ function render() {
   writeHash();
   setTimeout(() => RET.sync(), 0);
   { const fp = document.getElementById('feedback'); if (fp && !fp.hidden) fbRender(); }
-  document.querySelector('.layout').classList.toggle('cal-mode', TOOL_TABS.has(state.cul));
+  document.querySelector('.layout').classList.toggle('cal-mode', TOOL_TABS.has(state.cul) || (state.cul === 'science' && SCI_SPECIAL.has(state.con)) || state.con === 'CUL');
+  if (state.cul === 'astro') { const card = document.getElementById('card'); card.style.setProperty('--cc', 'var(--accent)'); card.innerHTML = astroHubHTML(state.lang === 'ar' ? 'ar' : 'en'); return; }
+  if (state.con === 'CUL' && secOf(state.cul) === 'culture') { const card = document.getElementById('card'); card.style.setProperty('--cc', `var(--c-${state.cul})`); card.innerHTML = culHubHTML(state.cul, state.lang === 'ar' ? 'ar' : 'en'); return; }
+  if (state.cul === 'science' && state.con === 'SCI') { const card = document.getElementById('card'); card.style.setProperty('--cc', 'var(--c-science)'); card.innerHTML = sciHubHTML(state.lang === 'ar' ? 'ar' : 'en'); return; }
   if (state.cul === 'plan') { PLAN.render(); return; }
   if (state.cul === 'learn') { GUIDES.render(); return; }
   if (state.cul === 'quiz') { QUIZ.render(); return; }
   if (state.cul === 'guide') {
-    document.querySelectorAll('#cultures input').forEach(i => { i.checked = i.value === 'guide'; i.closest('.chip').classList.remove('none'); });
     const card = document.getElementById('card'), ar = state.lang === 'ar';
     card.style.setProperty('--cc', '#e9a23b');
-    let h = `<div class="card-head"><div><div class="eyebrow"><span class="dot"></span>${ar ? '★ القوائم المحفوظة' : '★ Saved lists'}</div><h2${ar ? ' lang="ar" style="font-family:var(--f-ar)"' : ''}>${ar ? 'كوكباتك ونجومك المحفوظة' : 'Your saved stars and constellations'}</h2></div></div>`;
+    let h = `<div class="card-head"><div><div class="eyebrow"><span class="dot"></span>${ar ? '✦ ليلتي' : '✦ My night'}</div><h2${ar ? ' lang="ar" style="font-family:var(--f-ar)"' : ''}>${ar ? 'كل ما جمعته لليلتك' : 'Everything you gathered for your night'}</h2></div></div>`;
     h += `<div class="langs" role="group" aria-label="Language">${[['en', 'English'], ['ar', 'العربية']].map(([id, l]) => `<button type="button" data-lang="${id}" aria-pressed="${(ar ? 'ar' : 'en') === id}"${id === 'ar' ? ' lang="ar"' : ''}>${l}</button>`).join('')}</div>`;
     h += AG.guideHTML(ar ? 'ar' : 'en');
     card.innerHTML = h;
@@ -19,7 +21,6 @@ function render() {
     return;
   }
   if (state.cul === 'calendar') {
-    document.querySelectorAll('#cultures input').forEach(i => { i.checked = i.value === 'calendar'; i.closest('.chip').classList.remove('none'); });
     const card = document.getElementById('card'), ar = state.lang === 'ar';
     card.style.setProperty('--cc', 'var(--c-cal)');
     let h = `<div class="card-head"><div><div class="eyebrow"><span class="dot"></span>${ar ? 'تقويم السماء' : 'Sky calendar'}</div><h2${ar ? ' lang="ar" style="font-family:var(--f-ar)"' : ''}>${ar ? 'متى ترى النجوم والكواكب' : 'When to see the stars and planets'}</h2></div></div>`;
@@ -31,7 +32,6 @@ function render() {
     return;
   }
   const c = byKey[state.con], e = (DATA.lore[state.con] || {})[state.cul];
-  document.querySelectorAll('#cultures input').forEach(i => { i.checked = i.value === state.cul; i.closest('.chip').classList.toggle('none', !hasLore(state.con, i.value)); });
   document.getElementById('curName').textContent = c.latin;
   markList();
   const card = document.getElementById('card');
@@ -114,7 +114,8 @@ function applySkin(v) {
   if (v) document.documentElement.setAttribute('data-skin', v); else document.documentElement.removeAttribute('data-skin');
 }
 function init() {
-  let sk = ''; try { sk = localStorage.getItem('osms-skin') || ''; } catch (e) {}
+  // the dark night-sky look is the default; anyone who picked a screen colour keeps it
+  let sk = 'dark'; try { const v = localStorage.getItem('osms-skin'); if (v !== null) sk = v; } catch (e) {}
   applySkin(sk); const sel = document.getElementById('skin'); sel.value = sk;
   const skLbl = document.querySelector('label[for=skin]'), syncSk = () => { skLbl.hidden = !!document.documentElement.getAttribute('data-bg') && sel.value !== 'red'; };
   sel.addEventListener('change', () => { applySkin(sel.value); try { localStorage.setItem('osms-skin', sel.value); } catch (e) {} syncSk(); });
@@ -122,9 +123,12 @@ function init() {
   const bgs = document.getElementById('bgsel'), applyBg = v => { if (v) document.documentElement.setAttribute('data-bg', v); else document.documentElement.removeAttribute('data-bg'); };
   if (![...bgs.options].some(o => o.value === bg)) bg = ''; applyBg(bg); bgs.value = bg; syncSk();
   bgs.addEventListener('change', () => { applyBg(bgs.value); try { localStorage.setItem('osms-bg', bgs.value); } catch (e) {} syncSk(); });
+  // no link to a page: open where this person left off last time
+  const hadHash = location.hash.length > 1;
+  if (!hadHash) { try { const l = localStorage.getItem('osms-last'); if (l && l[0] === '#') history.replaceState(null, '', l); } catch (e) {} }
   if (!AG.importFromHash()) readHash();
   if (!hasLore(state.con, state.cul)) state.con = firstFor(state.cul);
-  buildCultures(); buildNav();
+  buildNav();
   setTimeout(() => { try { TOUR.note(); } catch (e) {} try { APP.iosTip(); } catch (e) {} }, 1200);
   AG.updateCount();
   buildList();
@@ -134,5 +138,6 @@ function init() {
   if (matchMedia('(max-width: 860px)').matches) document.getElementById('index').open = false;
   window.addEventListener('hashchange', () => { if (AG.importFromHash()) { render(); return; } if (readHash()) { if (!hasLore(state.con, state.cul)) state.con = firstFor(state.cul); buildList(document.getElementById('q').value); render(); } });
   render();
+  WELCOME.first(hadHash);
 }
 init();

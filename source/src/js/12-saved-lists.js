@@ -1,4 +1,4 @@
-/* ---------- AstroGuide: saved lists of constellations, stars, objects and planets ---------- */
+/* ---------- AstroGuide: My night, the lists of constellations, stars, objects and planets you gather while exploring ---------- */
 const AG = (() => {
   let S = {lists: [], active: null};
   const uid = () => Math.random().toString(36).slice(2, 9);
@@ -9,7 +9,7 @@ const AG = (() => {
   }
   function save() { try { localStorage.setItem('osms-ag', JSON.stringify(S)); } catch (e) {} updateCount(); }
   const idOf = it => [it.t, it.key, it.ref || '', it.t === 'con' ? it.cul : ''].join('|');
-  const listName = (l, ar) => l.name || (ar ? 'قائمتي' : 'My list');
+  const listName = (l, ar) => l.name || (ar ? 'ليلتي' : 'My night');
   const active = () => S.lists.find(l => l.id === S.active) || S.lists[0];
   const inList = (l, it) => l.items.some(x => idOf(x) === idOf(it));
   const savedAnywhere = it => S.lists.some(l => inList(l, it));
@@ -17,6 +17,18 @@ const AG = (() => {
     const i = l.items.findIndex(x => idOf(x) === idOf(it));
     if (i >= 0) { l.items.splice(i, 1); save(); return false; }
     l.items.push({...it, note: ''}); save(); return true;
+  }
+  // what Plan a night can use from the open list: constellations (stars and objects count as their constellation) and planets
+  function plannable() {
+    const out = [], seen = new Set(), sci = k => byKey[k] && DATA.sci[k] && DATA.sci[k].parts;
+    active().items.forEach(it => {
+      let x = null;
+      if (it.t === 'con' && sci(it.key)) x = CULTURES.some(c => c.id === it.cul) ? {t: 'con', key: it.key, cul: it.cul} : {t: 'con', key: it.key};
+      else if ((it.t === 'star' || it.t === 'dso') && sci(it.key)) x = {t: 'con', key: it.key};
+      else if (it.t === 'planet' && PLANETS.includes(it.ref)) x = {t: 'planet', ref: it.ref};
+      if (!x) return; const id = x.t + ':' + (x.key || x.ref); if (!seen.has(id)) { seen.add(id); out.push(x); }
+    });
+    return out;
   }
   function total() { return S.lists.reduce((n, l) => n + l.items.length, 0); }
   function updateCount() { const el = document.getElementById('agcount'); if (el) el.textContent = total() ? String(total()) : ''; }
@@ -63,13 +75,13 @@ const AG = (() => {
   // ---- save buttons and the list chooser ----
   function btn(it, lang, small) {
     const on = savedAnywhere(it), ar = lang === 'ar';
-    return `<button type="button" class="agsave${small ? ' sm' : ''}" data-ag="${esc(JSON.stringify(it))}" aria-pressed="${on}" title="${ar ? 'احفظ في قوائمك' : 'Save to your lists'}">${on ? '★' : '☆'}${small ? '' : ` <span>${on ? (ar ? 'محفوظ' : 'Saved') : (ar ? 'احفظ' : 'Save')}</span>`}</button>`;
+    return `<button type="button" class="agsave${small ? ' sm' : ''}" data-ag="${esc(JSON.stringify(it))}" aria-pressed="${on}" title="${ar ? 'أضف إلى ليلتي' : 'Add to My night'}" aria-label="${ar ? 'أضف إلى ليلتي' : 'Add to My night'}">${on ? '✓' : '+'}${small ? '' : ` <span>${on ? (ar ? 'في ليلتي' : 'In my night') : (ar ? 'ليلتي' : 'My night')}</span>`}</button>`;
   }
   function refreshButtons() {
     document.querySelectorAll('.agsave').forEach(b => {
       const it = JSON.parse(b.dataset.ag), on = savedAnywhere(it), ar = state.lang === 'ar';
-      b.setAttribute('aria-pressed', on); b.firstChild.textContent = on ? '★' : '☆';
-      const sp = b.querySelector('span'); if (sp) sp.textContent = on ? (ar ? 'محفوظ' : 'Saved') : (ar ? 'احفظ' : 'Save');
+      b.setAttribute('aria-pressed', on); b.firstChild.textContent = on ? '✓' : '+';
+      const sp = b.querySelector('span'); if (sp) sp.textContent = on ? (ar ? 'في ليلتي' : 'In my night') : (ar ? 'ليلتي' : 'My night');
     });
   }
   function toast(msg) {
@@ -83,11 +95,11 @@ const AG = (() => {
     closeMenu();
     if (S.lists.length === 1) {
       const l = S.lists[0], on = toggle(l, it); refreshButtons();
-      toast(on ? (ar ? `حُفظ في «${listName(l, true)}»` : `Saved to ${listName(l, false)}`) : (ar ? 'أُزيل من القائمة' : 'Removed from your list'));
+      toast(on ? (ar ? `أُضيف إلى «${listName(l, true)}»` : `Added to ${listName(l, false)}`) : (ar ? `أُزيل من «${listName(l, true)}»` : `Removed from ${listName(l, false)}`));
       return;
     }
     const m = document.createElement('div'); m.id = 'agmenu'; m.setAttribute('role', 'menu'); if (ar) { m.dir = 'rtl'; m.lang = 'ar'; }
-    m.innerHTML = `<div class="agm-h">${ar ? 'احفظ في' : 'Save to'}</div>` + S.lists.map(l => `<button type="button" role="menuitemcheckbox" aria-checked="${inList(l, it)}" data-l="${l.id}"><span class="ck">${inList(l, it) ? '✓' : ''}</span>${esc(listName(l, ar))} <span class="n">${l.items.length}</span></button>`).join('')
+    m.innerHTML = `<div class="agm-h">${ar ? 'أضف إلى' : 'Add to'}</div>` + S.lists.map(l => `<button type="button" role="menuitemcheckbox" aria-checked="${inList(l, it)}" data-l="${l.id}"><span class="ck">${inList(l, it) ? '✓' : ''}</span>${esc(listName(l, ar))} <span class="n">${l.items.length}</span></button>`).join('')
       + `<button type="button" data-new="1"><span class="ck">+</span>${ar ? 'قائمة جديدة' : 'New list'}</button>`;
     document.body.appendChild(m);
     const r = b.getBoundingClientRect();
@@ -100,7 +112,7 @@ const AG = (() => {
     m.querySelector('[data-new]').addEventListener('click', ev => {
       ev.stopPropagation(); const name = prompt(ar ? 'اسم القائمة الجديدة' : 'Name for the new list', ar ? 'جولة الليلة' : "Tonight's tour");
       if (name === null) return; const l = {id: uid(), name: name.trim().slice(0, 40), items: []}; S.lists.push(l); toggle(l, it); refreshButtons(); closeMenu();
-      toast(ar ? `حُفظ في «${listName(l, true)}»` : `Saved to ${listName(l, false)}`);
+      toast(ar ? `أُضيف إلى «${listName(l, true)}»` : `Added to ${listName(l, false)}`);
     });
     m.querySelector('button').focus();
   }
@@ -245,8 +257,9 @@ const AG = (() => {
     const ar = lang === 'ar', l = active();
     let h = `<div class="agw${ar ? ' rtl' : ''}"${ar ? ' dir="rtl" lang="ar"' : ''}>`;
     if (pres) { const x = presHTML(lang); if (x) return h + x + `</div>`; }
-    h += `<p class="muted" style="max-width:70ch">${ar ? 'احفظ الكوكبات والنجوم والأجرام والكواكب بزر ☆ احفظ في أي صفحة، ورتّبها في قوائم لجولاتك ومحاضراتك، وأضف ملاحظاتك، وتنقّل بينها بسهولة.' : 'Save constellations, stars, deep-sky objects and planets with the ☆ Save button on any page. Arrange them in lists for your tours and talks, add your notes, and move between them freely.'}</p>`;
+    h += `<p class="muted" style="max-width:70ch">${ar ? 'أضف الكوكبات والنجوم والأجرام والكواكب بزر «+ ليلتي» في أي صفحة من «التراث والثقافة» و«العلم»، فتجتمع هنا جاهزة لـ«خطّط لليلتك». ويمكنك أن تجعل لكل جولة قائمة، وتضيف ملاحظاتك، وتعرضها عنصرًا بعد عنصر.' : 'Add constellations, stars, deep-sky objects and planets with the + My night button on any page in Heritage & Culture and Science. They gather here, ready for Plan a night. Keep a list for each tour, add your notes, and present them one by one.'}</p>`;
     h += `<div class="aglists" role="tablist">${S.lists.map(x => `<button type="button" role="tab" class="aglist" data-al="${x.id}" aria-selected="${x.id === l.id}">${esc(listName(x, ar))} <span class="n">${x.items.length}</span></button>`).join('')}<button type="button" class="aglist add" data-anew="1">+ ${ar ? 'قائمة جديدة' : 'New list'}</button></div>`;
+    { const pn = plannable().length; if (pn) h += `<div class="agplanrow"><button type="button" class="pbtn main agplan" data-aact="plan">${ar ? `خطّط لليلة بهذه (${pn}) ←` : `Plan a night with these (${pn}) →`}</button><span class="muted">${ar ? 'الكوكبات والكواكب من هذه القائمة' : 'The constellations and planets in this list'}</span></div>`; }
     h += `<div class="agbar">`;
     if (renaming) h += `<input id="agname" type="text" maxlength="40" value="${esc(l.name)}" placeholder="${ar ? 'اسم القائمة' : 'List name'}"><button type="button" data-aact="rsave">${ar ? 'حفظ' : 'Save name'}</button>`;
     else h += `<button type="button" data-aact="rename">${ar ? 'إعادة التسمية' : 'Rename'}</button>`;
@@ -254,7 +267,7 @@ const AG = (() => {
     if (S.lists.length > 1 || l.items.length) h += `<button type="button" data-aact="del" class="${confirmDel ? 'danger' : ''}">${confirmDel ? (ar ? 'اضغط مجددًا للحذف' : 'Tap again to delete') : (ar ? 'حذف القائمة' : 'Delete list')}</button>`;
     h += `</div>`;
     if (!l.items.length) {
-      h += `<div class="agempty"><p><b>${ar ? 'القائمة فارغة' : 'This list is empty'}</b></p><p>${ar ? 'افتح أي كوكبة أو نجم أو كوكب واضغط ☆ احفظ ليظهر هنا.' : 'Open any constellation, star or planet and tap ☆ Save to add it here.'}</p></div>`;
+      h += `<div class="agempty"><p><b>${ar ? 'القائمة فارغة' : 'This list is empty'}</b></p><p>${ar ? 'افتح أي كوكبة أو نجم أو كوكب واضغط «+ ليلتي» ليظهر هنا.' : 'Open any constellation, star or planet and tap + My night to add it here.'}</p></div>`;
     } else {
       h += `<ol class="agitems">${l.items.map((it, i) => {
         const inf = info(it, lang) || {title: it.ref || it.key, sub: '', color: 'var(--line)', type: ''};
@@ -284,7 +297,7 @@ const AG = (() => {
       let b = h.slice(4).replace(/-/g, '+').replace(/_/g, '/'); while (b.length % 4) b += '=';
       const d = JSON.parse(decodeURIComponent(escape(atob(b))));
       const items = (d.i || []).filter(it => it && TYPES[it.t] && typeof it.key === 'string').slice(0, 200).map(it => ({t: it.t, key: it.key, ref: it.ref || '', cul: it.cul || '', note: String(it.note || '').slice(0, 2000)}));
-      const l = {id: uid(), name: (String(d.n || '').slice(0, 40) || (state.lang === 'ar' ? 'قائمتي' : 'My list')) + (state.lang === 'ar' ? ' (مشاركة)' : ' (shared)'), items};
+      const l = {id: uid(), name: (String(d.n || '').slice(0, 40) || (state.lang === 'ar' ? 'ليلتي' : 'My night')) + (state.lang === 'ar' ? ' (مشاركة)' : ' (shared)'), items};
       S.lists.push(l); S.active = l.id; save(); state.cul = 'guide';
       try { history.replaceState(null, '', '#guide'); } catch (e) {}
       return true;
@@ -300,6 +313,7 @@ const AG = (() => {
       else if (a === 'rsave') { l.name = (document.getElementById('agname').value || '').trim().slice(0, 40); renaming = false; save(); re(); }
       else if (a === 'del') { if (!confirmDel) { confirmDel = true; re(); return; } confirmDel = false; S.lists = S.lists.filter(x => x.id !== l.id); if (!S.lists.length) S.lists = [{id: uid(), name: '', items: []}]; S.active = S.lists[0].id; save(); re(); }
       else if (a === 'copy') { const link = shareLink(l); (navigator.clipboard && navigator.clipboard.writeText ? navigator.clipboard.writeText(link) : Promise.reject()).then(() => toast(ar ? 'نُسخ الرابط' : 'Link copied'), () => { prompt(ar ? 'انسخ هذا الرابط' : 'Copy this link', link); }); }
+      else if (a === 'plan') { PLAN.seed(plannable()); setCulture('plan'); window.scrollTo({top: 0}); }
       else if (a === 'start' && l.items.length) { pres = {list: l.id, i: 0}; re(); presTop(); }
     }));
     const ni = document.getElementById('agname'); if (ni) ni.addEventListener('keydown', ev => { if (ev.key === 'Enter') { l.name = ni.value.trim().slice(0, 40); renaming = false; save(); re(); } });
@@ -319,7 +333,7 @@ const AG = (() => {
   }
   load();
   function newList(name, items) { const l = {id: uid(), name: String(name).slice(0, 60), items: items.slice()}; S.lists.push(l); S.active = l.id; save(); return l; }
-  return {btn, info, guideHTML, bindGuide, navBar, bindNav, updateCount, importFromHash, total, detail: detailHTML, lore: loreHTML, chart: chartFig, newList};
+  return {btn, plannable, active: () => active(), listName, info, guideHTML, bindGuide, navBar, bindNav, updateCount, importFromHash, total, detail: detailHTML, lore: loreHTML, chart: chartFig, newList};
 })();
 
 
