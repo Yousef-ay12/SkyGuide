@@ -1,5 +1,7 @@
 /* ---------- Quiz: test your knowledge, questions made from the site's own data ---------- */
 const QUIZ = (() => {
+  // a Cosmology question's link opens the right part of the Cosmology page
+  document.addEventListener('click', ev => { const a = ev.target.closest && ev.target.closest('[data-qpart]'); if (!a) return; COS_PART = a.dataset.qpart; try { localStorage.setItem('osms-cos', COS_PART); } catch (e) {} });
   const KINDS = [
     ['chart', 'Which constellation is this?', 'ما هذه الكوكبة؟'],
     ['starcon', 'Which constellation is the star in?', 'في أي كوكبة هذا النجم؟'],
@@ -9,7 +11,9 @@ const QUIZ = (() => {
     ['colour', 'Star colours and heat', 'ألوان النجوم وحرارتها'],
     ['story', 'Stories and names', 'القصص والأسماء'],
     ['planet', 'Planets and the Sun', 'الكواكب والشمس'],
-    ['dso', 'Deep-sky objects', 'الأجرام السماوية العميقة']];
+    ['dso', 'Deep-sky objects', 'الأجرام السماوية العميقة'],
+    ['moons', 'Moons of the planets', 'أقمار الكواكب'],
+    ['cosmos', 'Cosmology', 'علم الكون']];
   const COUNTS = [5, 10, 15, 20];
   const EASY_CONS = ['Ori', 'UMa', 'UMi', 'Cas', 'Cyg', 'Sco', 'Leo', 'Tau', 'Gem', 'Cru', 'Lyr', 'Aql', 'Peg', 'And', 'Per', 'Sgr', 'Boo', 'Vir', 'CMa', 'Aur', 'Cen', 'Dra', 'Her', 'Cep', 'Del', 'Aqr', 'Cnc', 'Lib', 'Ari', 'Cap', 'Psc', 'CMi'];
   const CUL_AR = {arab: 'سماء العرب', greek: 'سماء الإغريق', egypt: 'سماء مصر القديمة', china: 'سماء الصين', japan: 'سماء اليابان', india: 'سماء الهند', safrica: 'سماء جنوب أفريقيا'};
@@ -178,6 +182,30 @@ const QUIZ = (() => {
       const opts = shuffle([c, ...shuffle(Object.keys(DCAT_N).filter(x => x !== c)).slice(0, 3)]);
       return {q: ar ? (c === 'neb' ? 'ما السديم الذي تولد فيه النجوم؟' : esc(DSO_TYPE_INFO[code][2])) : `What is ${an(cn(c))}?`, opts: opts.map(x => esc(first(DCAT_N[x][2]))), ans: opts.indexOf(c), exp: esc(DSO_TYPE_INFO[code][ar ? 3 : 1]), go: (all.find(d => DCAT[d.type] === c) || {con: 'Ori'}).con + '-science'};
     },
+    moons(lvl, ar) {
+      const all = []; Object.keys(MOONS).forEach(pid => MOONS[pid].forEach(m => all.push(Object.assign({pid}, m))));
+      const pn = pid => esc(planetN(pid, ar)), mn = m => esc(ar ? m.ar : m.en), r = Math.random();
+      if (r < 0.45) {   // a moon from what makes it special
+        const q = pick(MOON_RIDDLES), m = all.find(x => x.en === q[0]); if (!m) return null;
+        const pool = all.filter(x => x.en !== m.en && (lvl === 'hard' || x.d > 1000 || ['Phobos', 'Deimos', 'Enceladus', 'Mimas', 'Miranda'].includes(x.en)));
+        const opts = shuffle([m, ...shuffle(pool).slice(0, 3)]);
+        return {q: ar ? q[2] : q[1], opts: opts.map(mn), ans: opts.indexOf(m), exp: `<b>${mn(m)}</b> (${pn(m.pid)}): ${esc((ar ? m.fa : m.f)[0])}`, go: 'SOL-science'};
+      }
+      if (r < 0.75) {   // which planet does it go around?
+        const m = pick(lvl === 'hard' ? all.filter(x => x.pid !== 'earth') : all.filter(x => x.pid !== 'earth' && (x.d > 1500 || x.pid === 'mars')));
+        const opts = shuffle([m.pid, ...shuffle(['mars', 'jupiter', 'saturn', 'uranus', 'neptune'].filter(x => x !== m.pid)).slice(0, 3)]);
+        return {q: ar ? `حول أي كوكب يدور القمر ${mn(m)}؟` : `Which planet does ${mn(m)} go around?`, opts: opts.map(pn), ans: opts.indexOf(m.pid), exp: ar ? `${mn(m)} قمر من أقمار ${pn(m.pid)}، ويبعد عنه ${nf(m.a)} كم.` : `${mn(m)} is a moon of ${pn(m.pid)}, ${nf(m.a)} km from it.`, go: 'SOL-science'};
+      }
+      // which of two moons is bigger?
+      for (let t = 0; t < 30; t++) { const a = pick(all), b = pick(all); if (a === b || Math.max(a.d, b.d) / Math.min(a.d, b.d) < 1.25) continue; const win = a.d > b.d ? a : b;
+        return {q: ar ? 'أي القمرين أكبر؟' : 'Which moon is bigger?', opts: [mn(a), mn(b)], ans: win === a ? 0 : 1, two: true,
+          exp: ar ? `${mn(a)}: ${nf(a.d)} كم. ${mn(b)}: ${nf(b.d)} كم.` : `${mn(a)}: ${nf(a.d)} km across. ${mn(b)}: ${nf(b.d)} km across.`, go: 'SOL-science'}; }
+      return null;
+    },
+    cosmos(lvl, ar) {
+      const q = pick(COS_QUIZ.filter(x => lvl === 'hard' || !x.hard)), L = ar ? q.ar : q.en, ord = shuffle([0, 1, 2, 3]);
+      return {q: esc(L[0]), opts: ord.map(i => esc(L[1][i])), ans: ord.indexOf(0), exp: esc(L[2]), go: 'COS-science', part: q.part};
+    },
     planet(lvl, ar) {
       if (Math.random() < 0.08) {
         const o = ar ? ['8 ثوانٍ', '8 دقائق', '8 ساعات', '8 أيام'] : ['8 seconds', '8 minutes', '8 hours', '8 days']; const ord = shuffle([0, 1, 2, 3]);
@@ -226,7 +254,7 @@ const QUIZ = (() => {
     if (done) {
       const ok = G.picked === Q.ans;
       h += `<div class="qz-exp ${ok ? 'ok' : 'no'}" role="status"><b>${ok ? t.right : t.wrong}</b> ${Q.exp}</div>`;
-      h += `<div class="qz-go"><button type="button" class="pbtn main" data-qa="next">${G.i + 1 < n ? t.next : t.finish}</button><a class="pbtn" href="#${Q.go}">${t.open}</a></div>`;
+      h += `<div class="qz-go"><button type="button" class="pbtn main" data-qa="next">${G.i + 1 < n ? t.next : t.finish}</button><a class="pbtn" href="#${Q.go}"${Q.part ? ` data-qpart="${Q.part}"` : ''}>${t.open}</a></div>`;
     }
     return h;
   }

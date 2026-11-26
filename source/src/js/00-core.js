@@ -47,6 +47,9 @@ function readHash() {
   if (h === 'plan') { state.cul = 'plan'; return true; }
   if (h === 'quiz') { state.cul = 'quiz'; return true; }
   if (h === 'guides' || h === 'guides-comm' || h === 'guides-equip') { state.cul = 'learn'; if (h !== 'guides') GUIDES.page = h.slice(7); return true; }
+  // a shared Cosmology topic: #COS-science/<part>/<topic number>
+  const ct = h.match(/^COS-science\/([a-z]+)\/(\d+)$/);
+  if (ct) { state.con = 'COS'; state.cul = 'science'; COS_PART = ct[1]; try { localStorage.setItem('osms-cos', ct[1]); } catch (e) {} setTimeout(() => SEARCH.cosTopic(+ct[2]), 50); return true; }
   const m = h.match(/^([A-Za-z]+)-([a-z]+)$/);
   if (m && byKey[m[1]] && (m[2] === 'science' || CULTURES.some(c => c.id === m[2]))) { state.con = m[1]; state.cul = m[2]; return true; }
   return false;

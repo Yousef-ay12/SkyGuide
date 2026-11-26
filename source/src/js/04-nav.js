@@ -34,6 +34,8 @@ function buildNav() {
   document.querySelectorAll('[data-hlang]').forEach(b => b.addEventListener('click', () => { state.lang = b.dataset.hlang; try { localStorage.setItem('osms-lang', state.lang); } catch (e) {} buildList(document.getElementById('q').value); render(); }));
   const sb = document.getElementById('setbtn'), sp = document.getElementById('setpanel');
   sb.addEventListener('click', () => { sp.hidden = !sp.hidden; sb.setAttribute('aria-expanded', !sp.hidden); });
+  document.getElementById('srchbtn').addEventListener('click', () => SEARCH.show());
+  document.addEventListener('keydown', ev => { if (ev.key === '/' && !ev.ctrlKey && !ev.metaKey && !/^(INPUT|TEXTAREA|SELECT)$/.test((document.activeElement || {}).tagName || '') && !document.querySelector('.tour, .welcome, .gsearch')) { ev.preventDefault(); SEARCH.show(); } });
   document.getElementById('brandbtn').addEventListener('click', () => { if (typeof WELCOME !== 'undefined') WELCOME.show(); else window.scrollTo({top: 0, behavior: 'smooth'}); });
 }
 function subnavHTML(sec, ar) {
@@ -75,8 +77,9 @@ function applyChrome() {
   const tb = document.getElementById('tourbtn'); if (tb) { tb.lastChild.textContent = ' ' + t.tour; }
   const ib = document.getElementById('installbtn'); if (ib) { ib.lastChild.textContent = ' ' + t.install; }
   const cb = document.getElementById('iconbtn'); if (cb) { cb.lastChild.textContent = ' ' + t.icon; }
+  try { PICSAVE.label(); } catch (e) {}
   document.querySelectorAll('.ntab').forEach(b => { const n = SECTIONS.find(x => x[0] === b.dataset.sec), tx = b.querySelector('.n-t'); if (n && tx) tx.textContent = ar ? n[2] : n[1]; });
-  set('#setbtn .setlbl', t.settings); const hd2 = document.getElementById('setpanel'); if (hd2) { hd2.setAttribute('dir', ar ? 'rtl' : 'ltr'); hd2.classList.toggle('rtl', ar); } set('#index > summary > span:first-child', t.cons); set('.search .sect-lbl', t.search);
+  set('#setbtn .setlbl', t.settings); set('#srchbtn .setlbl', ar ? 'بحث' : 'Search'); const sbn = document.getElementById('srchbtn'); if (sbn) sbn.setAttribute('aria-label', ar ? 'ابحث في الموقع كله' : 'Search the whole site'); const hd2 = document.getElementById('setpanel'); if (hd2) { hd2.setAttribute('dir', ar ? 'rtl' : 'ltr'); hd2.classList.toggle('rtl', ar); } set('#index > summary > span:first-child', t.cons); set('.search .sect-lbl', t.search);
   const cnt = document.getElementById('count'); if (cnt && cnt.dataset[L]) cnt.textContent = cnt.dataset[L];
 }
 function syncNav() {

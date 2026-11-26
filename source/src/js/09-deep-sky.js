@@ -242,7 +242,7 @@ const RET = (() => {
   let pill = null;
   const hide = () => { if (pill) { pill.remove(); pill = null; } };
   function restore(r) {
-    const go = (n) => { const a = document.querySelector(`#card .dcard[data-dso="${CSS.escape(r.id)}"]`);
+    const go = (n) => { if (n === 0) DSO_LAZY.fillFor(r.id); const a = document.querySelector(`#card .dcard[data-dso="${CSS.escape(r.id)}"]`);
       if (!a) { if (n < 20) setTimeout(() => go(n + 1), 50); return; }
       let d = a.closest('details'); while (d) { d.open = true; d = d.parentElement && d.parentElement.closest('details'); }
       requestAnimationFrame(() => { a.scrollIntoView({block: 'center', behavior: 'instant'}); a.classList.remove('flash'); void a.offsetWidth; a.classList.add('flash'); });
@@ -342,17 +342,34 @@ function dsoSectionHTML(lang) {
   DSO_CATS.forEach(([id, en, a, sub, subAr]) => {
     const l = all.filter(o => dsoCatOf(o.d) === id).sort((x, y) => dsoNum(x.d) - dsoNum(y.d) || String(x.d.name || x.d.cat).localeCompare(String(y.d.name || y.d.cat)));
     if (!l.length) return;
-    h += `<details class="dgroup" id="dg-${id}"><summary><span class="pd-ar" aria-hidden="true">▸</span><span class="dg-t">${ar ? a : en} <span class="dn-n">· ${l.length}</span></span><span class="dg-sub">${ar ? subAr : sub}</span></summary>`
-      + `<div class="dgrid">${l.map(o => dsoCardHTML(o, lang)).join('')}</div></details>`;
+    // the cards of a catalogue are only built when it is opened (or searched), which keeps this page quick to open
+    DSO_LAZY.lists[id] = l;
+    h += `<details class="dgroup" id="dg-${id}" data-dg="${id}"><summary><span class="pd-ar" aria-hidden="true">▸</span><span class="dg-t">${ar ? a : en} <span class="dn-n">· ${l.length}</span></span><span class="dg-sub">${ar ? subAr : sub}</span></summary>`
+      + `<div class="dgrid" data-fill="${id}"></div></details>`;
   });
   h += `<p class="vref" style="white-space:normal">${ar ? 'الصور: صور تلسكوب جيمس ويب الفضائي حيث وُجدت (ESA/Webb وناسا ووكالة الفضاء الكندية، بترخيص CC BY 4.0، وسطر الشكر لكل صورة تحتها)؛ ويكيميديا كومنز (لكل صورة صاحبها ورخصتها، اضغط على «المصدر» تحت الصورة)؛ مسح السماء DSS الملوّن (معهد علوم تلسكوب الفضاء STScI ومرصد بالومار/معهد كاليفورنيا للتقنية) عبر خدمة hips2fits من مركز CDS في ستراسبورغ.' : 'Pictures: James Webb Space Telescope where available (ESA/Webb, NASA and CSA, CC BY 4.0; each picture\'s credit line is shown on it); Wikimedia Commons (each photo has its own author and licence: tap "Source" under it); DSS colour sky survey (STScI, Palomar Observatory/Caltech, UK Schmidt), via the CDS hips2fits service, Strasbourg.'}</p>`;
   return h;
 }
 // search inside the deep-sky section: names, catalogue numbers (M42, NGC 1976, C14, IC 434), constellation and type, in English or Arabic
+const DSO_LAZY = (() => {
+  const lists = {};
+  function fill(g) {
+    const box = g && g.querySelector('.dgrid[data-fill]'); if (!box) return;
+    const l = lists[box.dataset.fill] || []; box.removeAttribute('data-fill');
+    box.innerHTML = l.map(o => dsoCardHTML(o, state.lang === 'ar' ? 'ar' : 'en')).join('');
+    DSO_IMG.watch(box);
+  }
+  const fillAll = root => (root || document).querySelectorAll('details.dgroup').forEach(fill);
+  // the catalogue that holds one object (used by "Back to the deep-sky object")
+  function fillFor(id) { const g = [...document.querySelectorAll('#card details.dgroup')].find(x => (lists[x.dataset.dg] || []).some(o => o.d.id === id)); if (g) fill(g); }
+  document.addEventListener('toggle', ev => { const d = ev.target; if (d.matches && d.matches('details.dgroup') && d.open) fill(d); }, true);
+  return {lists, fill, fillAll, fillFor};
+})();
 const DSOS = (() => {
   const norm = t => String(t || '').toLowerCase().normalize('NFD').replace(/[̀-ًͯ-ٰٟ]/g, '').replace(/[أإآ]/g, 'ا').replace(/ة/g, 'ه').replace(/ى/g, 'ي').replace(/[’'‘`]/g, '').replace(/[^a-z0-9؀-ۿ]+/g, ' ').trim();
   let saved = null;
   function run(inp) {
+    DSO_LAZY.fillAll(document.getElementById('card'));
     const card = document.getElementById('card'), raw = norm(inp.value), groups = [...card.querySelectorAll('details.dgroup')], out = card.querySelector('.dsq-n'), ar = state.lang === 'ar';
     if (!raw) { groups.forEach(g => { g.hidden = false; g.querySelectorAll('.dcard').forEach(c => c.hidden = false); }); if (saved) { groups.forEach((g, i) => g.open = saved[i]); saved = null; } out.textContent = ''; return; }
     if (!saved) saved = groups.map(g => g.open);
@@ -472,8 +489,7 @@ const DSO_IMG = (() => {
   function watch(root) {
     const boxes = root.querySelectorAll('.dimg[data-sky]'); if (!boxes.length) return;
     if (!('IntersectionObserver' in window)) { boxes.forEach(load); return; }
-    if (io) io.disconnect();
-    io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting && e.boundingClientRect.width > 0 && !e.target.closest('details:not([open])')) { io.unobserve(e.target); load(e.target); } }), {rootMargin: '400px 0px'});
+    if (!io) io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting && e.boundingClientRect.width > 0 && !e.target.closest('details:not([open])')) { io.unobserve(e.target); load(e.target); } }), {rootMargin: '400px 0px'});
     boxes.forEach(b => { io.observe(b); const r = b.getBoundingClientRect(); if (r.width && !b.closest('details:not([open])') && r.top < innerHeight + 400 && r.bottom > -400) load(b); });
   }
   // opening a folded catalogue starts its pictures

@@ -2,12 +2,14 @@
    When the app is installed it saves every file it needs, so all tabs work with no internet.
    The page itself: newest version from the internet first (waits up to 3 seconds), the saved copy when offline.
    Code, styling and data files have a fingerprint in their name, so the saved copy is used straight away.
-   Deep-sky pictures: kept after you have seen them (up to 150), so they also show offline. */
+   Pictures: kept after you have seen them (up to 300), so they also show offline;
+   "Save pictures for offline" in Settings stores all of them in a separate store that is never trimmed. */
 const VERSION = '__VERSION__';
 const CACHE = 'skyguide-' + VERSION;
 const PICS = 'skyguide-pictures-v1';   // Wikipedia and Webb photos
 const SKY = 'skyguide-sky-v1';         // sky-survey photos (take more room, so keep fewer)
-const MAX_PICS = 150, MAX_SKY = 40;
+const SAVED = 'skyguide-offline-pics'; // pictures saved with "Save pictures for offline" (never trimmed)
+const MAX_PICS = 300, MAX_SKY = 40;
 const FILES = __FILES__;
 const PIC_HOSTS = /(^|\.)(esawebb\.org|wikipedia\.org|wikimedia\.org|alasky\.cds\.unistra\.fr|archive\.stsci\.edu)$/;
 
@@ -15,7 +17,7 @@ self.addEventListener('install', ev => {
   ev.waitUntil(caches.open(CACHE).then(c => c.addAll(FILES)).then(() => self.skipWaiting()));
 });
 self.addEventListener('activate', ev => {
-  ev.waitUntil(caches.keys().then(keys => Promise.all(keys.filter(k => k !== CACHE && k !== PICS && k !== SKY).map(k => caches.delete(k)))).then(() => self.clients.claim()));
+  ev.waitUntil(caches.keys().then(keys => Promise.all(keys.filter(k => k !== CACHE && k !== PICS && k !== SKY && k !== SAVED).map(k => caches.delete(k)))).then(() => self.clients.claim()));
 });
 async function trim(name, max) {
   const c = await caches.open(name), keys = await c.keys();
@@ -47,8 +49,9 @@ self.addEventListener('fetch', ev => {
   const req = ev.request; if (req.method !== 'GET') return;
   const url = new URL(req.url);
   if (PIC_HOSTS.test(url.hostname)) {
+    if (req.cache === 'no-store') return;   // the "Save pictures" download stores its own copies
     const sky = /alasky|stsci/.test(url.hostname);
-    ev.respondWith(keepPicture(req, sky ? SKY : PICS, sky ? MAX_SKY : MAX_PICS));
+    ev.respondWith(caches.open(SAVED).then(c => c.match(req)).then(hit => hit || keepPicture(req, sky ? SKY : PICS, sky ? MAX_SKY : MAX_PICS)));
     return;
   }
   if (req.mode === 'navigate') { ev.respondWith(page(req)); return; }

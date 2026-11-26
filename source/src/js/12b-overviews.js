@@ -26,6 +26,35 @@ function culHubHTML(cul, lang) {
     return `<div class="cul-card"><button type="button" class="cul-open" data-ocon="${k}"><b>${esc(ar ? c.ar : c.latin)}</b><span class="cul-ar" lang="${ar ? 'en' : 'ar'}">${esc(ar ? c.latin : c.ar)}</span><span class="cul-st">${esc(cutText(s.title || s.seen, 70))}</span></button>${AG.btn({t: 'con', key: k, cul: cu.id}, lang, true)}</div>`; }).join('');
   return h + `</div></div>`;
 }
+// tonight, for the chosen place: when the Moon rises and sets, and the brightest stars and deep-sky objects that stand high during the tour
+const COMPASS = {en: ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'], ar: ['الشمال', 'الشمال الشرقي', 'الشرق', 'الجنوب الشرقي', 'الجنوب', 'الجنوب الغربي', 'الغرب', 'الشمال الغربي']};
+let TN_HAS = null;   // which stars and objects have their own card
+function tonightMoreHTML(pl, st, Y, M, D, lang) {
+  const ar = lang === 'ar', tz = pl.tz, hhmm = t => { const d = new Date(t + tz * 36e5); return String(d.getUTCHours()).padStart(2, '0') + ':' + String(d.getUTCMinutes()).padStart(2, '0'); };
+  const malt = t => { const m = SKY.moon(t); return SKY.altaz(m.ra, m.dec, t, pl.lat, pl.lon).alt - 0.125; };   // 0.125°: the Moon's rim with refraction
+  // Moon: rise and set between noon today and noon tomorrow
+  const t0 = localUTC(Y, M, D, 12, tz), ev = []; let pa = malt(t0);
+  for (let t = t0 + 6e5; t <= t0 + 864e5; t += 6e5) { const a = malt(t); if ((pa < 0) !== (a < 0)) ev.push([a > 0 ? 'rise' : 'set', t - 6e5 * a / (a - pa)]); pa = a; }
+  const up0 = malt(t0) > 0;
+  let moon = ev.map(([k, t]) => `<span>${k === 'rise' ? (ar ? 'شروق القمر' : 'Moonrise') : (ar ? 'غروب القمر' : 'Moonset')} <b><bdi dir="ltr">${hhmm(t)}</bdi></b>${t >= t0 + 432e5 ? (ar ? ' (صباح الغد)' : ' (tomorrow)') : ''}</span>`).join('');
+  if (!ev.length) moon = `<span>${up0 ? (ar ? 'القمر فوق الأفق طوال الليل' : 'The Moon is up all night') : (ar ? 'القمر تحت الأفق طوال الليل' : 'The Moon stays below the horizon all night')}</span>`;
+  // the middle of the tour
+  const hm = s => { const [h, m] = String(s || '21:00').split(':').map(Number); return (h || 0) + (m || 0) / 60; };
+  let a = hm(st.tourStart), b = hm(st.tourEnd); if (b <= a) b += 24; const tm = localUTC(Y, M, D, 0, tz) + ((a + b) / 2) * 36e5;
+  if (!TN_HAS) { TN_HAS = {star: new Set(), dso: new Set()}; Object.keys(DATA.sci).forEach(k => (DATA.sci[k].parts || []).forEach(p => { p.stars.forEach(x => TN_HAS.star.add(x.name)); (p.dsos || []).forEach(x => TN_HAS.dso.add(x.id)); })); }
+  const where = (ra, dec) => SKY.altaz(ra, dec, tm, pl.lat, pl.lon);
+  const dir = az => COMPASS[ar ? 'ar' : 'en'][Math.round(az / 45) % 8];
+  const item = (kind, ref, name, alt, az, extra) => { const txt = `<b>${name}</b><span class="tn-w">${ar ? 'نحو ' + dir(az) : dir(az)} · <bdi dir="ltr">${Math.round(alt)}°</bdi>${extra}</span>`;
+    return `<li>${TN_HAS[kind].has(ref) ? `<button type="button" class="tn-go" data-tgo="${kind}" data-ref="${esc(ref)}">${txt}</button>` : `<span class="tn-go">${txt}</span>`}</li>`; };
+  const stars = Object.values(CALP.stars).filter(s => s.name && s.vmag <= 2.1).map(s => ({s, p: where(s.ra, s.dec)})).filter(x => x.p.alt >= 25).sort((x, y) => x.s.vmag - y.s.vmag).slice(0, 5);
+  const dsos = allDsos().map(({d}) => ({d, q: DSO_POS[d.id]})).filter(x => x.q && x.d.mag != null && x.d.mag <= 6.5).map(x => ({d: x.d, p: where(x.q[0], x.q[1])})).filter(x => x.p.alt >= 30).sort((x, y) => x.d.mag - y.d.mag)
+    .filter((x, i, a) => { const base = (x.d.name || x.d.cat || '').replace(/\s*\(.*$/, ''); return a.findIndex(y => (y.d.name || y.d.cat || '').replace(/\s*\(.*$/, '') === base) === i; }).slice(0, 5);
+  const sl = stars.map(({s, p}) => item('star', s.name, esc(ar ? (DATA.starAr[s.name] || s.name) : s.name), p.alt, p.az, '')).join('');
+  const dl = dsos.map(({d, p}) => item('dso', d.id, `<bdi dir="ltr">${esc(d.name || d.cat)}</bdi>`, p.alt, p.az, d.name && d.cat ? ` · <bdi dir="ltr">${esc(d.cat)}</bdi>` : '')).join('');
+  return `<div class="ah-more"><div class="tn-moon">${moon}</div>`
+    + `<p class="tn-at muted">${ar ? `أعلى ما في السماء نحو الساعة <bdi dir="ltr">${hhmm(tm)}</bdi> (منتصف جولتك). الرقم هو الارتفاع فوق الأفق.` : `High in the sky at about <bdi dir="ltr">${hhmm(tm)}</bdi> (the middle of your tour). The number is the height above the horizon.`}</p>`
+    + `<div class="tn-cols">${sl ? `<div><span class="sect-lbl">${ar ? 'ألمع النجوم' : 'Brightest stars'}</span><ul class="tn-list">${sl}</ul></div>` : ''}${dl ? `<div><span class="sect-lbl">${ar ? 'أجرام عميقة' : 'Deep-sky objects'}</span><ul class="tn-list">${dl}</ul></div>` : ''}</div></div>`;
+}
 function astroHubHTML(lang) {
   const ar = lang === 'ar';
   let h = `<div class="hub ahub${ar ? ' rtl' : ''}"${ar ? ' dir="rtl" lang="ar"' : ''} style="--cc:var(--accent)">`;
@@ -35,8 +64,8 @@ function astroHubHTML(lang) {
   try { calInit(); const pl = placeObj(), st = CAL.st, d = new Date(Date.now() + pl.tz * 36e5), Y = d.getUTCFullYear(), M = d.getUTCMonth(), D = d.getUTCDate();
     const m = SKY.moon(localUTC(Y, M, D, 21, pl.tz));
     tonight = `<div class="ah-tonight">${moonIcon(m.illum, m.waxing, pl.lat < 0, 46)}<div class="ah-tn"><b>${ar ? 'الليلة' : 'Tonight'} · ${esc(fmtD(Date.UTC(Y, M, D), lang, {weekday: 'short', day: 'numeric', month: 'short'}))}</b>
-      <span>${esc(ar ? (pl.ar || pl.en) : pl.en)} · ${ar ? 'الجولة' : 'tour'} <bdi dir="ltr">${esc(st.tourStart)}–${esc(st.tourEnd)}</bdi> · ${ar ? 'القمر' : 'Moon'} ${Math.round(m.illum * 100)}%</span></div>
-      <button type="button" class="pbtn" data-astro="calendar">${ar ? 'غيّر المكان' : 'Change place'}</button></div>${WX.box(pl, Y, M, D, 'mini')}`;
+      <span>${esc(ar ? (pl.ar || pl.en) : pl.en)} · ${ar ? 'الجولة' : 'tour'} <bdi dir="ltr">${esc(st.tourStart)}–${esc(st.tourEnd)}</bdi> · <span class="nw">${ar ? 'القمر' : 'Moon'} <bdi dir="ltr">${Math.round(m.illum * 100)}%</bdi></span></span></div>
+      <button type="button" class="pbtn" data-astro="calendar">${ar ? 'غيّر المكان' : 'Change place'}</button></div>${WX.box(pl, Y, M, D, 'mini')}${tonightMoreHTML(pl, st, Y, M, D, lang)}`;
   } catch (e) {}
   // my night
   const l = AG.active(), pn = AG.plannable().length;
@@ -56,6 +85,7 @@ function astroHubHTML(lang) {
 document.addEventListener('click', ev => {
   if (!ev.target.closest) return;
   const o = ev.target.closest('[data-ocon]'); if (o) { state.con = o.dataset.ocon; buildList(document.getElementById('q').value); render(); window.scrollTo({top: 0}); return; }
+  const tg = ev.target.closest('[data-tgo]'); if (tg) { SEARCH.goTo(tg.dataset.tgo, tg.dataset.ref); return; }
   const a = ev.target.closest('[data-astro]'); if (a) { setCulture(a.dataset.astro); window.scrollTo({top: 0}); return; }
   if (ev.target.closest('[data-astroplan]')) { PLAN.seed(AG.plannable()); setCulture('plan'); window.scrollTo({top: 0}); }
 });

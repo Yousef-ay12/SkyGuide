@@ -738,3 +738,8 @@ input[type=radio], input[type=checkbox] { accent-color: var(--accent); }
 .plk .ppick { margin-top: 6px; }
 .plk-s { margin: 10px 0 14px; }
 .plmore { margin-top: 10px; }
+/* Share buttons */
+.shbtn { display: inline-flex; align-items: center; gap: 5px; font: 500 12.5px/1.2 var(--f-body); padding: 3px 10px; border: 1px solid var(--line); border-radius: 999px; background: none; color: var(--muted); cursor: pointer; white-space: nowrap; flex-shrink: 0; }
+.shbtn:hover, .shbtn:focus-visible { color: var(--ink); border-color: var(--accent); }
+.cos-share { margin: 12px 0 0; display: flex; justify-content: flex-end; }
+@media (max-width: 430px) { .card-head .shbtn .shl { display: none; } .card-head .shbtn { padding: 4px 8px; } }

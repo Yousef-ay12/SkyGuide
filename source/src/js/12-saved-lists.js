@@ -263,6 +263,7 @@ const AG = (() => {
     h += `<div class="agbar">`;
     if (renaming) h += `<input id="agname" type="text" maxlength="40" value="${esc(l.name)}" placeholder="${ar ? 'اسم القائمة' : 'List name'}"><button type="button" data-aact="rsave">${ar ? 'حفظ' : 'Save name'}</button>`;
     else h += `<button type="button" data-aact="rename">${ar ? 'إعادة التسمية' : 'Rename'}</button>`;
+    if (navigator.share && l.items.length) h += `<button type="button" data-aact="share">${ar ? 'شارك القائمة' : 'Share list'}</button>`;
     h += `<button type="button" data-aact="copy">${ar ? 'انسخ رابط القائمة' : 'Copy list link'}</button>`;
     if (S.lists.length > 1 || l.items.length) h += `<button type="button" data-aact="del" class="${confirmDel ? 'danger' : ''}">${confirmDel ? (ar ? 'اضغط مجددًا للحذف' : 'Tap again to delete') : (ar ? 'حذف القائمة' : 'Delete list')}</button>`;
     h += `</div>`;
@@ -312,6 +313,7 @@ const AG = (() => {
       if (a === 'rename') { renaming = true; re(); const i = document.getElementById('agname'); if (i) i.focus(); }
       else if (a === 'rsave') { l.name = (document.getElementById('agname').value || '').trim().slice(0, 40); renaming = false; save(); re(); }
       else if (a === 'del') { if (!confirmDel) { confirmDel = true; re(); return; } confirmDel = false; S.lists = S.lists.filter(x => x.id !== l.id); if (!S.lists.length) S.lists = [{id: uid(), name: '', items: []}]; S.active = S.lists[0].id; save(); re(); }
+      else if (a === 'share') SHARE.go(l.name || (ar ? 'ليلتي' : 'My night'), shareLink(l));
       else if (a === 'copy') { const link = shareLink(l); (navigator.clipboard && navigator.clipboard.writeText ? navigator.clipboard.writeText(link) : Promise.reject()).then(() => toast(ar ? 'نُسخ الرابط' : 'Link copied'), () => { prompt(ar ? 'انسخ هذا الرابط' : 'Copy this link', link); }); }
       else if (a === 'plan') { PLAN.seed(plannable()); setCulture('plan'); window.scrollTo({top: 0}); }
       else if (a === 'start' && l.items.length) { pres = {list: l.id, i: 0}; re(); presTop(); }

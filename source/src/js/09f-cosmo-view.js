@@ -98,10 +98,12 @@ const COS_FIG = {
   }
 };
 function cosHTML(lang) {
-  const ar = lang === 'ar', part = COS_PARTS.find(p => p.id === COS_PART) || COS_PARTS[0];
+  const ar = lang === 'ar', glo = COS_PART === 'glo', part = COS_PARTS.find(p => p.id === COS_PART) || COS_PARTS[0];
   const fold = (t, body) => `<details class="dsofold cosfold"><summary><span class="pd-ar" aria-hidden="true">▸</span><span class="df-t">${t}</span><span class="df-h" data-o="${ar ? 'اضغط لعرضه' : 'Tap to show'}" data-c="${ar ? 'اضغط لطيّه' : 'Tap to fold'}"></span></summary><div class="cos-b">${body}</div></details>`;
   let h = `<p class="dsec-in">${ar ? 'علم الكون يدرس الكون كله: كيف بدأ، ومِمّ يتكوّن، وكيف نشأت المجرات والبنى الكبرى، وإلى أين يمضي. اختر جزءًا، ثم اضغط أي موضوع لفتحه.' : 'Cosmology studies the universe as a whole: how it began, what it is made of, how galaxies and the largest structures formed, and where it is heading. Choose a part, then tap any topic to open it.'}</p>`;
-  h += `<div class="cos-parts" role="group" aria-label="${ar ? 'أجزاء علم الكون' : 'Parts of cosmology'}">${COS_PARTS.map((p, i) => `<button type="button" class="sn${p.id === part.id ? ' on' : ''}" data-cospart="${p.id}" aria-pressed="${p.id === part.id}" style="--cc:var(--c-science)"><span class="cos-n">${i + 1}</span>${ar ? p.ar : p.en}</button>`).join('')}</div>`;
+  h += `<div class="cos-parts" role="group" aria-label="${ar ? 'أجزاء علم الكون' : 'Parts of cosmology'}">${COS_PARTS.map((p, i) => `<button type="button" class="sn${p.id === part.id ? ' on' : ''}" data-cospart="${p.id}" aria-pressed="${p.id === part.id}" style="--cc:var(--c-science)"><span class="cos-n">${i + 1}</span>${ar ? p.ar : p.en}</button>`).join('')}<button type="button" class="sn${glo ? ' on' : ''}" data-cospart="glo" aria-pressed="${glo}" style="--cc:var(--c-science)"><span class="cos-n">Aa</span>${ar ? 'المسرد' : 'Glossary'}</button></div>`;
+  if (glo) return h + cosGlossaryHTML(ar) + `<p class="cos-next"><button type="button" class="pbtn" data-cospart="${COS_PARTS[0].id}">${ar ? `ابدأ من: ${COS_PARTS[0].ar} ←` : `Start with: ${COS_PARTS[0].en} →`}</button></p>`;
+  let nTopic = 0;
   h += `<h3 class="cos-h">${ar ? part.ar : part.en}</h3><p class="cos-in">${ar ? part.intro[1] : part.intro[0]}</p>`;
   part.groups.forEach(g => {
     h += `<h4 class="cos-g">${ar ? g.ar : g.en}</h4>`;
@@ -111,11 +113,12 @@ function cosHTML(lang) {
       if (it.fig && COS_FIG[it.fig]) body += `<figure class="cos-fig">${COS_FIG[it.fig](ar)}</figure>`;
       if (it.ex) { const ex = it.ex.map(([k, id]) => { const x = {t: 'dso', key: k, ref: id}, inf = AG.info(x, lang); return inf ? `<span class="cos-ex"><button type="button" class="cos-exn" data-con="${k}">${esc(inf.title)}${inf.sub ? ` <span class="muted">${esc(inf.sub)}</span>` : ''}</button>${AG.btn(x, lang, true)}</span>` : ''; }).join('');
         if (ex) body += `<div class="cos-exs"><span class="sect-lbl">${ar ? 'ابحث عنها في السماء' : 'Find them in the sky'}</span>${ex}</div>`; }
+      body += `<p class="cos-share">${SHARE.btn('COS-science/' + part.id + '/' + (nTopic++), ar ? it.ar : it.en, lang)}</p>`;
       h += fold(ar ? it.ar : it.en, body);
     });
   });
   const i = COS_PARTS.indexOf(part), nx = COS_PARTS[i + 1];
-  if (nx) h += `<p class="cos-next"><button type="button" class="pbtn" data-cospart="${nx.id}">${ar ? `التالي: ${nx.ar} ←` : `Next: ${nx.en} →`}</button></p>`;
+  h += `<p class="cos-next"><button type="button" class="pbtn" data-cospart="${nx ? nx.id : 'glo'}">${nx ? (ar ? `التالي: ${nx.ar} ←` : `Next: ${nx.en} →`) : (ar ? 'التالي: المسرد ←' : 'Next: the glossary →')}</button></p>`;
   h += `<p class="vref" style="white-space:normal;margin-top:18px">${ar ? 'المصادر: نتائج قمر بلانك (2018)؛ ناسا وESA؛ تعاون LIGO وVirgo وKAGRA؛ مسح DESI؛ Tully وآخرون، Nature (2014)؛ Zucker وآخرون، Nature (2022). الأرقام مقرّبة.' : 'Sources: Planck 2018 results; NASA and ESA; the LIGO, Virgo and KAGRA collaborations; the DESI survey; Tully et al., Nature (2014); Zucker et al., Nature (2022). Figures are rounded.'}</p>`;
   return h;
 }

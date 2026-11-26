@@ -147,3 +147,18 @@ html.wel-open { overflow: hidden; }
 .pfromn { margin: 0 0 12px; }
 
 @media (max-width: 380px) { .hub-grid, .cul-grid { grid-template-columns: minmax(0, 1fr); } }
+/* tonight: Moon times, and the best stars and deep-sky objects */
+.ah-more { margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--line); }
+.tn-moon { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: .95rem; }
+.tn-moon b { color: var(--accent); }
+.tn-at { font-size: .85rem; margin: 8px 0 6px; }
+.tn-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 16px; }
+.tn-list { list-style: none; margin: 4px 0 0; padding: 0; }
+.tn-list li { margin: 0; }
+.tn-go { display: flex; flex-direction: column; align-items: flex-start; width: 100%; text-align: start; padding: 5px 6px; margin: 0 -6px; border: 0; background: none; color: inherit; font: inherit; border-radius: 8px; min-width: 0; }
+button.tn-go { cursor: pointer; }
+button.tn-go:hover, button.tn-go:focus-visible { background: var(--accent-soft); }
+.tn-go b { font-size: .95rem; overflow-wrap: anywhere; }
+.tn-w { font-size: .8rem; opacity: .75; overflow-wrap: anywhere; }
+@media (max-width: 340px) { .tn-cols { grid-template-columns: 1fr; } }
+.nw { white-space: nowrap; }
