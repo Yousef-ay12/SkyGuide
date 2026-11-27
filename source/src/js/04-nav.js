@@ -103,7 +103,8 @@ function buildList(filter = '') {
   const f = filter.trim().toLowerCase();
   let shown = 0;
   Object.keys(REGIONS).forEach(r => {
-    const items = DATA.constellations.filter(c => c.region === r && !c.hidden && inList(c.key, state.cul) && (!f || (c.latin + ' ' + c.gloss + ' ' + c.ar + ' ' + c.key).toLowerCase().includes(f) || searchLore(c.key, f)));
+    // in Science the Solar System, Why stars shine, Deep sky and Cosmology are tabs at the top, so the list leaves them out
+    const items = DATA.constellations.filter(c => c.region === r && !c.hidden && inList(c.key, state.cul) && !(state.cul === 'science' && SCI_SPECIAL.has(c.key)) && (!f || (c.latin + ' ' + c.gloss + ' ' + c.ar + ' ' + c.key).toLowerCase().includes(f) || searchLore(c.key, f)));
     if (!items.length) return;
     const g = document.createElement('div'); g.className = 'grp'; g.dataset.r = r; g.textContent = regionName(r); list.appendChild(g);
     items.forEach(c => {
@@ -117,7 +118,7 @@ function buildList(filter = '') {
       list.appendChild(b);
     });
   });
-  const note = document.createElement('p'); note.className = 'list-note'; const n = list.querySelectorAll('.item:not([data-key="QUR"]):not([data-key="POE"])').length; note.textContent = state.cul === 'science' ? (f ? `${n} matches` : (state.lang === 'ar' ? 'كل الكوكبات الـ88، ومعها درب التبانة وسحابتا ماجلان والمجموعة الشمسية' : 'All 88 constellations, plus the Milky Way, the Magellanic Clouds and the Solar System')) : (state.lang === 'ar' ? `كل الكوكبات الـ88؛ لـ${[...list.querySelectorAll('.item')].filter(x => x.dataset.key !== 'QUR' && hasLore(x.dataset.key, state.cul)).length} منها قصص في ${CUL_AR_SKY[state.cul] || ''}، والباقي باهت` : `All 88 constellations; ${[...list.querySelectorAll('.item')].filter(x => x.dataset.key !== 'QUR' && hasLore(x.dataset.key, state.cul)).length} have ${cname(state.cul)} stories, the others are dimmed`); list.prepend(note);
+  const note = document.createElement('p'); note.className = 'list-note'; const n = list.querySelectorAll('.item:not([data-key="QUR"]):not([data-key="POE"])').length; note.textContent = state.cul === 'science' ? (f ? `${n} matches` : (state.lang === 'ar' ? 'كل الكوكبات الـ88، ومعها درب التبانة وسحابتا ماجلان' : 'All 88 constellations, plus the Milky Way and the Magellanic Clouds')) : (state.lang === 'ar' ? `كل الكوكبات الـ88؛ لـ${[...list.querySelectorAll('.item')].filter(x => x.dataset.key !== 'QUR' && hasLore(x.dataset.key, state.cul)).length} منها قصص في ${CUL_AR_SKY[state.cul] || ''}، والباقي باهت` : `All 88 constellations; ${[...list.querySelectorAll('.item')].filter(x => x.dataset.key !== 'QUR' && hasLore(x.dataset.key, state.cul)).length} have ${cname(state.cul)} stories, the others are dimmed`); list.prepend(note);
   if (!shown) list.innerHTML = state.cul === 'science' ? `<p class="empty-search">Nothing matches that search. Try a star name such as Sirius or Betelgeuse, or an object such as Orion Nebula.</p>` : `<p class="empty-search">No ${cname(state.cul)} story matches that search. Try a star name such as Sirius, or an Arabic name such as سهيل.</p>`;
   markList();
 }

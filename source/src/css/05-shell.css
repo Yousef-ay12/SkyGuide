@@ -53,6 +53,11 @@ header.top::before { content: ''; position: absolute; inset: 0; z-index: -1; bac
 /* softer, rounder panels */
 .card, .index { border-radius: 16px; }
 .index { top: calc(var(--hdh) + 12px); max-height: calc(100vh - var(--hdh) - 24px); }
+/* phones: the open list scrolls inside its own box; the box is capped on the list itself, since a cap on the panel only hid the rest */
+@media (max-width: 860px) {
+  .index { max-height: none; }
+  .list { max-height: max(220px, calc(100dvh - var(--hdh) - var(--bb) - 230px)); overflow-y: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; scrollbar-width: thin; scrollbar-color: var(--accent) transparent; }
+}
 
 @media (max-width: 1040px) {
   .brandbtn .b-ar, .setbtn .setlbl { display: none; }

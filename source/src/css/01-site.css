@@ -799,3 +799,10 @@ button.poe-chip { font: inherit; font-size: 14px; cursor: pointer; }
 /* phones: make room in the top bar when the For kids button is showing */
 @media (max-width: 430px) { body:has(#kidhd:not([hidden])) .hdtools { gap: 6px; } body:has(#kidhd:not([hidden])) .setbtn { padding: 6px 9px; } }
 @media (max-width: 374px) { body:has(#kidhd:not([hidden])) .hdtools { gap: 4px; } body:has(#kidhd:not([hidden])) .setbtn { padding: 6px 7px; } body:has(#kidhd:not([hidden])) .hlang button { padding: 6px 6px; } body:has(#kidhd:not([hidden])) .brandbtn .b-en { font-size: 17px; } body:has(#kidhd:not([hidden])) .brandbtn .b-star { display: none; } }
+/* TRIAL: Stellarium app on iPhone (10b-stellarium-app.js) */
+.swapp-note { position: fixed; z-index: 960; left: 50%; bottom: calc(var(--bb, 0px) + 16px); transform: translateX(-50%); display: flex; flex-wrap: wrap; align-items: center; gap: 6px 14px; max-width: min(440px, calc(100vw - 24px)); padding: 10px 12px 10px 16px; border-radius: 12px; background: var(--solid); color: var(--ink); border: 1px solid var(--line); box-shadow: 0 6px 24px rgba(0,0,0,.35); font-size: 15px; }
+.swapp-note a { color: var(--accent); font-weight: 600; white-space: nowrap; }
+.swapp-note button { font: inherit; font-size: 20px; line-height: 1; background: none; border: 0; color: var(--muted); cursor: pointer; padding: 2px 6px; }
+.swtest { position: fixed; inset: 0; z-index: 990; background: rgba(5, 8, 20, .7); display: flex; align-items: center; justify-content: center; padding: 16px; }
+.swt-box { background: var(--solid); color: var(--ink); border: 1px solid var(--line); border-radius: 14px; padding: 18px; max-width: 420px; width: 100%; max-height: 90vh; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; }
+.swt-box h2 { margin: 0; font-size: 20px; } .swt-box p { margin: 0 0 6px; } .swt-box .pbtn { text-align: center; font-family: var(--f-mono); font-size: 14px; }
