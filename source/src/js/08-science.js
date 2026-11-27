@@ -157,6 +157,8 @@ function kidHd() {
   // change only what differs: the watcher below would otherwise fire again on its own edits
   if (b.hidden !== hide) b.hidden = hide;
   if (b.getAttribute('aria-pressed') !== String(KIDS)) b.setAttribute('aria-pressed', KIDS);
+  const sk = document.getElementById('skyhd'), sl = ar ? 'خريطة السماء' : 'Sky map';   // the sky map button beside it follows the language too
+  if (sk && sk.querySelector('.setlbl').textContent !== sl) { sk.querySelector('.setlbl').textContent = sl; sk.setAttribute('aria-label', sl); sk.title = ar ? 'خريطة السماء: وجّه هاتفك إلى السماء' : 'Sky map: point your phone at the sky'; }
   if (t.textContent !== lbl) { t.textContent = lbl; b.setAttribute('aria-label', ar ? 'نسخة الأطفال' : 'For kids'); b.title = ar ? 'نسخة مبسّطة للأطفال' : 'Simpler version for kids'; }
 }
 new MutationObserver(kidHd).observe(document.body, {childList: true, subtree: true});
@@ -221,7 +223,7 @@ function starCard(s, lang) {
   let alt = [];
   if (s.bayer) alt.push(`<span dir="ltr">${esc(s.bayer)}</span>`);
   if (arName) alt.push(`<span class="arn2" lang="ar">${esc(arName)}</span>`);
-  let h = `<article class="starc" data-star="${esc(s.name)}" style="--sc:${bvColour(s.ci, s.cls)}"><h4><span class="sw" aria-hidden="true"></span><bdi>${esc(s.name)}</bdi>${AG.btn({t: 'star', key: state.con, ref: s.name}, lang, true)}${swBtn(swStarName(s, ((DATA.sci[state.con] || {}).parts || [{}])[0].abbr), 20, lang)}</h4><div class="alt">${alt.join(' · ') || '&nbsp;'}</div>`;
+  let h = `<article class="starc" data-star="${esc(s.name)}" style="--sc:${bvColour(s.ci, s.cls)}"><h4><span class="sw" aria-hidden="true"></span><bdi>${esc(s.name)}</bdi>${AG.btn({t: 'star', key: state.con, ref: s.name}, lang, true)}${swBtn(swStarName(s, ((DATA.sci[state.con] || {}).parts || [{}])[0].abbr), 20, lang)}${PSKY.mini('star:' + s.name + '|' + state.con, lang)}</h4><div class="alt">${alt.join(' · ') || '&nbsp;'}</div>`;
   if (KIDS) { const k = kidStar(s, lang); if (k.length) h += `<div class="kidbox"><span class="sect-lbl">${ar ? '🧒 للأطفال' : '🧒 For kids'}</span><ul>${k.map(x => `<li>${esc(x)}</li>`).join('')}</ul></div>`; }
   h += `<dl>`;
   h += `<dt>${t.colour}</dt><dd>${esc(typeTxt(s, lang))} <span class="vref" dir="ltr">${esc(s.spect)}</span></dd>`;

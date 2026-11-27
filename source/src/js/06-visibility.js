@@ -77,7 +77,7 @@ const VIS = (() => {
       const ctx = ctxs[i];
       const core = patternCost(pattern, 'core', S, t, STARS, ctx);
       const dark = ctx.sunAlt <= S.sunMax, high = core.minAlt >= S.minCoreAlt, bright = core.cost <= core.budget;
-      const cra = pattern._ra, cdec = pattern._dec;
+      const cra = pattern._ra;
       const ha = ((((lstOf(t, S.lon) - cra) % 360) + 540) % 360) - 180;   // hour angle of the pattern centre, degrees
       const score = (core.budget - core.cost) + S.meridianWeight * Math.cos(ha * D2R);
       return {t, core, pass: dark && high && bright, dark, high, bright, score};

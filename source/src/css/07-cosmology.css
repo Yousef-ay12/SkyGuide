@@ -34,7 +34,6 @@
 .cf-cap { font-size: 14px; color: var(--muted); margin: 4px 0 0; }
 .cosfig .cf-t { font-size: 14px; fill: var(--ink); }
 .cosfig .cf-s { font-size: 12.5px; fill: var(--muted); }
-.cosfig .cf-lb { font-size: 13px; fill: var(--sky-label); font-style: italic; }
 .cosfig .cf-ax { stroke: var(--muted); stroke-width: 1; fill: none; }
 .cosfig .cf-bar { fill: var(--c-science); }
 .cosfig .cf-de { fill: color-mix(in srgb, var(--c-science) 55%, var(--panel)); }
