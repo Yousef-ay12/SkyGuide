@@ -69,19 +69,22 @@ def main():
     f_stories = emit('stories', 'js', stories)
     f_sky = emit('sky', 'js', sky)
     f_app = emit('app', 'js', minify(js, 'js'))
+    # Point at the sky: its star data and constellation art load only when the view is opened
+    f_psky = emit('pointsky', 'js', f'PSKY_READY({compact("data/pointsky.json")});\n')
+    shutil.copytree(os.path.join(ROOT, 'art'), os.path.join(OUT, 'art'))
 
     html = ('<!doctype html>\n<html lang="en">\n<head>\n<meta charset="utf-8">\n'
             '<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">\n'
             + read('src/head.html') + f'<link rel="stylesheet" href="{f_css}">\n' + read('src/font-fallback.html')
             + '</head>\n<body>\n' + read('src/body.html')
-            + '<script>\n' + read('src/error-handler.js') + '</script>\n'
+            + '<script>\n' + read('src/error-handler.js') + f'window.PSKY_SRC = "{f_psky}";\n</script>\n'
             + ''.join(f'<script src="{f}" defer></script>\n' for f in (f_stories, f_sky, f_app))
             + '</body>\n</html>\n')
     with open(os.path.join(OUT, 'index.html'), 'w', encoding='utf-8') as f:
         f.write(html)
 
     # offline helper: everything the app needs, saved when it is installed
-    keep = ['./', f_css, f_stories, f_sky, f_app]
+    keep = ['./', f_css, f_stories, f_sky, f_app, f_psky]
     keep += sorted(os.path.relpath(p, OUT) for p in glob.glob(os.path.join(OUT, '*.webmanifest')))
     keep += sorted(os.path.relpath(p, OUT) for p in glob.glob(os.path.join(OUT, 'icons', '*.png')))
     keep += sorted(os.path.relpath(p, OUT) for p in glob.glob(os.path.join(OUT, 'fonts', '*.woff')))

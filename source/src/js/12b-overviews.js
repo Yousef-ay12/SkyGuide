@@ -66,7 +66,8 @@ function astroHubHTML(lang) {
     const m = SKY.moon(localUTC(Y, M, D, 21, pl.tz));
     tonight = `<div class="ah-tonight">${moonIcon(m.illum, m.waxing, pl.lat < 0, 46)}<div class="ah-tn"><b>${ar ? 'الليلة' : 'Tonight'} · ${esc(fmtD(Date.UTC(Y, M, D), lang, {weekday: 'short', day: 'numeric', month: 'short'}))}</b>
       <span>${esc(ar ? (pl.ar || pl.en) : pl.en)} · ${ar ? 'الجولة' : 'tour'} <bdi dir="ltr">${esc(st.tourStart)}–${esc(st.tourEnd)}</bdi> · <span class="nw">${ar ? 'القمر' : 'Moon'} <bdi dir="ltr">${Math.round(m.illum * 100)}%</bdi></span></span></div>
-      <button type="button" class="pbtn" data-astro="calendar">${ar ? 'غيّر المكان' : 'Change place'}</button></div>${WX.box(pl, Y, M, D, 'mini')}${tonightMoreHTML(pl, st, Y, M, D, lang)}`;
+      <button type="button" class="pbtn" data-astro="calendar">${ar ? 'غيّر المكان' : 'Change place'}</button></div>
+      <button type="button" class="ah-psky" data-psky=""><b>${ar ? 'وجّه هاتفك إلى السماء' : 'Point at the sky'}</b><span>${ar ? 'ارفع هاتفك فيُريك النجوم والكوكبات والكواكب في ذلك الاتجاه' : 'Hold your phone up to see the stars, constellations and planets in that direction'}</span></button>${WX.box(pl, Y, M, D, 'mini')}${tonightMoreHTML(pl, st, Y, M, D, lang)}`;
   } catch (e) {}
   // my night
   const l = AG.active(), pn = AG.plannable().length;

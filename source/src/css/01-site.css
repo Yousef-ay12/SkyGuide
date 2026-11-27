@@ -799,10 +799,37 @@ button.poe-chip { font: inherit; font-size: 14px; cursor: pointer; }
 /* phones: make room in the top bar when the For kids button is showing */
 @media (max-width: 430px) { body:has(#kidhd:not([hidden])) .hdtools { gap: 6px; } body:has(#kidhd:not([hidden])) .setbtn { padding: 6px 9px; } }
 @media (max-width: 374px) { body:has(#kidhd:not([hidden])) .hdtools { gap: 4px; } body:has(#kidhd:not([hidden])) .setbtn { padding: 6px 7px; } body:has(#kidhd:not([hidden])) .hlang button { padding: 6px 6px; } body:has(#kidhd:not([hidden])) .brandbtn .b-en { font-size: 17px; } body:has(#kidhd:not([hidden])) .brandbtn .b-star { display: none; } }
-/* TRIAL: Stellarium app on iPhone (10b-stellarium-app.js) */
-.swapp-note { position: fixed; z-index: 960; left: 50%; bottom: calc(var(--bb, 0px) + 16px); transform: translateX(-50%); display: flex; flex-wrap: wrap; align-items: center; gap: 6px 14px; max-width: min(440px, calc(100vw - 24px)); padding: 10px 12px 10px 16px; border-radius: 12px; background: var(--solid); color: var(--ink); border: 1px solid var(--line); box-shadow: 0 6px 24px rgba(0,0,0,.35); font-size: 15px; }
-.swapp-note a { color: var(--accent); font-weight: 600; white-space: nowrap; }
-.swapp-note button { font: inherit; font-size: 20px; line-height: 1; background: none; border: 0; color: var(--muted); cursor: pointer; padding: 2px 6px; }
-.swtest { position: fixed; inset: 0; z-index: 990; background: rgba(5, 8, 20, .7); display: flex; align-items: center; justify-content: center; padding: 16px; }
-.swt-box { background: var(--solid); color: var(--ink); border: 1px solid var(--line); border-radius: 14px; padding: 18px; max-width: 420px; width: 100%; max-height: 90vh; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; }
-.swt-box h2 { margin: 0; font-size: 20px; } .swt-box p { margin: 0 0 6px; } .swt-box .pbtn { text-align: center; font-family: var(--f-mono); font-size: 14px; }
+/* Point at the sky (16-point-sky.js) */
+.psbtn { display: inline-flex; align-items: center; gap: 5px; font: 500 12.5px/1.2 var(--f-body); padding: 3px 10px; border: 1px solid var(--line); border-radius: 999px; color: var(--muted); background: none; cursor: pointer; }
+.psbtn:hover, .psbtn:focus-visible { color: var(--ink); border-color: var(--accent); }
+.card-head .hb-row .psbtn { margin: 0; flex-shrink: 0; }
+@media (max-width: 560px) { .psbtn .psl { display: none; } .psbtn { padding: 4px 8px; } }
+body.psky-open { overflow: hidden; }
+.psky { position: fixed; inset: 0; z-index: 980; background: #04070f; color: #e8edf7; overflow: hidden; font-family: var(--f-body); }
+.psky[dir=rtl] { font-family: var(--f-ar); }
+.psky canvas { position: absolute; inset: 0; touch-action: none; display: block; }
+.ps-top { position: absolute; top: 0; left: 0; right: 0; display: flex; align-items: center; gap: 10px; padding: calc(env(safe-area-inset-top, 0px) + 10px) 12px 10px; background: linear-gradient(#04070fe6, #04070f00); pointer-events: none; }
+.ps-top > * { pointer-events: auto; }
+.ps-x { font: inherit; font-size: 26px; line-height: 1; width: 40px; height: 40px; border-radius: 50%; border: 1px solid #ffffff30; background: #0d1426cc; color: #e8edf7; cursor: pointer; flex: none; }
+.ps-t { display: flex; flex-direction: column; min-width: 0; flex: 1; } .ps-t b { font-size: 16px; } .ps-pl { font-size: 13px; color: #a9b6cf; }
+.ps-tg { display: flex; gap: 6px; flex: none; }
+.ps-tg button, .ps-nudge button, .ps-mode, .ps-alt { font: inherit; font-size: 13.5px; padding: 6px 11px; border-radius: 999px; border: 1px solid #ffffff30; background: #0d1426cc; color: #e8edf7; cursor: pointer; }
+.ps-tg button[aria-pressed=true] { background: #e8b95a; border-color: #e8b95a; color: #1d1405; }
+.ps-bot { position: absolute; left: 0; right: 0; bottom: 0; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 10px; padding: 12px 12px calc(env(safe-area-inset-bottom, 0px) + 12px); background: linear-gradient(#04070f00, #04070fe6); }
+.ps-dir { font-size: 14px; color: #c9d5ea; }
+.ps-nudge { display: flex; align-items: center; gap: 6px; font-size: 13px; color: #a9b6cf; } .ps-nudge[hidden] { display: none; }
+.ps-target, .ps-note { position: absolute; left: 50%; transform: translateX(-50%); max-width: min(92vw, 460px); margin: 0; padding: 8px 14px; border-radius: 12px; background: #0d1426e6; border: 1px solid #ffffff26; font-size: 14.5px; text-align: center; }
+.ps-target { top: calc(env(safe-area-inset-top, 0px) + 66px); color: #f0c060; border-color: #e8b95a66; }
+.ps-note { bottom: calc(env(safe-area-inset-bottom, 0px) + 120px); }
+.ps-target[hidden], .ps-note[hidden], .ps-arrow[hidden] { display: none; }
+.ps-arrow { position: absolute; font-size: 34px; color: #f0c060; text-shadow: 0 0 12px #000; pointer-events: none; }
+.ps-start { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; padding: 20px; background: #04070fb3; }
+.ps-card { max-width: 400px; background: #111a30; border: 1px solid #ffffff26; border-radius: 16px; padding: 20px; display: flex; flex-direction: column; gap: 10px; }
+.ps-card h3 { margin: 0; font-size: 20px; } .ps-card p { margin: 0; line-height: 1.55; } .ps-card .muted { color: #a9b6cf; font-size: 14px; }
+.ps-go { align-self: stretch; text-align: center; font-size: 16px; padding: 10px; }
+.ps-alt { align-self: center; background: none; border: 0; color: #a9b6cf; text-decoration: underline; }
+.ps-credit { position: absolute; right: 10px; bottom: calc(env(safe-area-inset-bottom, 0px) + 58px); margin: 0; max-width: 70vw; font-size: 10px; color: #8a97b0; opacity: .6; text-align: end; pointer-events: none; }
+.psky[dir=rtl] .ps-credit { right: auto; left: 10px; }
+.ah-psky { display: flex; flex-direction: column; align-items: flex-start; gap: 2px; width: 100%; margin: 10px 0; padding: 12px 16px 12px 48px; border-radius: 14px; border: 1px solid var(--accent); background: var(--sel) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23e8b95a' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='6' y='2.5' width='12' height='19' rx='2.5'/%3E%3Cpath d='M12 7.5l1.1 2.3 2.4.3-1.8 1.6.5 2.4L12 12.9l-2.2 1.2.5-2.4-1.8-1.6 2.4-.3z'/%3E%3C/svg%3E") no-repeat 14px center; color: var(--ink); font: inherit; text-align: start; cursor: pointer; }
+.ah-psky b { font-size: 16px; } .ah-psky span { font-size: 14px; color: var(--muted); }
+[dir=rtl] .ah-psky, .ah-psky:dir(rtl) { padding: 12px 48px 12px 16px; background-position: calc(100% - 14px) center; }
