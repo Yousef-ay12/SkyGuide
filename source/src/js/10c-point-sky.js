@@ -100,21 +100,24 @@ const PSKY = (() => {
     const f = [Math.sin(az) * Math.cos(al), Math.cos(az) * Math.cos(al), Math.sin(al)], r = [Math.cos(az), -Math.sin(az), 0];
     return {r, u: [r[1] * f[2] - r[2] * f[1], r[2] * f[0] - r[0] * f[2], r[0] * f[1] - r[1] * f[0]], f};
   }
-  // ---- holding the view steady: the motion sensors are a little noisy and no hand is perfectly still ----
-  // Small wobbles (under about half a degree) are eased out slowly, so what you point at stays put; a real turn is followed at once.
+  // ---- holding the view steady: the motion sensors are noisy and no hand is perfectly still ----
+  // An adaptive smoother (the "1 euro filter" used for motion tracking): held still, the view is smoothed heavily so what you point at
+  // stays put; the faster the phone turns, the less it is smoothed, so turning still feels direct.
   let sm = null;
   function steady(c) {
     if (mode !== 'sensor' || !ori) { sm = null; return c; }
     const now = performance.now();
-    if (!sm) { sm = {f: c.f.slice(), u: c.u.slice(), t: now}; return c; }
-    const dt = Math.min(100, now - sm.t); sm.t = now;
-    const dot = (a, b) => Math.max(-1, Math.min(1, a[0] * b[0] + a[1] * b[1] + a[2] * b[2]));
-    const ang = Math.acos(dot(sm.f, c.f)) * R2D + 0.5 * Math.acos(dot(sm.u, c.u)) * R2D;
-    const base = ang < 0.6 ? 0.04 : Math.min(1, 0.15 + (ang - 0.6) * 0.25), k = 1 - Math.pow(1 - base, dt / 16.7);
+    if (!sm) { sm = {f: c.f.slice(), u: c.u.slice(), v: [0, 0, 0], t: now}; return c; }
+    const dt = Math.max(1, Math.min(100, now - sm.t)) / 1000; sm.t = now;
+    const al = hz => 1 / (1 + 1 / (2 * Math.PI * hz * dt));   // smoothing step for a cut-off frequency
+    // how fast the phone is really turning: the change, itself smoothed, so the jitter averages out
+    const aD = al(0.8); sm.v = sm.v.map((x, i) => x + ((c.f[i] - sm.f[i]) / dt - x) * aD);
+    const speed = Math.hypot(...sm.v) * R2D;   // degrees a second
+    const a = al(0.25 + 0.04 * speed);
     const unit = v => { const m = Math.hypot(...v) || 1; return v.map(x => x / m); };
-    const f = unit(sm.f.map((x, i) => x + (c.f[i] - x) * k));
-    let u = sm.u.map((x, i) => x + (c.u[i] - x) * k); const d = dot(u, f); u = unit(u.map((x, i) => x - d * f[i]));
-    sm.f = f; sm.u = u; sm.left = ang * (1 - k);
+    const f = unit(sm.f.map((x, i) => x + (c.f[i] - x) * a));
+    let u = sm.u.map((x, i) => x + (c.u[i] - x) * a); const d = u[0] * f[0] + u[1] * f[1] + u[2] * f[2]; u = unit(u.map((x, i) => x - d * f[i]));
+    sm.left = Math.hypot(...c.f.map((x, i) => x - f[i])) * R2D; sm.f = f; sm.u = u;
     return {f, u, r: [f[1] * u[2] - f[2] * u[1], f[2] * u[0] - f[0] * u[2], f[0] * u[1] - f[1] * u[0]]};
   }
   function scrAngle() {
@@ -587,5 +590,5 @@ const PSKY = (() => {
   // used by the browser tests: a star's place on screen and in the sky (_probe), set the view (_view) or a phone orientation (_ori)
   function _probe(hip) { const i = D.H.get(hip); const cam = camera(), r = cam.r, u = cam.u, f = cam.f, k = (Hh / 2) / Math.tan(fov / 2 * D2R);
     const z = E[i] * f[0] + N[i] * f[1] + U[i] * f[2]; return {x: W / 2 + k * (E[i] * r[0] + N[i] * r[1] + U[i] * r[2]) / z, y: Hh / 2 - k * (E[i] * u[0] + N[i] * u[1] + U[i] * u[2]) / z, alt: Math.asin(U[i]) * R2D, az: norm(Math.atan2(E[i], N[i]) * R2D), W, H: Hh}; }
-  return {open, close, btn, mini, _probe, _view: v => { view = v; mode = 'drag'; draw(); }, _flush: () => { if (raf) { cancelAnimationFrame(raf); frame(); } }, _ori: o => { ori = o; headK = 0; mode = 'sensor'; draw(); }, _state: () => ({mode, fov, nudge, target, faint, fc: el && D ? facing(camera()) : null})};
+  return {open, close, btn, mini, _probe, _view: v => { view = v; mode = 'drag'; draw(); }, _flush: () => { if (raf) { cancelAnimationFrame(raf); frame(); } }, _ori: o => { ori = o; headK = 0; mode = 'sensor'; draw(); }, _state: () => ({mode, fov, nudge, target, faint, fc: el && D ? facing(camera()) : null, fs: sm ? facing({f: sm.f}) : null})};
 })();
