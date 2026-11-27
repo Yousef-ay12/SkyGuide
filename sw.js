@@ -4,7 +4,7 @@
    Code, styling and data files have a fingerprint in their name, so the saved copy is used straight away.
    Pictures: kept after you have seen them (up to 300), so they also show offline;
    "Save pictures for offline" in Settings stores all of them in a separate store that is never trimmed. */
-const VERSION = 'd1cfeb17';
+const VERSION = '74aa9ad1';
 const CACHE = 'skyguide-' + VERSION;
 const PICS = 'skyguide-pictures-v2';   // Wikipedia and Webb photos
 const SKY = 'skyguide-sky-v1';         // sky-survey photos (take more room, so keep fewer)
@@ -12,7 +12,7 @@ const SAVED = 'skyguide-offline-pics-v2'; // pictures saved with "Save pictures 
 const MAX_PICS = 300, MAX_SKY = 40;
 const FILES = [
  "./",
- "assets/site.708ccc9a.css",
+ "assets/site.b1e5af79.css",
  "assets/stories.57e18de0.js",
  "assets/sky.b3f4f751.js",
  "assets/app.a6688ec6.js",

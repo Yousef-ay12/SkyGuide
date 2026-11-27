@@ -186,8 +186,9 @@ h2 { font-family: var(--f-display); font-weight: 400; font-size: clamp(28px, 4vw
 .dsos { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; max-width: 72ch; }
 .dsos li { display: grid; grid-template-columns: 92px minmax(0, 1fr); gap: 2px 12px; padding: 8px 0; border-bottom: 1px solid var(--line); }
 .dsos .cat { font-family: var(--f-mono); font-size: 13px; color: var(--accent); padding-top: 3px; direction: ltr; }
-.dsos .dn { font-weight: 600; display: flex; align-items: flex-start; gap: 8px; }
-.dsos .dn .dnm { flex: 1 1 auto; min-width: 0; }
+.dsos .dn { font-weight: 600; display: flex; flex-wrap: wrap; align-items: flex-start; gap: 6px 8px; }
+.dsos .dn .dnm { flex: 1 1 11em; min-width: 0; }   /* the buttons drop under the name when there is no room beside it */
+@media (max-width: 560px) { .dsos li { grid-template-columns: minmax(0, 1fr); gap: 2px; } .dsos .cat { padding-top: 0; font-size: 12px; } }   /* phones: catalogue number above the name */
 .dsos .dn .hbtns { flex-shrink: 0; display: inline-flex; align-items: center; gap: 6px; }
 .dsos .dn .hbtns .agsave, .dsos .dn .hbtns .swbtn { margin: 0; }
 .dsos .dn .swl { display: none; }
@@ -302,6 +303,7 @@ body.chrome-ar .shtab thead th, body.chrome-ar .shtab tbody th { font-family: va
 .plfold > summary .hbtns .agsave, .plfold > summary .hbtns .swbtn { margin: 0; }
 .plfold > summary .swl { display: none; }
 .plfold > summary .df-h { grid-column: 2 / -1; grid-row: 2; }
+@media (max-width: 560px) { .plfold > summary .df-t { grid-column: 2 / -1; } .plfold > summary .hbtns { grid-column: 2 / -1; grid-row: 2; justify-self: start; margin-top: 4px; } .plfold > summary .df-h { grid-row: 3; } }   /* phones: the buttons go under the planet's name */
 .planet.infold { padding-top: 4px; }
 .plimg { position: relative; margin: 2px 14px 10px; height: 270px; border-radius: 8px; background: #000; display: grid; place-items: center; overflow: hidden; border: 1px solid var(--line); }
 .plimg img { position: absolute; top: 10px; left: 10px; width: calc(100% - 20px); height: calc(100% - 44px); object-fit: contain; display: block; }
