@@ -118,7 +118,7 @@ function buildList(filter = '') {
       list.appendChild(b);
     });
   });
-  const note = document.createElement('p'); note.className = 'list-note'; const n = list.querySelectorAll('.item:not([data-key="QUR"]):not([data-key="POE"])').length; note.textContent = state.cul === 'science' ? (f ? `${n} matches` : (state.lang === 'ar' ? 'كل الكوكبات الـ88، ومعها درب التبانة وسحابتا ماجلان' : 'All 88 constellations, plus the Milky Way and the Magellanic Clouds')) : (state.lang === 'ar' ? `كل الكوكبات الـ88؛ لـ${[...list.querySelectorAll('.item')].filter(x => x.dataset.key !== 'QUR' && hasLore(x.dataset.key, state.cul)).length} منها قصص في ${CUL_AR_SKY[state.cul] || ''}، والباقي باهت` : `All 88 constellations; ${[...list.querySelectorAll('.item')].filter(x => x.dataset.key !== 'QUR' && hasLore(x.dataset.key, state.cul)).length} have ${cname(state.cul)} stories, the others are dimmed`); list.prepend(note);
+  const note = document.createElement('p'); note.className = 'list-note'; const n = list.querySelectorAll('.item:not([data-key="QUR"]):not([data-key="POE"])').length; note.textContent = state.cul === 'science' ? (f ? `${n} matches` : (state.lang === 'ar' ? 'كل الكوكبات الـ88، ومعها درب التبانة وسحابتا ماجلان' : 'All 88 constellations, plus the Milky Way and the Magellanic Clouds')) : (f ? (state.lang === 'ar' ? `النتائج: ${n}` : `${n} matches`) : state.lang === 'ar' ? `الكوكبات التي لها قصص في ${CUL_AR_SKY[state.cul] || ''}: ${n}. كل الكوكبات الـ88 في قسم العلم.` : `${n} constellations with ${cname(state.cul)} stories. All 88 are in Science.`); list.prepend(note);
   if (!shown) list.innerHTML = state.cul === 'science' ? `<p class="empty-search">Nothing matches that search. Try a star name such as Sirius or Betelgeuse, or an object such as Orion Nebula.</p>` : `<p class="empty-search">No ${cname(state.cul)} story matches that search. Try a star name such as Sirius, or an Arabic name such as سهيل.</p>`;
   markList();
 }
@@ -131,7 +131,7 @@ function searchLore(key, f) {
 }
 function hasLore(con, cul) { if (TOOL_TABS.has(cul)) return true; if (con === 'CUL') return cul !== 'science'; return cul === 'science' ? !!DATA.sci[con] : !!(DATA.lore[con] || {})[cul]; }
 // which entries a culture's list shows: everything, except sections that belong to one place
-function inList(con, cul) { if (cul === 'science') return !!DATA.sci[con]; if (con === 'SOL' || (byKey[con] && byKey[con].sciOnly)) return false; if (ARAB_SRC.has(con)) return cul === 'arab'; return !!byKey[con]; }
+function inList(con, cul) { if (cul === 'science') return !!DATA.sci[con]; if (con === 'SOL' || SCI_SPECIAL.has(con)) return false; if (ARAB_SRC.has(con)) return cul === 'arab'; return hasLore(con, cul); }   /* a culture lists only its own stories; all 88 are in Science */
 function firstFor(cul) { const c = DATA.constellations.find(x => !ARAB_SRC.has(x.key) && hasLore(x.key, cul)); return c ? c.key : 'Ori'; }
 function setCulture(id) {
   const wasCal = TOOL_TABS.has(state.cul);

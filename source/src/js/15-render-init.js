@@ -1,4 +1,5 @@
 function render() {
+  document.documentElement.lang = state.lang;   // so screen readers read the page in the language it is in
   writeHash();
   setTimeout(() => RET.sync(), 0);
   { const fp = document.getElementById('feedback'); if (fp && !fp.hidden) fbRender(); }
