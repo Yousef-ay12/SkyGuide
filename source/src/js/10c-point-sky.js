@@ -40,7 +40,9 @@ const PSKY = (() => {
   let scratch = null, sctx = null, FONT = 'sans-serif', cen = null, cenFor = '', showDso = true, el = null, cv = null, ctx = null, W = 0, Hh = 0, dpr = 1, raf = 0;
   let mode = 'drag';            // 'sensor' or 'drag'
   let ori = null;               // last device orientation {a, b, g}
-  let headK = null;             // iOS: offset that turns the relative alpha into a compass bearing
+  let headK = null;             // offset that turns the gyroscope's alpha into a true-north one (from the compass, or from lining up)
+  let lined = false;            // the user lined the view up on something in the sky: the compass is not used after that
+  let gotRel = false, comp = null;
   let nudge = 0;                // the user's compass correction, degrees
   let view = {az: 180, alt: 35};  // drag mode
   let fov = 70;                 // vertical field of view, degrees
@@ -56,7 +58,7 @@ const PSKY = (() => {
   const cul = () => (artSet === 'w' || artSet === 's' ? artSet : state.cul === 'arab' ? 's' : 'w');
 
   // ---- where the stars are now: east, north and up parts of each star's direction ----
-  function place() { const p = placeObj(); return {lat: p.lat, lon: p.lon, name: ar() ? p.ar : p.en}; }
+  function place() { const p = placeObj(); return {lat: p.lat, lon: p.lon, md: p.md || 0, name: ar() ? p.ar : p.en}; }
   function positions() {
     tNow = Date.now(); pl = place(); lastPos = tNow; cen = null;
     const lst = norm(280.46061837 + 360.98564736629 * (tNow / 864e5 + 2440587.5 - 2451545) + pl.lon) * D2R, la = pl.lat * D2R;
@@ -443,21 +445,70 @@ const PSKY = (() => {
   }
 
   // ---- sensors ----
+  // The gyroscope (the relative orientation) drives the picture: smooth, and not upset by metal or magnets. The compass is only
+  // used to say where north is: read carefully at the start, then trusted only if it keeps disagreeing. Lining up on something in
+  // the sky replaces it altogether.
   function onOri(ev) {
     if (ev.alpha === null || ev.beta === null) return;
-    ori = {a: ev.alpha, b: ev.beta, g: ev.gamma || 0};
-    if (typeof ev.webkitCompassHeading === 'number' && !ev.absolute) {
-      // iOS: alpha starts wherever the phone pointed; the compass heading fixes it to north. Follow slowly to smooth out jumps.
-      const k = norm(360 - ev.webkitCompassHeading - ev.alpha);
-      if (headK === null) headK = k; else { let dd = k - headK; if (dd > 180) dd -= 360; if (dd < -180) dd += 360; if (Math.abs(dd) < 25) headK = norm(headK + dd * 0.015); }
-    } else if (ev.absolute === true || ev.type === 'deviceorientationabsolute') headK = 0;
+    const abs = ev.type === 'deviceorientationabsolute' || ev.absolute === true, now = performance.now();
+    if (!abs) gotRel = true;
+    if (!abs || !gotRel) ori = {a: ev.alpha, b: ev.beta, g: ev.gamma || 0};
+    // a compass reading, turned into the offset it implies (magnetic north corrected to true north for the chosen place)
+    let ca = null, good = true;
+    if (typeof ev.webkitCompassHeading === 'number' && ev.webkitCompassHeading >= 0) { ca = 360 - ev.webkitCompassHeading; const acc = ev.webkitCompassAccuracy; good = acc >= 0 && acc <= 30; }
+    else if (abs) ca = ev.alpha;
+    if (ca !== null && ori) compass(norm(ca - (pl ? pl.md : 0) - ori.a), good, now);
     if (mode === 'sensor') draw();
+  }
+  const adiff = (a, b) => { let d = norm(a - b); return d > 180 ? d - 360 : d; };
+  const cmean = l => norm(Math.atan2(l.reduce((s, x) => s + Math.sin(x * D2R), 0), l.reduce((s, x) => s + Math.cos(x * D2R), 0)) * R2D);
+  function compass(k, good, now) {
+    if (lined) return;
+    if (!comp) comp = {t0: now, ok: [], any: [], lock: false, off: null, offL: []};
+    const c = comp;
+    if (!c.lock) {
+      // the first second of good readings, averaged; if none are good after four seconds, the best there is (and a word about calibrating)
+      (good ? c.ok : c.any).push(k); if (c.any.length > 60) c.any.shift();
+      if (c.ok.length) headK = cmean(c.ok); else if (headK === null || c.any.length < 3) headK = cmean(c.any);
+      if (c.ok.length && now - c.t0 > 1000 && c.ok.length >= 8) { c.lock = true; calNote(false); }
+      else if (now - c.t0 > 4000) { c.lock = true; if (!c.ok.length) calNote(true); }
+      return;
+    }
+    if (!good) return;
+    calNote(false);
+    const d = adiff(k, headK);
+    if (Math.abs(d) < 15) { c.off = null; c.offL = []; headK = norm(headK + d * 0.0005); return; }   // agrees: follow very slowly, to undo gyroscope drift
+    // keeps disagreeing by a lot for a second and a half, and steadily: the first reading was wrong, take the new one
+    if (c.off === null) c.off = now; c.offL.push(k); if (c.offL.length > 120) c.offL.shift();
+    const m = cmean(c.offL);
+    if (now - c.off > 1500 && c.offL.every(x => Math.abs(adiff(x, m)) < 10)) { headK = m; c.off = null; c.offL = []; }
+  }
+  function calNote(on) {
+    if (!el) return; const n = el.querySelector('.ps-note');
+    if (on) { n.hidden = false; n.dataset.cal = '1'; n.textContent = T('The compass is unsure. Move your phone in a figure-8 a few times, or tap Line up and point at something you can see.', 'البوصلة غير متأكدة. حرّك هاتفك على شكل الرقم 8 عدة مرات، أو اضغط «محاذاة» ووجّهه إلى جرم تراه.'); }
+    else if (n.dataset.cal) { delete n.dataset.cal; n.hidden = true; }
+  }
+  // lining up: the user points the middle of the screen at something they can see and picks it from the list
+  function lineUpList() {
+    const out = [];
+    const vis = v => v[2] > 0.02;
+    const near = v => Math.acos(Math.max(-1, Math.min(1, (({f}) => f[0] * v[0] + f[1] * v[1] + f[2] * v[2])(camera())))) * R2D;
+    bodies.filter(b => b.id !== 'sun' && vis(b.v) && b.mag < 2).forEach(b => out.push({n: ar() ? b.ar : b.en, v: b.v, m: b.mag}));
+    for (const [i, nm] of D.NM) { if (D.M[i] > 1.6) break; const v = [E[i], N[i], U[i]]; if (vis(v)) out.push({n: ar() && nm[1] ? nm[1] : nm[0], v, m: D.M[i]}); }
+    if (target && target.kind !== 'con' && target.id !== 'sun') { const v = tVec({}); if (v && vis(v)) out.unshift({n: tName(), v, m: -99}); }
+    // closest to where the phone points first, so the one in view is at the top
+    return out.filter((x, i) => out.findIndex(y => y.n === x.n) === i).sort((a, b) => near(a.v) - near(b.v)).slice(0, 6);
+  }
+  function lineUp(v) {
+    // turn the sky about the vertical so the middle of the screen points at v
+    const fc = facing(camera()), az = norm(Math.atan2(v[0], v[1]) * R2D);
+    headK = norm((headK || 0) + adiff(fc.az, az)); lined = true; sm = null;
   }
   async function startSensors() {
     try { if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') { const r = await DeviceOrientationEvent.requestPermission(); if (r !== 'granted') throw new Error('denied'); } }
     catch (e) { setMode('drag', T('Motion access was not allowed, so you can drag to look around instead. To allow it, reload the page and tap Start again.', 'لم يُسمح بالوصول إلى حساسات الحركة، فيمكنك السحب للتجول في السماء. للسماح، أعد تحميل الصفحة واضغط «ابدأ» مرة أخرى.')); return; }
     addEventListener('deviceorientationabsolute', onOri); addEventListener('deviceorientation', onOri);
-    ori = null; headK = null; setMode('sensor');
+    ori = null; if (!lined) { headK = null; comp = null; } gotRel = false; setMode('sensor');
     setTimeout(() => { if (el && mode === 'sensor' && !ori) setMode('drag', T('This device has no motion sensors that the browser can use. Drag to look around.', 'لا يجد المتصفح حساسات حركة في هذا الجهاز. اسحب للتجول في السماء.')); }, 1800);
   }
   function stopSensors() { removeEventListener('deviceorientationabsolute', onOri); removeEventListener('deviceorientation', onOri); }
@@ -488,7 +539,7 @@ const PSKY = (() => {
 
   // ---- open and close ----
   async function open(key) {
-    target = null; const spec = String(key || '');
+    target = null; lined = false; headK = null; comp = null; const spec = String(key || '');
     if (el) close();
     el = document.createElement('div'); el.className = 'psky'; el.setAttribute('role', 'dialog'); el.setAttribute('aria-modal', 'true'); el.setAttribute('aria-label', T('Point at the sky', 'وجّه هاتفك إلى السماء'));
     if (ar()) { el.dir = 'rtl'; el.lang = 'ar'; }
@@ -499,14 +550,14 @@ const PSKY = (() => {
       <div class="ps-arrow" hidden aria-hidden="true"><svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15M13 6l6 6-6 6"/></svg></div>
       <div class="ps-ptr" hidden aria-hidden="true"><svg viewBox="0 0 44 44" width="44" height="44" fill="none" stroke="#ff6a3d" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 9V2h7M35 2h7v7M42 35v7h-7M9 42H2v-7"/></svg><span></span></div>
       <p class="ps-target" hidden></p><p class="ps-note" hidden></p>
-      <div class="ps-bot"><span class="ps-dir"></span>
-        <div class="ps-nudge" hidden><span>${T('Compass off?', 'البوصلة غير دقيقة؟')}</span><button type="button" data-ps="nl" aria-label="${T('Turn the sky left', 'أدر السماء يسارًا')}"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button><button type="button" data-ps="nr" aria-label="${T('Turn the sky right', 'أدر السماء يمينًا')}"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg></button><button type="button" data-ps="n0">${T('Reset', 'إعادة')}</button></div>
+      <div class="ps-aim" hidden aria-hidden="true"></div>
+      <div class="ps-bot"><div class="ps-sheet" hidden role="dialog" aria-label="${T('Line up', 'محاذاة')}"></div><p class="ps-credit">${cul() === 's' ? T("Figures: al-Sufi's Book of the Fixed Stars (public domain), placed with Khalid al-Ajaji's Stellarium data (CC BY-ND 4.0)", 'الرسوم: كتاب صور الكواكب للصوفي (ملكية عامة)، بمواضع من بيانات خالد العجاجي في Stellarium (CC BY-ND 4.0)') : T('Art: Johan Meuris for Stellarium (Free Art License) · lines: Stellarium (CC BY-SA) · stars: Hipparcos via d3-celestial', 'الرسوم: يوهان ميوريس لبرنامج Stellarium (رخصة الفن الحر) · الخطوط: Stellarium (CC BY-SA) · النجوم: هيباركوس عبر d3-celestial')}</p><span class="ps-dir"></span>
+        <div class="ps-nudge" hidden><button type="button" data-ps="lu" class="ps-lu">${T('Line up', 'محاذاة')}</button><button type="button" data-ps="nl" aria-label="${T('Turn the sky left', 'أدر السماء يسارًا')}"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button><button type="button" data-ps="nr" aria-label="${T('Turn the sky right', 'أدر السماء يمينًا')}"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg></button><button type="button" data-ps="n0">${T('Reset', 'إعادة')}</button></div>
         <div class="ps-tg"><button type="button" data-ps="art" class="ps-art"></button><button type="button" data-ps="lines" aria-pressed="${showLines}">${T('Lines', 'الخطوط')}</button><button type="button" data-ps="dso" aria-pressed="${showDso}">${T('Deep sky', 'الأجرام العميقة')}</button><button type="button" class="ps-mode" data-ps="mode"></button></div></div>
       <div class="ps-start"><div class="ps-card"><h3>${T('Point at the sky', 'وجّه هاتفك إلى السماء')}</h3>
         <p class="ps-intro">${tname ? T(`Hold your phone up and move it around. An arrow shows you where ${tname} is.`, `ارفع هاتفك وحرّكه في السماء، وسيدلّك سهم على مكان ${tname}.`) : T('Hold your phone up and move it around: the screen shows the stars, constellations and planets in that direction.', 'ارفع هاتفك وحرّكه في السماء، فتُظهر الشاشة النجوم والكوكبات والكواكب في ذلك الاتجاه.')}</p>
-        <p class="muted">${T('Your phone may ask to use motion and orientation. Away from metal and cars the compass works best; if the sky looks turned, use the two turn buttons at the bottom.', 'قد يطلب هاتفك إذنًا لاستخدام الحركة والاتجاه. تعمل البوصلة أفضل بعيدًا عن المعادن والسيارات، وإن بدت السماء مُدارة فاستخدم زرّي التدوير في الأسفل.')}</p>
-        <button type="button" class="pbtn ps-go" data-ps="go">${T('Start', 'ابدأ')}</button><button type="button" class="ps-alt" data-ps="drag">${T('No thanks, let me drag', 'لا، سأسحب بإصبعي')}</button></div></div>
-      <p class="ps-credit">${cul() === 's' ? T("Figures: al-Sufi's Book of the Fixed Stars (public domain), placed with Khalid al-Ajaji's Stellarium data (CC BY-ND 4.0)", 'الرسوم: كتاب صور الكواكب للصوفي (ملكية عامة)، بمواضع من بيانات خالد العجاجي في Stellarium (CC BY-ND 4.0)') : T('Art: Johan Meuris for Stellarium (Free Art License) · lines: Stellarium (CC BY-SA) · stars: Hipparcos via d3-celestial', 'الرسوم: يوهان ميوريس لبرنامج Stellarium (رخصة الفن الحر) · الخطوط: Stellarium (CC BY-SA) · النجوم: هيباركوس عبر d3-celestial')}</p>`;
+        <p class="muted">${T('Your phone may ask to use motion and orientation. Keep away from cars and metal. If the sky looks turned, tap Line up at the bottom and point at the Moon, a planet or a bright star.', 'قد يطلب هاتفك إذنًا لاستخدام الحركة والاتجاه. ابتعد عن السيارات والمعادن، وإن بدت السماء مُدارة فاضغط «محاذاة» في الأسفل ووجّه الهاتف إلى القمر أو كوكب أو نجم لامع.')}</p>
+        <button type="button" class="pbtn ps-go" data-ps="go">${T('Start', 'ابدأ')}</button><button type="button" class="ps-alt" data-ps="drag">${T('No thanks, let me drag', 'لا، سأسحب بإصبعي')}</button></div></div>`;
     document.body.appendChild(el); document.body.classList.add('psky-open');
     cv = el.querySelector('canvas:not(.ps-gl)'); ctx = cv.getContext('2d');
     ui = {dir: el.querySelector('.ps-dir'), tg: el.querySelector('.ps-target'), arrow: el.querySelector('.ps-arrow'), ptr: el.querySelector('.ps-ptr')};
@@ -556,6 +607,15 @@ const PSKY = (() => {
   }
   let faint = false;
   function centreOf(c) { let e = 0, n = 0, up = 0, k = 0; c.l.forEach(l => l.forEach(h => { const i = D.H.get(h); if (i !== undefined) { e += E[i]; n += N[i]; up += U[i]; k++; } })); return k ? [e / k, n / k, up / k] : null; }
+  let luItems = [];
+  function openLineUp() {
+    luItems = lineUpList(); const sh = el.querySelector('.ps-sheet');
+    sh.innerHTML = `<p>${T('Point the middle of the screen at one of these that you can see, then tap it:', 'وجّه منتصف الشاشة إلى واحد من هذه تراه في السماء، ثم اضغط عليه:')}</p>`
+      + (luItems.length ? `<div class="ps-lul">${luItems.map((x, i) => `<button type="button" data-ps="lux" data-i="${i}">${esc(x.n)}</button>`).join('')}</div>` : `<p class="muted">${T('Nothing bright is above the horizon right now.', 'لا يوجد جرم لامع فوق الأفق الآن.')}</p>`)
+      + `<button type="button" class="ps-alt" data-ps="luc">${T('Cancel', 'إلغاء')}</button>`;
+    sh.hidden = false; el.querySelector('.ps-aim').hidden = false;
+  }
+  function closeLineUp() { if (!el) return; el.querySelector('.ps-sheet').hidden = true; el.querySelector('.ps-aim').hidden = true; }
   function onKey(e) { if (e.key === 'Escape') close(); }
   function onClick(e) {
     const b = e.target.closest('[data-ps]'); if (!b) return;
@@ -568,7 +628,10 @@ const PSKY = (() => {
     else if (a === 'lines') { showLines = !showLines; b.setAttribute('aria-pressed', showLines); save(); draw(); }
     else if (a === 'dso') { showDso = !showDso; b.setAttribute('aria-pressed', showDso); save(); draw(); }
     else if (a === 'nl' || a === 'nr') { nudge = norm(nudge + (a === 'nl' ? -3 : 3)); if (nudge > 180) nudge -= 360; save(); draw(); }
-    else if (a === 'n0') { nudge = 0; save(); draw(); }
+    else if (a === 'n0') { nudge = 0; lined = false; headK = null; comp = null; sm = null; save(); draw(); }   // back to the compass
+    else if (a === 'lu') openLineUp();
+    else if (a === 'luc') closeLineUp();
+    else if (a === 'lux') { const it = luItems[+b.dataset.i]; if (it) { lineUp(it.v); nudge = 0; save(); } closeLineUp(); const n = el.querySelector('.ps-note'); n.hidden = false; n.textContent = T('Lined up. The view now follows your phone without the compass.', 'تمت المحاذاة. يتبع العرض هاتفك الآن دون البوصلة.'); setTimeout(() => { if (el && !n.dataset.cal) n.hidden = true; }, 3500); draw(); }
   }
   function close() {
     if (!el) return; stopSensors(); cancelAnimationFrame(raf); raf = 0;

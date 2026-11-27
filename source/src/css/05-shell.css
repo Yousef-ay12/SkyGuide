@@ -134,3 +134,5 @@ html.gs-open { overflow: hidden; }
 .picsave .ps-miss { margin: 4px 0 8px; font-size: 14px; }
 .picsave .ps-miss summary { cursor: pointer; color: var(--muted); }
 .picsave .ps-miss p { margin: 6px 0 0; color: var(--muted); }
+/* two quick taps on a button press it twice instead of zooming the page (iPhone Safari); pinch zoom still works */
+button, a, summary, label, select, input, [role="button"], [role="tab"], .psky, .psky * { touch-action: manipulation; }
