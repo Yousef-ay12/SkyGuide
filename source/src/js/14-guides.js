@@ -358,10 +358,8 @@ ${ask(ar, '"What\'s the hardest question anyone has asked you?" Practise the hon
     const card = document.getElementById('card'), ar = state.lang === 'ar';
     card.style.setProperty('--cc', 'var(--c-guides, #2f9e7a)');
     let h = `<div class="card-head"><div><div class="eyebrow"><span class="dot"></span>${ar ? 'للمرشدين' : 'For guides'}</div><h2${ar ? ' lang="ar" style="font-family:var(--f-ar)"' : ''}>${ar ? 'أدوات المرشد' : 'A guide\'s toolkit'}</h2></div></div>`;
-    h += `<div class="langs" role="group" aria-label="Language">${[['en', 'English'], ['ar', 'العربية']].map(([id, l]) => `<button type="button" data-lang="${id}" aria-pressed="${(ar ? 'ar' : 'en') === id}"${id === 'ar' ? ' lang="ar"' : ''}>${l}</button>`).join('')}</div>`;
     h += html(ar ? 'ar' : 'en');
     card.innerHTML = h;
-    card.querySelectorAll('[data-lang]').forEach(b => b.addEventListener('click', () => { state.lang = b.dataset.lang; try { localStorage.setItem('osms-lang', state.lang); } catch (e) {} render(); }));
     card.querySelectorAll('[data-gp]').forEach(b => b.addEventListener('click', () => { if (page === b.dataset.gp) return; page = b.dataset.gp; try { localStorage.setItem('osms-gpage', page); } catch (e) {} writeHash(); draw(); const c = document.getElementById('card'); if (c && c.getBoundingClientRect().top < 0) window.scrollTo({top: Math.max(0, c.getBoundingClientRect().top + scrollY - 80)}); }));
     scaleCalc(card, ar); magCalc(card, ar);
   }

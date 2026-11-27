@@ -31,12 +31,11 @@ function poePoemItem(x, ar) {
   const star = ar ? x.starAr : x.star, note = ar ? x.noteAr : x.note;
   return `<div class="pverse">${star ? `<div class="pv-head"><b>${esc(star)}</b></div>` : ''}${poeBayt(x.ar)}<p class="pv-sum"><span class="pv-lbl">${ar ? 'المعنى' : 'What it means'}</span>${esc(ar ? x.enAr : x.en)}</p>${note ? `<p class="pv-note">${esc(note)}</p>` : ''}<div class="pv-foot"><span class="pv-by">${esc(ar ? x.byAr : x.by)}</span></div></div>`;
 }
-function poeHTML(e, ar, langBtns) {
+function poeHTML(e, ar) {
   const gs = e.poemGroups, cal = gs.filter(g => g.kind === 'cal'), poems = gs.filter(g => g.kind === 'poem');
   const nowSet = new Set(poeNow(cal.flatMap(g => g.items))), aid = new Map();
   cal.forEach(g => g.items.forEach((x, i) => aid.set(x, `poe-${g.id}-${i}`)));
-  let h = langBtns([['en', 'English'], ['ar', 'العربية']], ar ? 'ar' : 'en');
-  h += `<div class="poe${ar ? ' rtl' : ''}"${ar ? ' dir="rtl" lang="ar"' : ''}>`;
+  let h = `<div class="poe${ar ? ' rtl' : ''}"${ar ? ' dir="rtl" lang="ar"' : ''}>`;
   h += ar ? `<p class="poe-lead">كانت العرب تعرف أوقات السنة بالنجوم: كل ثلاثة عشر يومًا يطلع منزل من منازل القمر الثمانية والعشرين مع الفجر، فيأتي معه حرّ أو برد أو مطر أو جَنى. وقالوا في كل نجم سجعًا يحفظونه. جمعها ابن قتيبة (ت ٢٧٦هـ) في كتاب «الأنواء في مواسم العرب»، ومعها أبيات للشعراء في القمر والكواكب والنجوم.</p>`
           : `<p class="poe-lead">The Arabs told the time of year by the stars. Every thirteen days one of the 28 stations of the Moon rises at dawn, bringing heat, cold, rain or harvest, and for each one there was a short rhymed saying that everyone knew. Ibn Qutayba collected them in the 9th century in <i>al-Anwa' fi Mawasim al-'Arab</i>. After the calendar come poems about the Moon, the planets and the stars.</p>`;
   h += `<p class="poe-shift muted">${ar ? 'التواريخ كما ذكرها ابن قتيبة في زمانه. وبسبب حركة المبادرة وتغيّر التقويم منذ ذلك الحين صار طلوع النجوم نفسها يتأخر نحو ثلاثة أسابيع في أيامنا.' : "The dates are Ibn Qutayba's, for his time. Because of precession and the change of calendar since then, the same stars now rise at dawn about three weeks later."}</p>`;

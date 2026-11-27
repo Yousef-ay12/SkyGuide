@@ -13,10 +13,8 @@ function render() {
     const card = document.getElementById('card'), ar = state.lang === 'ar';
     card.style.setProperty('--cc', '#e9a23b');
     let h = `<div class="card-head"><div><div class="eyebrow"><span class="dot"></span>${ar ? '✦ ليلتي' : '✦ My night'}</div><h2${ar ? ' lang="ar" style="font-family:var(--f-ar)"' : ''}>${ar ? 'كل ما جمعته لليلتك' : 'Everything you gathered for your night'}</h2></div></div>`;
-    h += `<div class="langs" role="group" aria-label="Language">${[['en', 'English'], ['ar', 'العربية']].map(([id, l]) => `<button type="button" data-lang="${id}" aria-pressed="${(ar ? 'ar' : 'en') === id}"${id === 'ar' ? ' lang="ar"' : ''}>${l}</button>`).join('')}</div>`;
     h += AG.guideHTML(ar ? 'ar' : 'en');
     card.innerHTML = h;
-    card.querySelectorAll('[data-lang]').forEach(b => b.addEventListener('click', () => { state.lang = b.dataset.lang; try { localStorage.setItem('osms-lang', state.lang); } catch (e) {} render(); }));
     AG.bindGuide(card);
     return;
   }
@@ -24,10 +22,8 @@ function render() {
     const card = document.getElementById('card'), ar = state.lang === 'ar';
     card.style.setProperty('--cc', 'var(--c-cal)');
     let h = `<div class="card-head"><div><div class="eyebrow"><span class="dot"></span>${ar ? 'تقويم السماء' : 'Sky calendar'}</div><h2${ar ? ' lang="ar" style="font-family:var(--f-ar)"' : ''}>${ar ? 'متى ترى النجوم والكواكب' : 'When to see the stars and planets'}</h2></div></div>`;
-    h += `<div class="langs" role="group" aria-label="Language">${[['en', 'English'], ['ar', 'العربية']].map(([id, l]) => `<button type="button" data-lang="${id}" aria-pressed="${(ar ? 'ar' : 'en') === id}"${id === 'ar' ? ' lang="ar"' : ''}>${l}</button>`).join('')}</div>`;
     h += calHTML(ar ? 'ar' : 'en');
     card.innerHTML = h;
-    card.querySelectorAll('[data-lang]').forEach(b => b.addEventListener('click', () => { state.lang = b.dataset.lang; try { localStorage.setItem('osms-lang', state.lang); } catch (e) {} render(); }));
     calBind(card);
     return;
   }
@@ -53,16 +49,16 @@ function render() {
     h += `<figure class="chart${flip ? ' flip' : ''}">${chart}<figcaption${vlang === 'ar' ? ' dir="rtl" lang="ar" class="rtl"' : ''}>${esc(cap)}</figcaption></figure>`;
   }
   if (pos) h += skyPanel(pos, vlang, c);
-  const langBtns = (opts, act = L) => `<div class="langs" role="group" aria-label="Language">${opts.map(([id, lbl]) => `<button type="button" data-lang="${id}" aria-pressed="${act === id}"${id === 'ar' ? ' lang="ar"' : ''}>${lbl}</button>`).join('')}</div>`;
+  // the in-card language switch: only on South African pages that have Afrikaans, which the top EN / عربي switch does not offer
+  const langBtns = (opts, act = L) => opts.length < 3 ? '' : `<div class="langs" role="group" aria-label="Language">${opts.map(([id, lbl]) => `<button type="button" data-lang="${id}" aria-pressed="${act === id}"${id === 'ar' ? ' lang="ar"' : ''}>${lbl}</button>`).join('')}</div>`;
   if (state.cul === 'science') {
     const ar = L === 'ar';
-    h += `<div class="sci-tools">${langBtns([['en', 'English'], ['ar', 'العربية']], ar ? 'ar' : 'en')}<button type="button" class="kidbtn" id="kidbtn" aria-pressed="${KIDS}">${ar ? '🧒 للأطفال' : '🧒 For kids'}</button></div>`;
+    h += kidBtn();
     h += sciHTML(state.con, ar ? 'ar' : 'en');
     const others = CULTURES.filter(cu => (DATA.lore[state.con] || {})[cu.id]);
     if (others.length) h += `<div class="none-box" style="margin-top:22px"><span class="sect-lbl">${ar ? 'قصص هذه النجوم' : 'Stories about these stars'}</span><div class="links">${others.map(cu => `<button type="button" data-cul="${cu.id}" style="--cc:var(--c-${cu.id})"><span class="dot"></span>${culLbl(cu)}</button>`).join('')}</div></div>`;
   } else if (e && e.quranGroups) {
     const ar = L === 'ar';
-    h += langBtns([['en', 'English'], ['ar', 'العربية']], ar ? 'ar' : 'en');
     h += ar ? `<p class="rtl" lang="ar" dir="rtl" style="max-width:68ch;margin:0 0 6px">آيات من القرآن الكريم تتعلّق بالفلك: البروج والشمس والقمر ومنازله والكواكب والنجوم وأفلاكها، مرتّبة بحسب الموضوع. النص برواية حفص (نسخة تنزيل)، مع تعليقات موجزة من كتب التفسير.</p><div class="qbox rtl" dir="rtl" lang="ar">`
              : `<p style="max-width:68ch;margin:0 0 6px">Verses of the Quran about astronomy: the constellations, the Sun, the Moon and its stations, the planets, the stars and their orbits, grouped by theme. The Arabic is the standard Hafs reading (Tanzil edition). The English is a translation of the meaning, with short notes from the classical commentaries.</p><div class="qbox">`;
     e.quranGroups.forEach(g => {
@@ -72,7 +68,7 @@ function render() {
     });
     h += `</div>`;
   } else if (e && e.poemGroups) {
-    h += poeHTML(e, L === 'ar', langBtns);
+    h += poeHTML(e, L === 'ar');
   } else if (e) {
     const hasAf = state.cul === 'safrica' && e.af;
     const opts = [['en', 'English'], ['ar', 'العربية']]; if (hasAf) opts.splice(1, 0, ['af', 'Afrikaans']);
@@ -108,7 +104,6 @@ function render() {
   card.querySelectorAll('[data-cul]').forEach(b => b.addEventListener('click', () => setCulture(b.dataset.cul)));
   card.querySelectorAll('[data-lang]').forEach(b => b.addEventListener('click', () => { state.lang = b.dataset.lang; try { localStorage.setItem('osms-lang', state.lang); } catch (e) {} render(); }));
   card.querySelectorAll('[data-con]').forEach(b => b.addEventListener('click', () => { state.con = b.dataset.con; render(); }));
-  const kb = card.querySelector('#kidbtn'); if (kb) kb.addEventListener('click', () => { KIDS = !KIDS; try { localStorage.setItem('osms-kids', KIDS ? '1' : '0'); } catch (e) {} render(); });
   AG.bindNav(card);
   if (state.cul === 'science' && state.con === 'DSO') DSO_IMG.watch(card);
 }

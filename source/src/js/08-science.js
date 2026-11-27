@@ -148,8 +148,18 @@ function sizeTxt(R, name, lang) {
   return t;
 }
 let KIDS = false;
-// the kids switch, also shown on Plan a night and the Quiz
-function kidBtn(ar) { return `<button type="button" class="kidbtn" data-kid aria-pressed="${KIDS}">${ar ? '🧒 للأطفال' : '🧒 For kids'}</button>`; }
+// kids mode: one switch for the whole site, the For kids button in the top bar
+// pages where kids mode changes something leave this mark; the For kids button in the top bar shows only when one is on screen
+function kidBtn() { return '<span data-kidspot hidden></span>'; }
+function kidHd() {
+  const b = document.getElementById('kidhd'); if (!b) return;
+  const ar = state.lang === 'ar', hide = !document.querySelector('[data-kidspot]'), lbl = ar ? 'للأطفال' : 'For kids', t = b.querySelector('.setlbl');
+  // change only what differs: the watcher below would otherwise fire again on its own edits
+  if (b.hidden !== hide) b.hidden = hide;
+  if (b.getAttribute('aria-pressed') !== String(KIDS)) b.setAttribute('aria-pressed', KIDS);
+  if (t.textContent !== lbl) { t.textContent = lbl; b.setAttribute('aria-label', ar ? 'نسخة الأطفال' : 'For kids'); b.title = ar ? 'نسخة مبسّطة للأطفال' : 'Simpler version for kids'; }
+}
+new MutationObserver(kidHd).observe(document.body, {childList: true, subtree: true});
 document.addEventListener('click', ev => { const b = ev.target.closest && ev.target.closest('[data-kid]'); if (!b) return; KIDS = !KIDS; try { localStorage.setItem('osms-kids', KIDS ? '1' : '0'); } catch (e) {} render(); });
 try { KIDS = localStorage.getItem('osms-kids') === '1'; } catch (e) {}
 function kidStar(s, lang) {

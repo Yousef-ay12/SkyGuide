@@ -278,10 +278,9 @@ const QUIZ = (() => {
     if (G && G.lang !== state.lang && G.picked == null && !G.end) G = null;   // language changed: start again in the new language
     card.style.setProperty('--cc', '#8b7cf6');
     let h = `<div class="card-head"><div><div class="eyebrow"${ar ? ' lang="ar" style="letter-spacing:0;text-transform:none;font-family:var(--f-ar);font-size:15px"' : ''}><span class="dot"></span>${t.eyebrow}</div><h2${ar ? ' lang="ar" style="font-family:var(--f-ar)"' : ''}>${t.h}</h2>${G ? '' : `<p class="gls"${ar ? ' lang="ar" dir="rtl"' : ''}>${t.sub}</p>`}</div></div>`;
-    h += `<div class="sci-tools"><div class="langs" role="group" aria-label="Language">${[['en', 'English'], ['ar', 'العربية']].map(([id, l]) => `<button type="button" data-lang="${id}" aria-pressed="${lang === id}"${id === 'ar' ? ' lang="ar"' : ''}>${l}</button>`).join('')}</div>${kidBtn(ar)}</div>`;
+    h += kidBtn();
     h += `<div class="quiz${ar ? ' rtl' : ''}" id="quiz"${ar ? ' dir="rtl" lang="ar"' : ''}>` + (!G ? setupHTML(t, ar) : G.end ? endHTML(t, ar) : questionHTML(t, ar)) + `</div>`;
     card.innerHTML = h;
-    card.querySelectorAll('[data-lang]').forEach(b => b.addEventListener('click', () => { state.lang = b.dataset.lang; try { localStorage.setItem('osms-lang', state.lang); } catch (e) {} render(); }));
     const top = () => { const e = document.getElementById('quiz'); if (e && e.getBoundingClientRect().top < 0) window.scrollTo({top: Math.max(0, e.getBoundingClientRect().top + scrollY - 80)}); };
     card.querySelectorAll('[data-qc]').forEach(b => b.addEventListener('click', () => { S.count = +b.dataset.qc; keep(); render(); }));
     card.querySelectorAll('[data-ql]').forEach(b => b.addEventListener('click', () => { S.level = b.dataset.ql; keep(); render(); }));

@@ -381,11 +381,8 @@ body.chrome-ar .shtab thead th, body.chrome-ar .shtab tbody th { font-family: va
 .tpr.ok .tps { background: var(--c-science); color: var(--panel); }
 .tpl { margin-top: 6px; font: inherit; font-size: 14.5px; background: none; border: 1px solid var(--line); border-radius: 999px; padding: 2px 10px; color: var(--ink); cursor: pointer; }
 .tpl:hover { border-color: var(--accent); }
-.sci-tools { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin: 0 0 16px; }
-.sci-tools .langs { margin: 0; }
-.kidbtn { font: inherit; font-size: 15px; padding: 5px 14px; border-radius: 999px; border: 1px solid var(--line); background: var(--panel); color: var(--ink); cursor: pointer; }
-.kidbtn[aria-pressed="true"] { background: #e9a23b; border-color: #e9a23b; color: #1d1405; }
-.kidbtn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.setbtn.kidhd[aria-pressed="true"] { background: #e9a23b; border-color: #e9a23b; color: #1d1405; }
+.kidhd > span[aria-hidden] { font-size: 16px; line-height: 1; }
 .kidbox { background: color-mix(in srgb, #e9a23b 16%, var(--panel)); border: 1px dashed #e9a23b; border-radius: 6px; padding: 8px 12px; margin: 6px 0 10px; font-size: 16px; line-height: 1.45; }
 .kidbox ul { margin: 2px 0 0; padding-inline-start: 1.1em; }
 .kidbox li { margin: 0 0 4px; }
@@ -798,3 +795,7 @@ button.poe-chip { font: inherit; font-size: 14px; cursor: pointer; }
 .poe-row { display: flex; flex-wrap: wrap; gap: 6px 8px; width: 100%; }
 @media (max-width: 560px) { .poe-row { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; padding-bottom: 2px; } .poe-row::-webkit-scrollbar { display: none; } .poe-chip { white-space: nowrap; flex: none; } }
 .qgroup > .poe-smean { margin: -4px 0 16px; color: inherit; }
+.setbtn.kidhd[hidden] { display: none; }
+/* phones: make room in the top bar when the For kids button is showing */
+@media (max-width: 430px) { body:has(#kidhd:not([hidden])) .hdtools { gap: 6px; } body:has(#kidhd:not([hidden])) .setbtn { padding: 6px 9px; } }
+@media (max-width: 374px) { body:has(#kidhd:not([hidden])) .hdtools { gap: 4px; } body:has(#kidhd:not([hidden])) .setbtn { padding: 6px 7px; } body:has(#kidhd:not([hidden])) .hlang button { padding: 6px 6px; } body:has(#kidhd:not([hidden])) .brandbtn .b-en { font-size: 17px; } body:has(#kidhd:not([hidden])) .brandbtn .b-star { display: none; } }

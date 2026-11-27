@@ -173,7 +173,7 @@ const PLAN = (() => {
     card.style.setProperty('--cc', 'var(--c-cal)');
     const N = night();
     let h = `<div class="card-head"><div><div class="eyebrow"${ar ? ' lang="ar" style="letter-spacing:0;text-transform:none;font-family:var(--f-ar);font-size:15px"' : ''}><span class="dot"></span>${t.eyebrow}</div><h2${ar ? ' lang="ar" style="font-family:var(--f-ar)"' : ''}>${t.title}</h2></div></div>`;
-    h += `<div class="sci-tools"><div class="langs" role="group" aria-label="Language">${[['en', 'English'], ['ar', 'العربية']].map(([id, l]) => `<button type="button" data-lang="${id}" aria-pressed="${lang === id}"${id === 'ar' ? ' lang="ar"' : ''}>${l}</button>`).join('')}</div>${!P.done && P.step >= 3 && stepsOrder()[P.step - 3] === 'sci' ? kidBtn(ar) : ''}</div>`;
+    if (!P.done && P.step >= 3 && stepsOrder()[P.step - 3] === 'sci') h += kidBtn();
     h += `<div class="plan${ar ? ' rtl' : ''}" id="plan"${ar ? ' dir="rtl" lang="ar"' : ''}>` + stepBar(t, ar);
     if (P.done) {
       h += `<div class="pdone"><h3>${t.doneT}</h3><p>${t.doneP}</p><div class="pbtns"><button type="button" class="pbtn main" data-pact="save">${t.saveAll}</button><button type="button" class="pbtn" data-pact="again">${t.again}</button></div><p class="pmsg" role="status"></p></div>`;
@@ -193,7 +193,6 @@ const PLAN = (() => {
     }
     h += `</div>`;
     card.innerHTML = h;
-    card.querySelectorAll('[data-lang]').forEach(b => b.addEventListener('click', () => { state.lang = b.dataset.lang; try { localStorage.setItem('osms-lang', state.lang); } catch (e) {} PLANrender(); }));
     bind(card, t);
   }
   const PLANrender = () => { keep(); render(); };
