@@ -100,6 +100,23 @@ const PSKY = (() => {
     const f = [Math.sin(az) * Math.cos(al), Math.cos(az) * Math.cos(al), Math.sin(al)], r = [Math.cos(az), -Math.sin(az), 0];
     return {r, u: [r[1] * f[2] - r[2] * f[1], r[2] * f[0] - r[0] * f[2], r[0] * f[1] - r[1] * f[0]], f};
   }
+  // ---- holding the view steady: the motion sensors are a little noisy and no hand is perfectly still ----
+  // Small wobbles (under about half a degree) are eased out slowly, so what you point at stays put; a real turn is followed at once.
+  let sm = null;
+  function steady(c) {
+    if (mode !== 'sensor' || !ori) { sm = null; return c; }
+    const now = performance.now();
+    if (!sm) { sm = {f: c.f.slice(), u: c.u.slice(), t: now}; return c; }
+    const dt = Math.min(100, now - sm.t); sm.t = now;
+    const dot = (a, b) => Math.max(-1, Math.min(1, a[0] * b[0] + a[1] * b[1] + a[2] * b[2]));
+    const ang = Math.acos(dot(sm.f, c.f)) * R2D + 0.5 * Math.acos(dot(sm.u, c.u)) * R2D;
+    const base = ang < 0.6 ? 0.04 : Math.min(1, 0.15 + (ang - 0.6) * 0.25), k = 1 - Math.pow(1 - base, dt / 16.7);
+    const unit = v => { const m = Math.hypot(...v) || 1; return v.map(x => x / m); };
+    const f = unit(sm.f.map((x, i) => x + (c.f[i] - x) * k));
+    let u = sm.u.map((x, i) => x + (c.u[i] - x) * k); const d = dot(u, f); u = unit(u.map((x, i) => x - d * f[i]));
+    sm.f = f; sm.u = u; sm.left = ang * (1 - k);
+    return {f, u, r: [f[1] * u[2] - f[2] * u[1], f[2] * u[0] - f[0] * u[2], f[0] * u[1] - f[1] * u[0]]};
+  }
   function scrAngle() {
     if (typeof window.orientation === 'number') return window.orientation;
     const a = screen.orientation && screen.orientation.angle; return a === 270 ? -90 : (a || 0);
@@ -211,7 +228,7 @@ const PSKY = (() => {
   function frame() {
     raf = 0; if (!el) return;
     if (Date.now() - lastPos > 20000) { positions(); placeLine(); }
-    const cam = camera(), r = cam.r, u = cam.u, f = cam.f;
+    const cam = steady(camera()), r = cam.r, u = cam.u, f = cam.f;
     const k = (Hh / 2) / Math.tan(fov / 2 * D2R), cx = W / 2, cy = Hh / 2;
     const P = (e, n, up) => { const z = e * f[0] + n * f[1] + up * f[2]; if (z <= 0.05) return null; return [cx + k * (e * r[0] + n * r[1] + up * r[2]) / z, cy - k * (e * u[0] + n * u[1] + up * u[2]) / z, z]; };
     const on = (p, m = 0) => p && p[0] > -m && p[0] < W + m && p[1] > -m && p[1] < Hh + m;
@@ -378,6 +395,7 @@ const PSKY = (() => {
     if (ptrAt) { ptr.style.transform = `translate(${ptrAt[0] - 22}px, ${ptrAt[1] - 22}px)`; put(ptr.lastChild, 'textContent', target.kind === 'body' ? '' : tName()); }
     // what is being looked for: an arrow at the edge when it is off screen
     hud(fc, centres, P, on);
+    if (sm && sm.left > 0.02) draw();   // still easing towards where the phone points
   }
   function tVec(centres) {
     if (!target) return null;
@@ -428,7 +446,7 @@ const PSKY = (() => {
     if (typeof ev.webkitCompassHeading === 'number' && !ev.absolute) {
       // iOS: alpha starts wherever the phone pointed; the compass heading fixes it to north. Follow slowly to smooth out jumps.
       const k = norm(360 - ev.webkitCompassHeading - ev.alpha);
-      if (headK === null) headK = k; else { let dd = k - headK; if (dd > 180) dd -= 360; if (dd < -180) dd += 360; if (Math.abs(dd) < 25) headK = norm(headK + dd * 0.05); }
+      if (headK === null) headK = k; else { let dd = k - headK; if (dd > 180) dd -= 360; if (dd < -180) dd += 360; if (Math.abs(dd) < 25) headK = norm(headK + dd * 0.015); }
     } else if (ev.absolute === true || ev.type === 'deviceorientationabsolute') headK = 0;
     if (mode === 'sensor') draw();
   }
