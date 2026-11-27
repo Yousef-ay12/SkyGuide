@@ -862,3 +862,7 @@ body.psky-open { overflow: hidden; }
 .ps-target { top: calc(env(safe-area-inset-top, 0px) + 62px); }
 
 .ps-note { bottom: calc(env(safe-area-inset-bottom, 0px) + 150px); }
+
+/* the sky map is still being worked on: a small tag by its title and a note on its start card */
+.ps-wip { display: inline-block; vertical-align: 2px; margin-inline-start: 6px; padding: 1px 7px; border-radius: 999px; background: #e8b95a; color: #1d1405; font-size: 11px; font-weight: 600; letter-spacing: 0; }
+.ps-card .ps-wipnote { font-size: 14px; color: #f3e2bb; background: #e8b95a1f; border: 1px solid #e8b95a55; border-radius: 10px; padding: 8px 10px; }

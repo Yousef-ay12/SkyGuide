@@ -545,7 +545,7 @@ const PSKY = (() => {
     if (ar()) { el.dir = 'rtl'; el.lang = 'ar'; }
     const tname = spec ? '…' : '';
     el.innerHTML = `<canvas class="ps-gl" aria-hidden="true"></canvas><canvas aria-hidden="true"></canvas>
-      <div class="ps-top"><button type="button" class="ps-x" data-ps="close" aria-label="${T('Close', 'إغلاق')}">×</button><div class="ps-t"><b>${T('Point at the sky', 'وجّه هاتفك إلى السماء')}</b><span class="ps-pl"></span></div>
+      <div class="ps-top"><button type="button" class="ps-x" data-ps="close" aria-label="${T('Close', 'إغلاق')}">×</button><div class="ps-t"><b>${T('Point at the sky', 'وجّه هاتفك إلى السماء')} <span class="ps-wip">${T('Work in progress', 'قيد التطوير')}</span></b><span class="ps-pl"></span></div>
 </div>
       <div class="ps-arrow" hidden aria-hidden="true"><svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15M13 6l6 6-6 6"/></svg></div>
       <div class="ps-ptr" hidden aria-hidden="true"><svg viewBox="0 0 44 44" width="44" height="44" fill="none" stroke="#ff6a3d" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 9V2h7M35 2h7v7M42 35v7h-7M9 42H2v-7"/></svg><span></span></div>
@@ -557,6 +557,7 @@ const PSKY = (() => {
       <div class="ps-start"><div class="ps-card"><h3>${T('Point at the sky', 'وجّه هاتفك إلى السماء')}</h3>
         <p class="ps-intro">${tname ? T(`Hold your phone up and move it around. An arrow shows you where ${tname} is.`, `ارفع هاتفك وحرّكه في السماء، وسيدلّك سهم على مكان ${tname}.`) : T('Hold your phone up and move it around: the screen shows the stars, constellations and planets in that direction.', 'ارفع هاتفك وحرّكه في السماء، فتُظهر الشاشة النجوم والكوكبات والكواكب في ذلك الاتجاه.')}</p>
         <p class="muted">${T('Your phone may ask to use motion and orientation. Keep away from cars and metal. If the sky looks turned, tap Line up at the bottom and point at the Moon, a planet or a bright star.', 'قد يطلب هاتفك إذنًا لاستخدام الحركة والاتجاه. ابتعد عن السيارات والمعادن، وإن بدت السماء مُدارة فاضغط «محاذاة» في الأسفل ووجّه الهاتف إلى القمر أو كوكب أو نجم لامع.')}</p>
+        <p class="ps-wipnote">${T('This sky map is still a work in progress and has a few issues: the direction can be off and the view may shake a little. If the sky looks turned, tap Line up.', 'خريطة السماء هذه ما زالت قيد التطوير وفيها بعض المشكلات: قد يكون الاتجاه غير دقيق وقد يهتز العرض قليلًا. إن بدت السماء مُدارة فاضغط «محاذاة».')}</p>
         <button type="button" class="pbtn ps-go" data-ps="go">${T('Start', 'ابدأ')}</button><button type="button" class="ps-alt" data-ps="drag">${T('No thanks, let me drag', 'لا، سأسحب بإصبعي')}</button></div></div>`;
     document.body.appendChild(el); document.body.classList.add('psky-open');
     cv = el.querySelector('canvas:not(.ps-gl)'); ctx = cv.getContext('2d');
