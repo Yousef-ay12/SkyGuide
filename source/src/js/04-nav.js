@@ -88,7 +88,7 @@ function syncNav() {
   const nav = document.getElementById('mainnav'); if (!nav) return;
   const sec = secOf(state.cul), ar = state.lang === 'ar';
   if (sec === 'culture') lastCul = state.cul; else if (sec === 'astro') lastAstro = state.cul;
-  if (byKey[state.con] && !SCI_SPECIAL.has(state.con) && !byKey[state.con].hidden && state.con !== 'QUR') lastSciCon = state.con;
+  if (byKey[state.con] && !SCI_SPECIAL.has(state.con) && !byKey[state.con].hidden && !ARAB_SRC.has(state.con)) lastSciCon = state.con;
   document.documentElement.dataset.sec = sec;
   nav.querySelectorAll('.ntab').forEach(b => { const on = b.dataset.sec === sec; b.setAttribute('aria-pressed', on); b.classList.toggle('on', on); if (on) b.setAttribute('aria-current', 'page'); else b.removeAttribute('aria-current'); });
   const sub = document.getElementById('subnav'); sub.innerHTML = `<div class="sn-row">${subnavHTML(sec, ar)}</div>`; sub.dataset.sec = sec;
@@ -117,7 +117,7 @@ function buildList(filter = '') {
       list.appendChild(b);
     });
   });
-  const note = document.createElement('p'); note.className = 'list-note'; const n = list.querySelectorAll('.item:not([data-key="QUR"])').length; note.textContent = state.cul === 'science' ? (f ? `${n} matches` : (state.lang === 'ar' ? 'كل الكوكبات الـ88، ومعها درب التبانة وسحابتا ماجلان والمجموعة الشمسية' : 'All 88 constellations, plus the Milky Way, the Magellanic Clouds and the Solar System')) : (state.lang === 'ar' ? `كل الكوكبات الـ88؛ لـ${[...list.querySelectorAll('.item')].filter(x => x.dataset.key !== 'QUR' && hasLore(x.dataset.key, state.cul)).length} منها قصص في ${CUL_AR_SKY[state.cul] || ''}، والباقي باهت` : `All 88 constellations; ${[...list.querySelectorAll('.item')].filter(x => x.dataset.key !== 'QUR' && hasLore(x.dataset.key, state.cul)).length} have ${cname(state.cul)} stories, the others are dimmed`); list.prepend(note);
+  const note = document.createElement('p'); note.className = 'list-note'; const n = list.querySelectorAll('.item:not([data-key="QUR"]):not([data-key="POE"])').length; note.textContent = state.cul === 'science' ? (f ? `${n} matches` : (state.lang === 'ar' ? 'كل الكوكبات الـ88، ومعها درب التبانة وسحابتا ماجلان والمجموعة الشمسية' : 'All 88 constellations, plus the Milky Way, the Magellanic Clouds and the Solar System')) : (state.lang === 'ar' ? `كل الكوكبات الـ88؛ لـ${[...list.querySelectorAll('.item')].filter(x => x.dataset.key !== 'QUR' && hasLore(x.dataset.key, state.cul)).length} منها قصص في ${CUL_AR_SKY[state.cul] || ''}، والباقي باهت` : `All 88 constellations; ${[...list.querySelectorAll('.item')].filter(x => x.dataset.key !== 'QUR' && hasLore(x.dataset.key, state.cul)).length} have ${cname(state.cul)} stories, the others are dimmed`); list.prepend(note);
   if (!shown) list.innerHTML = state.cul === 'science' ? `<p class="empty-search">Nothing matches that search. Try a star name such as Sirius or Betelgeuse, or an object such as Orion Nebula.</p>` : `<p class="empty-search">No ${cname(state.cul)} story matches that search. Try a star name such as Sirius, or an Arabic name such as سهيل.</p>`;
   markList();
 }
@@ -130,8 +130,8 @@ function searchLore(key, f) {
 }
 function hasLore(con, cul) { if (TOOL_TABS.has(cul)) return true; if (con === 'CUL') return cul !== 'science'; return cul === 'science' ? !!DATA.sci[con] : !!(DATA.lore[con] || {})[cul]; }
 // which entries a culture's list shows: everything, except sections that belong to one place
-function inList(con, cul) { if (cul === 'science') return !!DATA.sci[con]; if (con === 'SOL' || (byKey[con] && byKey[con].sciOnly)) return false; if (con === 'QUR') return cul === 'arab'; return !!byKey[con]; }
-function firstFor(cul) { const c = DATA.constellations.find(x => x.key !== 'QUR' && hasLore(x.key, cul)); return c ? c.key : 'Ori'; }
+function inList(con, cul) { if (cul === 'science') return !!DATA.sci[con]; if (con === 'SOL' || (byKey[con] && byKey[con].sciOnly)) return false; if (ARAB_SRC.has(con)) return cul === 'arab'; return !!byKey[con]; }
+function firstFor(cul) { const c = DATA.constellations.find(x => !ARAB_SRC.has(x.key) && hasLore(x.key, cul)); return c ? c.key : 'Ori'; }
 function setCulture(id) {
   const wasCal = TOOL_TABS.has(state.cul);
   if (id === 'plan' && state.cul !== 'plan') try { PLAN.enter(); } catch (e) {}
@@ -156,6 +156,11 @@ function poemFold(p, ar) {
   return `<details class="poemd"${ar ? ' dir="rtl" lang="ar"' : ''}><summary><span class="pd-ar" aria-hidden="true">▸</span><span class="pd-t">${ar ? `الأرجوزة كاملة · ${n} بيتًا` : `The Urjuza in full · ${n} couplets`}</span><span class="pd-h" data-o="${open}" data-c="${close}"></span></summary>`
     + `<section class="full" dir="ltr"><ol>${p.full.map(b => `<li><div class="bayt" lang="ar">${b.a.map(x => `<span>${esc(x)}</span>`).join('')}</div><p class="en">${esc(b.e)}</p></li>`).join('')}</ol><div class="by">${srcLinks(p.by)}</div>`
     + `<button type="button" class="pbtn pd-fold" onclick="const d=this.closest('details');d.open=false;d.scrollIntoView({block:'nearest'})">▴ ${ar ? 'اطوِ الأرجوزة' : 'Fold the Urjuza'}</button></section></details>`;
+}
+// under the Urjuza: what its couplets say, in plain words
+function poemMeaning(key, ar) {
+  const m = POEM_MEANING[key]; if (!m) return '';
+  return `<div class="poem-mean"${ar ? ' dir="rtl" lang="ar"' : ' dir="ltr" lang="en"'}><span class="sect-lbl">${ar ? 'معنى الأبيات' : 'What the poem says'}</span><p>${esc(m[ar ? 1 : 0])}</p></div>`;
 }
 function poemHTML(p) {
   let orig;

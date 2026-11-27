@@ -22,7 +22,7 @@ const TOUR = (() => {
   function prep(st) {
     if (st.prep === 'astro' && secOf(state.cul) !== 'astro') setCulture(lastAstro || 'plan');
     if (st.prep === 'story') {
-      if (tabOf(state.cul) !== 'stories' || !byKey[state.con] || byKey[state.con].hidden || state.con === 'QUR' || !hasLore(state.con, state.cul)) { state.con = 'Ori'; setCulture(lastCul && hasLore('Ori', lastCul) ? lastCul : 'arab'); }
+      if (tabOf(state.cul) !== 'stories' || !byKey[state.con] || byKey[state.con].hidden || ARAB_SRC.has(state.con) || !hasLore(state.con, state.cul)) { state.con = 'Ori'; setCulture(lastCul && hasLore('Ori', lastCul) ? lastCul : 'arab'); }
       if (window.matchMedia('(max-width: 900px)').matches) { const ix = document.getElementById('index'); if (ix && !ix.open && st.sel === '#index') ix.open = true; }
     }
   }

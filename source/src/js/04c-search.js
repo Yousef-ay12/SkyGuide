@@ -25,7 +25,7 @@ const SEARCH = (() => {
       .forEach(([k, en, ar]) => add('page', en, ar, 'Science', 'العلم', '', () => open(k, 'science')));
     CULTURES.forEach(c => add('page', c.name + ' sky', CUL_AR_SKY[c.id], 'Heritage & Culture', 'التراث والثقافة', c.id, () => open('CUL', c.id)));
     // constellations, their stars and objects, and the stories told about them
-    DATA.constellations.filter(c => !c.hidden && c.key !== 'QUR').forEach(c => {
+    DATA.constellations.filter(c => !c.hidden && !ARAB_SRC.has(c.key)).forEach(c => {
       const lo = DATA.lore[c.key] || {}, curs = CULTURES.filter(x => lo[x.id]);
       add('con', c.latin, c.ar, c.gloss, c.gloss, c.key + ' ' + c.gloss, () => { const s = secOf(state.cul); open(c.key, s === 'culture' && lo[state.cul] ? state.cul : DATA.sci[c.key] ? 'science' : (curs[0] || {}).id || 'science'); });
       curs.forEach(cu => { const e = lo[cu.id], ea = e.ar || e; (e.stories || []).forEach((st, i) => { const sa = (ea.stories || [])[i] || st;

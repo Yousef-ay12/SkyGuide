@@ -168,7 +168,7 @@ const AG = (() => {
     src.stories.forEach((st, i) => { h += `<article class="story"><h3>${esc(st.title)}</h3><p>${st.text}</p><div class="src" dir="ltr" lang="en">${srcLinks(e.stories[i].source)}</div></article>`; });
     if (e.quran) { h += `<div class="qbox"><span class="sect-lbl">${ar ? 'في القرآن الكريم' : 'In the Quran'}</span>`; e.quran.forEach(v => { h += versHTML(v, ar); }); h += `</div>`; }
     h += `</div>`;
-    if (e.poem && e.poem.full) h += poemFold(e.poem, ar);
+    if (e.poem && e.poem.full) h += poemFold(e.poem, ar) + poemMeaning(key, ar);
     else if (e.poem) h += poemHTML(e.poem);
     return h;
   }

@@ -6,7 +6,7 @@ The site at https://yousef-ay12.github.io/SkyGuide/ is built from these files.
 - `src/css/`: styling, joined in name order: fonts, site, guides, backgrounds (`03-backgrounds.css` is made by `tools/mkbg.js`),
   weather, the frame (top bar, sections, bottom bar on phones), overview pages, and Science extras (moons, Cosmology)
 - `src/js/`: the code, one file per part of the site, joined in name order:
-  core, tour, quiz, install, navigation (three sections and their pages), welcome doors, search, sky engine, visibility,
+  core, tour, quiz, install, navigation (three sections and their pages), welcome doors, search, poem meanings, Poems and the star calendar (Arab sources), sky engine, visibility,
   weather, calendar, science, deep-sky, moons, Cosmology (three text files, the page with its drawings, the Science
   overview, the pictures, extra quiz questions, the glossary, the kids versions), Stellarium links, connected stories, Plan a night,
   My night (saved lists), the Culture and AstroGuide overviews, Save pictures for offline, sharing, feedback,

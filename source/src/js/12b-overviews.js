@@ -4,7 +4,7 @@ const cutText = (s, n) => s.length > n ? s.slice(0, s.lastIndexOf(' ', n) > n * 
 function culHubHTML(cul, lang) {
   const ar = lang === 'ar', cu = CULTURES.find(c => c.id === cul) || CULTURES[0];
   const sky = ar ? CUL_AR_SKY[cu.id] : cname(cu.id) + ' sky';
-  const keys = DATA.constellations.filter(c => !c.hidden && c.key !== 'QUR' && (DATA.lore[c.key] || {})[cu.id]).map(c => c.key);
+  const keys = DATA.constellations.filter(c => !c.hidden && !ARAB_SRC.has(c.key) && (DATA.lore[c.key] || {})[cu.id]).map(c => c.key);
   const ent = k => { const e = DATA.lore[k][cu.id]; return ar && e.ar ? e.ar : e; };
   const story = k => { const e = ent(k); return {title: plainText((e.stories && e.stories[0] || {}).title), seen: plainText(e.seen)}; };
   // the featured story: one of this culture's constellations well placed this month
@@ -22,6 +22,7 @@ function culHubHTML(cul, lang) {
   }
   h += `<h3 class="hub-h">${ar ? `قصص ${esc(CUL_AR_SKY[cu.id])}` : `Stories of the ${esc(cname(cu.id))} sky`}</h3><div class="cul-grid">`;
   if (cu.id === 'arab' && (DATA.lore.QUR || {}).arab) h += `<div class="cul-card cul-qur"><button type="button" class="cul-open" data-ocon="QUR"><b>${ar ? 'القرآن والسماء' : 'The Quran and the sky'}</b><span lang="ar" class="cul-ar">القرآن والسماء</span><span class="cul-st">${ar ? 'آيات عن الفلك، مجموعة بحسب الموضوع' : 'Verses about astronomy, grouped by theme'}</span></button></div>`;
+  if (cu.id === 'arab' && (DATA.lore.POE || {}).arab) h += `<div class="cul-card cul-qur"><button type="button" class="cul-open" data-ocon="POE"><b>${ar ? 'الشعر وأنواء العرب' : 'Poems and the star calendar'}</b><span lang="ar" class="cul-ar">الشعر وأنواء العرب</span><span class="cul-st">${ar ? 'أشعار في القمر والكواكب والنجوم، وما قالته العرب عند طلوع كل نجم' : 'Poems about the Moon, planets and stars, and what the Arabs said as each star rose'}</span></button></div>`;
   h += keys.filter(k => k !== feat).map(k => { const c = byKey[k], s = story(k);
     return `<div class="cul-card"><button type="button" class="cul-open" data-ocon="${k}"><b>${esc(ar ? c.ar : c.latin)}</b><span class="cul-ar" lang="${ar ? 'en' : 'ar'}">${esc(ar ? c.latin : c.ar)}</span><span class="cul-st">${esc(cutText(s.title || s.seen, 70))}</span></button>${AG.btn({t: 'con', key: k, cul: cu.id}, lang, true)}</div>`; }).join('');
   return h + `</div></div>`;

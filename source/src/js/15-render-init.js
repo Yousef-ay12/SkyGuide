@@ -37,7 +37,7 @@ function render() {
   const card = document.getElementById('card');
   card.style.setProperty('--cc', `var(--c-${state.cul})`);
   card.style.animation = 'none'; void card.offsetWidth; card.style.animation = '';
-  let h = `<div class="card-head"><div><div class="eyebrow"><span class="dot"></span>${state.cul === 'science' ? (state.lang === 'ar' ? 'العلم' : 'Science') : state.lang === 'ar' ? CUL_AR_SKY[state.cul] : cname(state.cul) + ' sky'}</div><h2>${esc(c.latin)}</h2><div class="gls"${state.lang === 'ar' && c.glossAr ? ' lang="ar" dir="rtl" style="font-family:var(--f-ar)"' : ''}>${esc(state.lang === 'ar' && c.glossAr ? c.glossAr : c.gloss)}</div></div><div><div class="arn" lang="ar">${esc(c.ar)}</div>${state.con !== 'QUR' ? `<div class="hb-row">${AG.btn({t: 'con', key: state.con, cul: state.cul}, state.lang)}${(() => { const k = swConName(state.con); return k ? swBtn(k.name, k.fov, state.lang === 'ar' ? 'ar' : 'en') : ''; })()}${SHARE.btn(state.con + '-' + state.cul, state.cul === 'science' ? c.latin : (state.lang === 'ar' ? c.ar + ' · ' + CUL_AR_SKY[state.cul] : c.latin + ' · ' + cname(state.cul) + ' sky'), state.lang)}</div>` : ''}</div></div>`;
+  let h = `<div class="card-head"><div><div class="eyebrow"><span class="dot"></span>${state.cul === 'science' ? (state.lang === 'ar' ? 'العلم' : 'Science') : state.lang === 'ar' ? CUL_AR_SKY[state.cul] : cname(state.cul) + ' sky'}</div><h2>${esc(c.latin)}</h2><div class="gls"${state.lang === 'ar' && c.glossAr ? ' lang="ar" dir="rtl" style="font-family:var(--f-ar)"' : ''}>${esc(state.lang === 'ar' && c.glossAr ? c.glossAr : c.gloss)}</div></div><div><div class="arn" lang="ar">${esc(c.ar)}</div>${!ARAB_SRC.has(state.con) ? `<div class="hb-row">${AG.btn({t: 'con', key: state.con, cul: state.cul}, state.lang)}${(() => { const k = swConName(state.con); return k ? swBtn(k.name, k.fov, state.lang === 'ar' ? 'ar' : 'en') : ''; })()}${SHARE.btn(state.con + '-' + state.cul, state.cul === 'science' ? c.latin : (state.lang === 'ar' ? c.ar + ' · ' + CUL_AR_SKY[state.cul] : c.latin + ' · ' + cname(state.cul) + ' sky'), state.lang)}</div>` : ''}</div></div>`;
   h = AG.navBar(state.lang === 'af' ? 'en' : state.lang) + h;
   const L = state.lang;
   const chart = DATA.charts[state.con];
@@ -71,6 +71,8 @@ function render() {
       h += `</section>`;
     });
     h += `</div>`;
+  } else if (e && e.poemGroups) {
+    h += poeHTML(e, L === 'ar', langBtns);
   } else if (e) {
     const hasAf = state.cul === 'safrica' && e.af;
     const opts = [['en', 'English'], ['ar', 'العربية']]; if (hasAf) opts.splice(1, 0, ['af', 'Afrikaans']);
@@ -86,12 +88,13 @@ function render() {
     if (e.quran) { h += `<div class="qbox"><span class="sect-lbl">${lang === 'ar' ? 'في القرآن الكريم' : 'In the Quran'}</span>`; e.quran.forEach(v => { h += versHTML(v, lang === 'ar'); }); h += `</div>`; }
     h += `</div>`;
     if (e.poem && e.poem.full) {
-      h += poemFold(e.poem, lang === 'ar');
+      h += poemFold(e.poem, lang === 'ar') + poemMeaning(state.con, lang === 'ar');
     } else if (e.poem) h += poemHTML(e.poem);
     const others = CULTURES.filter(cu => cu.id !== state.cul && (DATA.lore[state.con] || {})[cu.id]);
     h += `<div class="none-box" style="margin-top:22px"><span class="sect-lbl">${state.lang === 'ar' ? 'النجوم نفسها في ثقافات أخرى' : 'The same stars, other cultures'}</span><div class="links">${others.map(cu => `<button type="button" data-cul="${cu.id}" style="--cc:var(--c-${cu.id})"><span class="dot"></span>${culLbl(cu)}</button>`).join('')}${DATA.sci[state.con] ? `<button type="button" data-cul="science" style="--cc:var(--c-science)"><span class="dot"></span>${state.lang === 'ar' ? 'علم هذه النجوم' : 'The science of these stars'}</button>` : ''}</div></div>`;
-  } else if (state.con === 'QUR') {
-    h += `<div class="none-box"><p>${state.lang === 'ar' ? 'يجمع هذا القسم آيات القرآن الكريم عن السماء، وهو ضمن سماء العرب.' : 'This section collects verses of the Quran about the sky. It belongs to the Arab sky.'}</p><div class="links"><button type="button" data-cul="arab" style="--cc:var(--c-arab)"><span class="dot"></span>${state.lang === 'ar' ? 'افتحه في سماء العرب' : 'Open it in the Arab sky'}</button></div></div>`;
+  } else if (ARAB_SRC.has(state.con)) {
+    const qur = state.con === 'QUR';
+    h += `<div class="none-box"><p>${state.lang === 'ar' ? (qur ? 'يجمع هذا القسم آيات القرآن الكريم عن السماء، وهو ضمن سماء العرب.' : 'يجمع هذا القسم أشعار العرب في السماء وأنواءهم، وهو ضمن سماء العرب.') : (qur ? 'This section collects verses of the Quran about the sky. It belongs to the Arab sky.' : 'This section collects Arabic poems about the sky and the Arab star calendar. It belongs to the Arab sky.')}</p><div class="links"><button type="button" data-cul="arab" style="--cc:var(--c-arab)"><span class="dot"></span>${state.lang === 'ar' ? 'افتحه في سماء العرب' : 'Open it in the Arab sky'}</button></div></div>`;
   } else {
     const others = CULTURES.filter(cu => (DATA.lore[state.con] || {})[cu.id]);
     const withCul = DATA.constellations.filter(x => (DATA.lore[x.key] || {})[state.cul]);

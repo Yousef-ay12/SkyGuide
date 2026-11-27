@@ -136,7 +136,7 @@ const PLAN = (() => {
     h += `<h3 class="psub">${t.cons}</h3><div class="ppicks">${W.cons.length ? W.cons.map(c => { const x = {t: 'con', key: c.k}, id = pickId(x);
       return `<button type="button" class="ppick" data-pick='${JSON.stringify(x)}' aria-pressed="${on.has(id)}">${esc(ar ? byKey[c.k].ar : byKey[c.k].latin)}${ar ? '' : ` <span lang="ar">${esc(byKey[c.k].ar)}</span>`}${c.easy ? `<span class="peasy">${t.easy}</span>` : ''}</button>`; }).join('') : `<p class="muted">${t.nothingUp}</p>`}</div>`;
     if (W.pls.length) h += `<h3 class="psub">${t.planets}</h3><div class="ppicks">${W.pls.map(I => { const x = {t: 'planet', ref: I.p}, id = pickId(x); return `<button type="button" class="ppick" data-pick='${JSON.stringify(x)}' aria-pressed="${on.has(id)}">${esc(pickName(x, ar))}</button>`; }).join('')}</div>`;
-    const all = DATA.constellations.filter(c => DATA.sci[c.key] && DATA.sci[c.key].parts && c.key !== 'QUR').sort((a, b) => a.latin.localeCompare(b.latin));
+    const all = DATA.constellations.filter(c => DATA.sci[c.key] && DATA.sci[c.key].parts && !ARAB_SRC.has(c.key)).sort((a, b) => a.latin.localeCompare(b.latin));
     h += `<label class="pother">${t.other}<select data-p="other"><option value="">${t.choose}</option>${all.map(c => `<option value="${c.key}">${esc(ar ? c.ar + ' · ' + c.latin : c.latin)}</option>`).join('')}</select></label>`;
     const notUp = x => x.t === 'con' ? !W.cons.some(c => c.k === x.key) : !W.pls.some(I => I.p === x.ref);
     if (P.picks.some(notUp)) h += `<div class="ppicks">${P.picks.filter(notUp).map(x => `<button type="button" class="ppick" data-pick='${JSON.stringify(x)}' aria-pressed="true">${esc(pickName(x, ar))}</button>`).join('')}</div>`;
